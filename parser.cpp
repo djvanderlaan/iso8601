@@ -59,39 +59,39 @@ int main(int argc, char* argv[]) {
 
 void parse_month_and_day(std::string_view str, bool pre_hyphen = false) {
   if (str.size() < 2 || !all_num(str.substr(0, 2)))
-    throw std::runtime_error("PARSING ERROR");
+    throw std::runtime_error("Ivalid ISO8601 date");
   std::cout << "MONTH = '" << str.substr(0, 2) << "'\n";
   str.remove_prefix(2);
   if (str.size() > 0) {
     // check for hyphen for day; if month had a hyphen before; day
     // should have one too; and vice versa
     bool hyphen = str.front() == '-';
-    if (hyphen != pre_hyphen) throw std::runtime_error("PARSING ERROR");
+    if (hyphen != pre_hyphen) throw std::runtime_error("Ivalid ISO8601 date");
     if (hyphen) str.remove_prefix(1);
     // parse day
     if (str.size() != 2 || !all_num(str)) 
-      throw std::runtime_error("PARSING ERROR");
+      throw std::runtime_error("Ivalid ISO8601 date");
     std::cout << "DAY = '" << str << "'\nDONE\n";
   } else {
     // YYYYMM is not valid; YYYY-MM is
     if (!pre_hyphen)
-      throw std::runtime_error("PARSING ERROR");
+      throw std::runtime_error("Ivalid ISO8601 date");
     std::cout << "DONE\n";
   }
 }
 
 void parse_week_and_day(std::string_view str, bool pre_hyphen = false) {
   if (str.size() < 2 || !all_num(str.substr(0, 2)))
-    throw std::runtime_error("PARSING ERROR");
+    throw std::runtime_error("Ivalid ISO8601 date");
   std::cout << "WEEK = '" << str.substr(0, 2) << "'\n";
   str.remove_prefix(2);
   if (str.size() > 0) {
     bool hyphen = str.front() == '-';
     // if -W01 then also hypen for day; if W01 then no hyphen for day
-    if (hyphen != pre_hyphen) throw std::runtime_error("PARSING ERROR");
+    if (hyphen != pre_hyphen) throw std::runtime_error("Ivalid ISO8601 date");
     if (hyphen) str.remove_prefix(1);
     if (str.size() != 1 || !all_num(str)) 
-      throw std::runtime_error("PARSING ERROR");
+      throw std::runtime_error("Ivalid ISO8601 date");
     std::cout << "WEEKDAY = '" << str << "'\nDONE\n";
   } else {
     std::cout << "DONE\n";
@@ -99,7 +99,7 @@ void parse_week_and_day(std::string_view str, bool pre_hyphen = false) {
 }
 
 void parse_month_day_or_week(std::string_view str) {
-  if (str.size() < 2) throw std::runtime_error("PARSING ERROR");
+  if (str.size() < 2) throw std::runtime_error("Ivalid ISO8601 date");
   bool hyphen = str.front() == '-';
   if (hyphen) str.remove_prefix(1);
   if (str.front() == 'W') {
@@ -108,18 +108,18 @@ void parse_month_day_or_week(std::string_view str) {
     std::cout << "DAY = '" << str << "'\nDONE\n";
   } else if (str.size() >= 2) {
     parse_month_and_day(str, hyphen);
-  } else throw std::runtime_error("PARSING_ERROR");
+  } else throw std::runtime_error("Ivalid ISO8601 date");
 }
 
 void parse_year(std::string_view str) {
-  if (str.size() < 4) throw std::runtime_error("PARSING ERROR");
+  if (str.size() < 4) throw std::runtime_error("Ivalid ISO8601 date");
   if (str.front() == '+' || str.front() == '-') {
     // We have a year +1234 or -1234; and should have nothing else
-    if (str.size() != 5) throw std::runtime_error("PARSING ERROR");
+    if (str.size() != 5) throw std::runtime_error("Ivalid ISO8601 date");
     std::cout << "YEAR = '" << str << "'\nDONE\n";
   } else {
     const std::string_view year = str.substr(0, 4);
-    if (!all_num(year)) throw std::runtime_error("PARSING ERROR");
+    if (!all_num(year)) throw std::runtime_error("Ivalid ISO8601 date");
     std::cout << "YEAR = '" << year << "'\n";
     if (str.size() == 4) {
       std::cout << "DONE\n";
@@ -136,51 +136,58 @@ void parse_date(const std::string_view& str) {
 // ================================================================================================
 // TIME PARSING
 
+
+bool timezonestart(char c) {
+  return c == 'Z' || c == '+' || c == '-';
+}
+
 void parse_timezone(std::string_view str) {
   if (str.size() == 0) {
     std::cout << "TIMEZONE: LOCAL TIME\n";
-  } else if (str.front() == 'Z') {
+  } else if (str.size() == 1 && str.front() == 'Z') {
     std::cout << "TIMEZONE: ZULU TIME/UTC\n";
   } else if (str.front() == '-' || str.front() == '+') {
     std::string_view sign = str.substr(0,1);
-    if (str.size() < 3) std::runtime_error("PARSING ERROR");
+    if (str.size() < 3) throw std::runtime_error("Invalid time zone");
     std::string_view hour = str.substr(1,2);
-    if (!all_num(hour)) std::runtime_error("PARSING ERROR");
+    if (!all_num(hour)) throw std::runtime_error("Invalid time zone");
     std::cout << "TIMEZONE: " << sign << hour;
-    if (str.size() == 5) {
+    if (str.size() == 3) {
+      // do nothing; hours is already parsed
+    } else if (str.size() == 5) {
       std::string_view minutes = str.substr(3,5);
-      if (!all_num(minutes)) std::runtime_error("PARSING ERROR");
+      if (!all_num(minutes)) throw std::runtime_error("Invalid time zone");
       std::cout << ':' << minutes;
     } else if (str.size() == 6) {
       std::string_view minutes = str.substr(4,6);
-      if (!all_num(minutes)) std::runtime_error("PARSING ERROR");
+      if (!all_num(minutes)) throw std::runtime_error("Invalid time zone");
       std::cout << ':' << minutes;
     } else {
-      std::runtime_error("PARSING ERROR");
+      throw std::runtime_error("Invalid time zone");
     }
     std::cout << '\n';
   } else {
-    std::runtime_error("PARSING ERROR");
+    throw std::runtime_error("Invalid time zone");
   }
 }
 
 void parse_fraction(std::string_view str) {
   auto end = find_non_num(str);
   std::string_view fraction = str.substr(0, end);
-  if (fraction == "" || !all_num(fraction)) throw 
-    std::runtime_error("PARSING ERROR");
+  if (fraction == "" || !all_num(fraction)) 
+    throw std::runtime_error("Invalid ISO8601 time");
   std::cout << "FRACTION = '" << fraction << "'\n";
-  if (end < str.size()) throw std::runtime_error("PARSING ERROR");
-  std::cout << "DONE\n";
+  if (end < str.size()) 
+    parse_timezone(str.substr(end));
 }
 
 void parse_seconds(std::string_view str) {
-  if (str.size() < 2) throw std::runtime_error("PARSING ERROR");
+  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
   bool colonseparated = str.front() == ':';
   if (colonseparated) str.remove_prefix(1);
-  if (str.size() < 2) throw std::runtime_error("PARSING ERROR");
+  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
   std::string_view seconds = str.substr(0, 2);
-  if (!all_num(seconds)) throw std::runtime_error("PARSING ERROR");
+  if (!all_num(seconds)) throw std::runtime_error("Invalid ISO8601 time");
   std::cout << "SECONDS = '" << seconds << "'\n";
   str.remove_prefix(2);
   if (str.size() > 0 && str.front() == '.') {
@@ -192,44 +199,49 @@ void parse_seconds(std::string_view str) {
 }
 
 void parse_minutes(std::string_view str) {
-  if (str.size() < 2) throw std::runtime_error("PARSING ERROR");
+  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
   bool colonseparated = str.front() == ':';
   if (colonseparated) str.remove_prefix(1);
-  if (str.size() < 2) throw std::runtime_error("PARSING ERROR");
+  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
   std::string_view minutes = str.substr(0, 2);
-  if (!all_num(minutes)) throw std::runtime_error("PARSING ERROR");
+  if (!all_num(minutes)) throw std::runtime_error("Invalid ISO8601 time");
   std::cout << "MINUTES = '" << minutes << "'\n";
   str.remove_prefix(2);
+  // check for fractional minutes
   if (str.size() > 0 && str.front() == '.') {
     str.remove_prefix(1);
     parse_fraction(str);
+  // check if we have the start of a time zone
+  } else if (str.size() > 0 && timezonestart(str.front())) {
+    parse_timezone(str);
+  // if we have characters left this should be seconds
+  } else if (str.size() > 0) {
+    if (colonseparated != (str.front() == ':'))
+      throw std::runtime_error("Invalid ISO8601 time");
+    parse_seconds(str);
   } else {
-    if (str.size() > 0) {
-      if (colonseparated != (str.front() == ':')) {
-        parse_timezone(str);
-      } else parse_seconds(str);
-    } else {
-      parse_timezone(str);
-    }
+    parse_timezone(str);
   }
 }
 
 void parse_hour(std::string_view str) {
-  if (str.size() < 2) throw std::runtime_error("PARSING ERROR");
+  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
   std::string_view hour = str.substr(0, 2);
-  if (!all_num(hour)) throw std::runtime_error("PARSING ERROR");
+  if (!all_num(hour)) throw std::runtime_error("Invalid ISO8601 time");
   std::cout << "HOUR = '" << hour << "'\n";
   str.remove_prefix(2);
   // check for fractional hour
   if (str.size() > 0 && str.front() == '.') {
     str.remove_prefix(1);
     parse_fraction(str);
+  // check if we have the start of a time zone
+  } else if (str.size() > 0 && timezonestart(str.front())) {
+    parse_timezone(str);
+  // if we have characters left this should be minutes
+  } else if (str.size() > 0) {
+    parse_minutes(str);
   } else {
-    if (str.size() > 0) {
-      parse_minutes(str);
-    } else {
-      std::cout << "DONE\n";
-    }
+    parse_timezone(str);
   }
 }
 
