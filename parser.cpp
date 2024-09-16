@@ -5,6 +5,8 @@
 #include<cctype>
 #include<stdexcept>
 
+#include "include/time.h"
+
 std::string_view::size_type find_from_table(const std::string_view& str, std::string_view table);
 bool all_num(const std::string_view& str);
 std::string_view::size_type find_non_num(const std::string_view& str);
@@ -270,3 +272,4 @@ bool all_num(const std::string_view& str) {
   for (const char& c: str) num &= (c >= '0' && c <= '9');
   return num;
 }
+
