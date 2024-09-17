@@ -4,6 +4,8 @@
 #include<string_view>
 #include<cctype>
 #include<stdexcept>
+#include<string>
+#include<cmath>
 
 #include "include/time.h"
 
@@ -138,6 +140,59 @@ void parse_date(const std::string_view& str) {
 // ================================================================================================
 // TIME PARSING
 
+int strtoint(const std::string_view& str) {
+  if (str.size() == 0)
+    throw std::runtime_error("Convertion to int failed.");
+  std::string_view::const_iterator p = str.begin();
+  // check if we start with a sign
+  int sign = 1L;
+  if (str.front() == '+' || str.front() == '-') {
+    if (str.front() == '-') sign = -1;
+    ++p;
+    if (str.size() == 1)
+      throw std::runtime_error("Convertion to int failed.");
+  }
+  // the remainder should be a number
+  int value = 0L;
+  for ( ; p != str.end(); ++p) {
+    char c = *p;
+    switch (c) {
+      case '0':
+        value = value*10L + 0L;
+        break;
+      case '1':
+        value = value*10L + 1L;
+        break;
+      case '2':
+        value = value*10L + 2L;
+        break;
+      case '3':
+        value = value*10L + 3L;
+        break;
+      case '4':
+        value = value*10L + 4L;
+        break;
+      case '5':
+        value = value*10L + 5L;
+        break;
+      case '6':
+        value = value*10L + 6L;
+        break;
+      case '7':
+        value = value*10L + 7L;
+        break;
+      case '8':
+        value = value*10L + 8L;
+        break;
+      case '9':
+        value = value*10L + 9L;
+        break;
+      default:
+        throw std::runtime_error("Convertion to int failed.");
+    }
+  }
+  return sign * value;
+}
 
 bool timezonestart(char c) {
   return c == 'Z' || c == '+' || c == '-';
@@ -149,25 +204,19 @@ void parse_timezone(std::string_view str) {
   } else if (str.size() == 1 && str.front() == 'Z') {
     std::cout << "TIMEZONE: ZULU TIME/UTC\n";
   } else if (str.front() == '-' || str.front() == '+') {
-    std::string_view sign = str.substr(0,1);
     if (str.size() < 3) throw std::runtime_error("Invalid time zone");
-    std::string_view hour = str.substr(1,2);
-    if (!all_num(hour)) throw std::runtime_error("Invalid time zone");
-    std::cout << "TIMEZONE: " << sign << hour;
+    int hour = strtoint(str.substr(0,3));
+    int minutes = 0;
     if (str.size() == 3) {
       // do nothing; hours is already parsed
     } else if (str.size() == 5) {
-      std::string_view minutes = str.substr(3,5);
-      if (!all_num(minutes)) throw std::runtime_error("Invalid time zone");
-      std::cout << ':' << minutes;
+      minutes = strtoint(str.substr(3,5));
     } else if (str.size() == 6) {
-      std::string_view minutes = str.substr(4,6);
-      if (!all_num(minutes)) throw std::runtime_error("Invalid time zone");
-      std::cout << ':' << minutes;
+      minutes = strtoint(str.substr(4,6));
     } else {
       throw std::runtime_error("Invalid time zone");
     }
-    std::cout << '\n';
+    std::cout << "TIMEZONE: " << hour << ':' << minutes << '\n';
   } else {
     throw std::runtime_error("Invalid time zone");
   }
@@ -175,10 +224,9 @@ void parse_timezone(std::string_view str) {
 
 void parse_fraction(std::string_view str) {
   auto end = find_non_num(str);
-  std::string_view fraction = str.substr(0, end);
-  if (fraction == "" || !all_num(fraction)) 
-    throw std::runtime_error("Invalid ISO8601 time");
-  std::cout << "FRACTION = '" << fraction << "'\n";
+  std::string_view fraction_str = str.substr(0, end);
+  double fraction = std::pow(10.0, -1.0*fraction_str.size()) * strtoint(fraction_str);
+  std::cout << "FRACTION = " << fraction << "\n";
   if (end < str.size()) 
     parse_timezone(str.substr(end));
 }
