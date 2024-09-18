@@ -7,7 +7,7 @@
 #include<string>
 #include<cmath>
 
-#include "include/time.h"
+//##include "time.h"
 
 std::string_view::size_type find_from_table(const std::string_view& str, std::string_view table);
 bool all_num(const std::string_view& str);

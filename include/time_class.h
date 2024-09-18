@@ -1,5 +1,5 @@
-#ifndef time_h
-#define time_h
+#ifndef timeclass_h
+#define timeclass_h
 
 #include<stdexcept>
 
@@ -53,3 +53,4 @@ class Time {
 
 
 #endif
+
