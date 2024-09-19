@@ -13,15 +13,18 @@ bool isdecimal(char c) {
 typedef std::pair<double, bool> Fractional;
 
 Fractional readfractime(std::string_view str, std::string_view::size_type& pos) {
+  std::cout << str << "\n";
+  pos = 0;
   // We expect two digits
   if (str.size() < 2 || !isnumchar(str[0]) || !isnumchar(str[1]))
     throw std::runtime_error("Invalid ISO8601 time");
   pos += 2;
   // Possibly followed by a decimal sign
   const bool isfraction = str.size() > 2 && isdecimal(str[2]);
+  std::cout << isfraction << "\n";
   if (isfraction) {
     // now we expect more numbers
-    if (str.size() < 4 || !isnumchar(str.at(3))) 
+    if (str.size() < 4 || !isnumchar(str[3])) 
       throw std::runtime_error("Invalid ISO8601 time");
     pos += 2;
     for ( ; pos < str.size(); ++pos) {
@@ -34,6 +37,9 @@ Fractional readfractime(std::string_view str, std::string_view::size_type& pos) 
   return std::make_pair(val, isfraction);
 }
 
+bool timezonestart(char c) {
+  return c == 'Z' || c == '+' || c == '-';
+}
 
 
 double parsehour(std::string_view str, std::string_view::size_type& pos) {
@@ -61,23 +67,33 @@ double parsehour(std::string_view str, std::string_view::size_type& pos) {
 }
 
 Time parsetime(std::string_view str) {
+  std::cout << "== parsetime\n";
+
   std::string_view::size_type pos = 0;
   if (str.size() < 1) throw std::runtime_error("Invalid ISO8601 time");
   if (str.front() == 'T') str.remove_prefix(1);
 
   // Hours
   auto [hour, hour_fractional] = readfractime(str, pos);
+  str = str.substr(pos);
   std::cout << "HOUR = " << hour << "\n";
   // Minutes
+  // when ':'
+  // or !timezonestart()
+  // and str.size() > 0
+  // and !hour_fractional
+  //
   bool extended_format = false;
-  str = str.substr(pos);
-  if (!hour_fractional) {
+  double minutes = 0.0;
+  bool minutes_fractional = false;
+  if (!hour_fractional && str.size() > 0 && !timezonestart(str[0])) {
     // Check if we have HH:MM or HHMM
     if (str.size() > 0 && str[0] == ':')  {
       extended_format = true;
       str.remove_prefix(1);
     }
-
+    [minutes, minutes_fractional] = readfractime(str, pos);
+    std::cout << "MINUTES = " << minutes << "\n";
   }
 
   return Time{};

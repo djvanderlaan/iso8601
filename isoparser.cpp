@@ -146,7 +146,7 @@ void parse_date(const std::string_view& str) {
 // TIME PARSING
 
 
-bool timezonestart(char c) {
+bool _timezonestart(char c) {
   return c == 'Z' || c == '+' || c == '-';
 }
 
@@ -226,7 +226,7 @@ void parse_minutes(std::string_view str) {
     str.remove_prefix(1);
     parse_fraction(str);
   // check if we have the start of a time zone
-  } else if (str.size() > 0 && timezonestart(str.front())) {
+  } else if (str.size() > 0 && _timezonestart(str.front())) {
     parse_timezone(str);
   // if we have characters left this should be seconds
   } else if (str.size() > 0) {
@@ -249,7 +249,7 @@ void parse_hour(std::string_view str) {
     str.remove_prefix(1);
     parse_fraction(str);
   // check if we have the start of a time zone
-  } else if (str.size() > 0 && timezonestart(str.front())) {
+  } else if (str.size() > 0 && _timezonestart(str.front())) {
     parse_timezone(str);
   // if we have characters left this should be minutes
   } else if (str.size() > 0) {
