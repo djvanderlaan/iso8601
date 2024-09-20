@@ -78,6 +78,7 @@ ISOTime parsetime(std::string_view str) {
 
   // Hours
   auto [hour, hour_fractional] = readfractime(str, pos);
+  ISOTime result{hour, hour_fractional};
   str = str.substr(pos);
   // Minutes
   bool extended_format = false;
@@ -95,6 +96,7 @@ ISOTime parsetime(std::string_view str) {
     minutes_fractional = r.second;
     has_minutes = true;
     str = str.substr(pos);
+    result.set_minutes(r.first, r.second);
   }
   // Seconds
   bool has_seconds = false;
@@ -112,14 +114,12 @@ ISOTime parsetime(std::string_view str) {
     seconds_fractional = r.second;
     has_seconds = true;
     str = str.substr(pos);
+    result.set_seconds(r.first, r.second);
   }
   // Timezone
   auto tz = parse_timezone(str, pos);
+  result.set_timezone(tz);
   // Output result
-  std::cout << "HOUR = " << hour << "\n";
-  if (has_minutes) std::cout << "MINUTES = " << minutes << "\n";
-  if (has_seconds) std::cout << "SECONDS = " << seconds << "\n";
-  std::cout << "TIMEZONE = " << tz << "\n";
-  return ISOTime{};
+  return make_standard(result);
 }
 

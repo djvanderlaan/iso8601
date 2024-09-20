@@ -37,7 +37,8 @@ int main(int argc, char* argv[]) {
       std::cout << "TIME" << "\n";
       auto end_pos = find_from_table(line, "/P ");
       try{
-        parsetime(line.substr(0, end_pos));
+        auto time = parsetime(line.substr(0, end_pos));
+        std::cout << time << "\n";
       } catch (std::exception& e) {
         std::cerr << e.what() << "\n";
       }

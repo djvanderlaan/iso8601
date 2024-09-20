@@ -20,17 +20,17 @@ T1223.123         # HHMM fractional
 T1223             # HHMM 
 T122334.12        # HHMMSS fractional
 
-T12:23:34Z        # ZULU TIME
+T12:23:04Z        # ZULU TIME
 T12:23:34         # NO TIME ZONE
-T12:23:34+01      # AMSTERDAM
-T12:23:34+0100    # AMSTERDAM
-T12:23:34-03:00   # BRAZIL
+T12:03:34+01      # AMSTERDAM
+T12:03:34+0100    # AMSTERDAM
+T12:23:04-03:00   # BRAZIL
 T12:23:34.12Z     # ZULU TIME; fractional seconds
-T12:23.50Z        # ZULU TIME; fractional minutes
-T12.234Z          # ZULU TIME; fractional hours
-T12+01            # HH + TIME OFFSET
-T12:23+01         # HH:MM + TIME OFFSET
-T12+01            # HH + TIME OFFSET
-T1223+01          # HHMM + TIME OFFSET
-T122334+0100      # AMSTERDAM; compact
+T02:23.50Z        # ZULU TIME; fractional minutes
+T02.234Z          # ZULU TIME; fractional hours
+T02+01            # HH + TIME OFFSET
+T02:23+01         # HH:MM + TIME OFFSET
+T02+01            # HH + TIME OFFSET
+T0203+01          # HHMM + TIME OFFSET
+T020334+0100      # AMSTERDAM; compact
 
