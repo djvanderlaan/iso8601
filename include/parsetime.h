@@ -1,10 +1,10 @@
 #ifndef parsetime_h
 #define parsetime_h
 
-#include<string_view>
-#include"time_class.h"
+#include "isotime.h"
+#include <string_view>
 
-Time parsetime(std::string_view str);
+ISOTime parsetime(std::string_view str);
 
 #endif
 

@@ -14,7 +14,6 @@
 
 
 void parse_date(const std::string_view& str);
-void parse_time(std::string_view str);
 
 int main(int argc, char* argv[]) {
 
@@ -37,11 +36,6 @@ int main(int argc, char* argv[]) {
     if (line.front() == 'T' || (line.size() >= 3 && line[2] == ':')) {
       std::cout << "TIME" << "\n";
       auto end_pos = find_from_table(line, "/P ");
-      try{
-        parse_time(line.substr(0, end_pos));
-      } catch (std::exception& e) {
-        std::cerr << e.what() << "\n";
-      }
       try{
         parsetime(line.substr(0, end_pos));
       } catch (std::exception& e) {
@@ -140,127 +134,5 @@ void parse_year(std::string_view str) {
 
 void parse_date(const std::string_view& str) {
   parse_year(str);
-}
-
-// ================================================================================================
-// TIME PARSING
-
-
-bool _timezonestart(char c) {
-  return c == 'Z' || c == '+' || c == '-';
-}
-
-void parse_timezone2(const std::string_view& str, std::string_view::size_type& pos) {
-  const auto end = str.size();
-  const auto nchar_remain = end - pos;
-  if (nchar_remain == 0) {
-    std::cout << "TIMEZONE: LOCAL TIME\n";
-  } else if (nchar_remain == 1 && str.at(pos) == 'Z') {
-    std::cout << "TIMEZONE: ZULU TIME/UTC\n";
-  } else if (str.at(pos) == '-' || str.at(pos) == '+') {
-    if (nchar_remain < 3) throw std::runtime_error("Invalid time zone");
-    int hour = strtoint(str.substr(pos, pos+3));
-    pos += 3;
-    int minutes = 0;
-    if (nchar_remain == 3) {
-      // do nothing; hours is already parsed
-    } else if (nchar_remain == 5) {
-      minutes = strtoint(str.substr(pos,pos+2));
-      pos += 2;
-    } else if (nchar_remain == 6) {
-      minutes = strtoint(str.substr(pos+1,pos+3));
-      pos += 3;
-    } else {
-      throw std::runtime_error("Invalid time zone");
-    }
-    std::cout << "TIMEZONE: " << hour << ':' << minutes << '\n';
-  } else {
-    throw std::runtime_error("Invalid time zone");
-  }
-}
-
-void parse_timezone(std::string_view str) {
-  std::string_view::size_type pos = 0UL;
-  return parse_timezone2(str, pos);
-}
-
-void parse_fraction(std::string_view str) {
-  auto end = find_non_num(str);
-  std::string_view fraction_str = str.substr(0, end);
-  double fraction = std::pow(10.0, -1.0*fraction_str.size()) * strtoint(fraction_str);
-  std::cout << "FRACTION = " << fraction << "\n";
-  if (end < str.size()) { 
-    std::string_view::size_type pos = 0UL;
-    parse_timezone2(str.substr(end), pos);
-  }
-}
-
-void parse_seconds(std::string_view str) {
-  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
-  bool colonseparated = str.front() == ':';
-  if (colonseparated) str.remove_prefix(1);
-  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
-  std::string_view seconds = str.substr(0, 2);
-  if (!all_num(seconds)) throw std::runtime_error("Invalid ISO8601 time");
-  std::cout << "SECONDS = '" << seconds << "'\n";
-  str.remove_prefix(2);
-  if (str.size() > 0 && str.front() == '.') {
-    str.remove_prefix(1);
-    parse_fraction(str);
-  } else {
-    parse_timezone(str);
-  }
-}
-
-void parse_minutes(std::string_view str) {
-  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
-  bool colonseparated = str.front() == ':';
-  if (colonseparated) str.remove_prefix(1);
-  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
-  std::string_view minutes = str.substr(0, 2);
-  if (!all_num(minutes)) throw std::runtime_error("Invalid ISO8601 time");
-  std::cout << "MINUTES = '" << minutes << "'\n";
-  str.remove_prefix(2);
-  // check for fractional minutes
-  if (str.size() > 0 && str.front() == '.') {
-    str.remove_prefix(1);
-    parse_fraction(str);
-  // check if we have the start of a time zone
-  } else if (str.size() > 0 && _timezonestart(str.front())) {
-    parse_timezone(str);
-  // if we have characters left this should be seconds
-  } else if (str.size() > 0) {
-    if (colonseparated != (str.front() == ':'))
-      throw std::runtime_error("Invalid ISO8601 time");
-    parse_seconds(str);
-  } else {
-    parse_timezone(str);
-  }
-}
-
-void parse_hour(std::string_view str) {
-  if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 time");
-  std::string_view hour = str.substr(0, 2);
-  if (!all_num(hour)) throw std::runtime_error("Invalid ISO8601 time");
-  std::cout << "HOUR = '" << hour << "'\n";
-  str.remove_prefix(2);
-  // check for fractional hour
-  if (str.size() > 0 && str.front() == '.') {
-    str.remove_prefix(1);
-    parse_fraction(str);
-  // check if we have the start of a time zone
-  } else if (str.size() > 0 && _timezonestart(str.front())) {
-    parse_timezone(str);
-  // if we have characters left this should be minutes
-  } else if (str.size() > 0) {
-    parse_minutes(str);
-  } else {
-    parse_timezone(str);
-  }
-}
-
-void parse_time(std::string_view str) {
-  if (str.front() == 'T') str.remove_prefix(1);
-  parse_hour(str);
 }
 
