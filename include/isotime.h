@@ -1,5 +1,5 @@
-#ifndef timeclass_h
-#define timeclass_h
+#ifndef isotime_h
+#define isotime_h
 
 #include <stdexcept>
 #include <ostream>
