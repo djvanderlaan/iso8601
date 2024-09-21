@@ -87,6 +87,10 @@ TEST_CASE("Date parsing invalid dates YYYY-MM-DD", "[parsedate]") {
   REQUIRE_THROWS( parsedate("2022-12-00") );
   REQUIRE_THROWS( parsedate("2022-12-1") );
   REQUIRE_THROWS( parsedate("222-12-32") );
+  REQUIRE_THROWS( parsedate("2022-12-") );
+  REQUIRE_THROWS( parsedate("2022-12-01 ") );
+  REQUIRE_THROWS( parsedate(" 2022-12-01") );
+  REQUIRE_THROWS( parsedate("2022-12 ") );
 }
 
 TEST_CASE("Date parsing YYYY-DDD", "[parsedate]") {
@@ -117,6 +121,8 @@ TEST_CASE("Date parsing invalid dates YYYY-DDD", "[parsedate]") {
   REQUIRE_THROWS( parsedate("2022-000") );
   REQUIRE_NOTHROW( parsedate("2022-366") );
   REQUIRE_THROWS( parsedate("2022-367") );
+  REQUIRE_THROWS( parsedate("2022-123-") );
+  REQUIRE_THROWS( parsedate("2022-123 ") );
 }
   
 TEST_CASE("Date parsing YYYY-Www-D", "[parsedate]") {
@@ -171,6 +177,7 @@ TEST_CASE("Date parsing invalid dates YYYY-Www-D", "[parsedate]") {
   REQUIRE_THROWS( parsedate("2022-W00-3") );
   REQUIRE_THROWS( parsedate("2022-W12-0") );
   REQUIRE_THROWS( parsedate("2022-W12-8") );
+  REQUIRE_THROWS( parsedate("2022-W12-") );
 }
 
 

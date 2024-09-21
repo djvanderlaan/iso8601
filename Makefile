@@ -18,7 +18,7 @@ objects    = $(notdir $(patsubst %.cpp, %.o, $(target).cpp $(sources)))
 
 $(target): $(objects) 
 	@echo "Linking..."
-	@(CXX) $(CXXFLAGS) -o $(target) $(patsubst %.o,$(TMPDIR)/%.o,$(objects)) $(LIBS)
+	@$(CXX) $(CXXFLAGS) -o $(target) $(patsubst %.o,$(TMPDIR)/%.o,$(objects)) $(LIBS)
 
 -include $(patsubst %.d,$(TMPDIR)/%.d,$(objects:.o=.d))
 	
@@ -29,8 +29,8 @@ $(target): $(objects)
 $(TMPDIR)/%.d: %.cpp
 	@echo "Making dependencies for $<..."
 	@$(CXX) -MM $(CXXFLAGS) $< > $@.$$$$;\
-	@sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@;\
-	@rm -f $@.$$$$
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@;\
+	rm -f $@.$$$$
 
 .PHONY: all clean test
 

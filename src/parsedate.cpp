@@ -18,7 +18,6 @@ bool starts_with(const std::string_view& str, char x) {
   return str.size() > 0 && str.front() == x;
 }
 
-
 ISODate parsedate(std::string_view str) {
   //std::string_view::size_type pos = 0;
   if (str.size() < 1) throw std::runtime_error("Invalid ISO8601 date");
@@ -61,6 +60,9 @@ ISODate parsedate(std::string_view str) {
     if ((str[0] == '-') != extended_format)
       throw std::runtime_error("Invalid ISO8601 date");
     if (str[0] == '-') str.remove_prefix(1);
+    // we can't have '-' at the end
+    if (str.size() == 0) 
+      throw std::runtime_error("Invalid ISO8601 date");
   }
   // Weekday
   if (str.size() > 0 && result.type() == ISODate::YEARWEEKDAY) {
