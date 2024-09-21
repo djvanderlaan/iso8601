@@ -8,7 +8,6 @@ ISOTime make_standard(const ISOTime& time, bool fill_missing) {
     const double hf = t.hour;
     t.hour = std::floor(t.hour);
     t.hour_fractional = false;
-    const double mf = (hf - t.hour)*60.0;
     t.minutes = (hf - t.hour)*60.0;
     t.minutes_fractional = true;
     t.has_minutes = true;

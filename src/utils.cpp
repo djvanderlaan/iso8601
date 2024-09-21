@@ -10,8 +10,14 @@ std::string_view::size_type find_from_table(const std::string_view& str, std::st
 
 std::string_view::size_type find_non_num(const std::string_view& str) {
   for (std::string_view::size_type i = 0; str.size(); ++i) 
-    if (str[i] < '0' || str[i] > '9') return i;
+    if (!isnumchar(str[i])) return i;
   return std::string_view::npos;
+}
+
+std::string_view::size_type count_numeric(const std::string_view& str) {
+  for (std::string_view::size_type i = 0; str.size(); ++i) 
+    if (!isnumchar(str[i])) return i;
+  return str.size();
 }
 
 bool all_num(const std::string_view& str) {

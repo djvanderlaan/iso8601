@@ -1,17 +1,6 @@
 #include "parsetime.h"
 #include "utils.h"
 
-#include <iostream>
-#include <utility>
-
-
-bool isnumchar(char c) {
-  return (c >= '0' && c <= '9');
-}
-bool isdecimal(char c) {
-  return c == '.' || c == ',';
-}
-
 typedef std::pair<double, bool> Fractional;
 
 Fractional readfractime(const std::string_view& str, std::string_view::size_type& pos) {
@@ -77,32 +66,23 @@ ISOTime parsetime(std::string_view str) {
   if (str.front() == 'T') str.remove_prefix(1);
 
   // Hours
-  auto [hour, hour_fractional] = readfractime(str, pos);
-  ISOTime result{hour, hour_fractional};
+  const auto r = readfractime(str, pos);
+  ISOTime result{r.first, r.second};
   str = str.substr(pos);
   // Minutes
   bool extended_format = false;
-  bool has_minutes = false;
-  double minutes = 0.0;
-  bool minutes_fractional = true;
-  if (!hour_fractional && str.size() > 0 && !timezonestart(str[0])) {
+  if (!result.hour_fractional && str.size() > 0 && !timezonestart(str[0])) {
     // Check if we have HH:MM or HHMM
     if (str[0] == ':')  {
       extended_format = true;
       str.remove_prefix(1);
     }
     const auto r = readfractime(str, pos);
-    minutes = r.first;
-    minutes_fractional = r.second;
-    has_minutes = true;
     str = str.substr(pos);
     result.set_minutes(r.first, r.second);
   }
   // Seconds
-  bool has_seconds = false;
-  double seconds = 0.0;
-  bool seconds_fractional = true;
-  if (has_minutes && !minutes_fractional && str.size() > 0 && 
+  if (result.has_minutes && !result.minutes_fractional && str.size() > 0 && 
       !timezonestart(str[0])) {
     // Check if we have HH:MM or HHMM
     const bool colon = str[0] == ':';
@@ -110,9 +90,6 @@ ISOTime parsetime(std::string_view str) {
       throw std::runtime_error("Invalid ISO8601 time");
     if (str[0] == ':')  str.remove_prefix(1);
     const auto r = readfractime(str, pos);
-    seconds = r.first;
-    seconds_fractional = r.second;
-    has_seconds = true;
     str = str.substr(pos);
     result.set_seconds(r.first, r.second);
   }
