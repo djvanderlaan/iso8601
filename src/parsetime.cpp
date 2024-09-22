@@ -63,7 +63,8 @@ ISOTimezone parse_timezone(const std::string_view& str, std::string_view::size_t
 ISOTime parsetime(std::string_view str) {
   std::string_view::size_type pos = 0;
   if (str.size() < 1) throw std::runtime_error("Invalid ISO8601 time");
-  if (str.front() == 'T') str.remove_prefix(1);
+  const bool starts_with_T = str.front() == 'T';
+  if (starts_with_T) str.remove_prefix(1);
 
   // Hours
   const auto r = readfractime(str, pos);
@@ -71,7 +72,7 @@ ISOTime parsetime(std::string_view str) {
   str = str.substr(pos);
   // Minutes
   bool extended_format = false;
-  if (!result.hour_fractional && str.size() > 0 && !timezonestart(str[0])) {
+  if (!result.hour_fractional() && str.size() > 0 && !timezonestart(str[0])) {
     // Check if we have HH:MM or HHMM
     if (str[0] == ':')  {
       extended_format = true;
@@ -81,8 +82,11 @@ ISOTime parsetime(std::string_view str) {
     str = str.substr(pos);
     result.set_minutes(r.first, r.second);
   }
+  // A check; we don't accept compact format without T
+  if (!extended_format && !starts_with_T)
+    throw std::runtime_error("Invalid ISO8601 time");
   // Seconds
-  if (result.has_minutes && !result.minutes_fractional && str.size() > 0 && 
+  if (result.has_minutes() && !result.minutes_fractional() && str.size() > 0 && 
       !timezonestart(str[0])) {
     // Check if we have HH:MM or HHMM
     const bool colon = str[0] == ':';
@@ -97,6 +101,6 @@ ISOTime parsetime(std::string_view str) {
   auto tz = parse_timezone(str, pos);
   result.set_timezone(tz);
   // Output result
-  return make_standard(result);
+  return result;
 }
 

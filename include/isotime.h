@@ -31,86 +31,136 @@ class ISOTimezone {
 class ISOTime {
   public:
     ISOTime(double h, bool hfrac, ISOTimezone tz = {}) : 
-        hour{h}, hour_fractional{hfrac}, 
-        timezone{tz} {
+        hour_{h}, hour_fractional_{hfrac}, 
+        timezone_{tz} {
       validate();
     }
 
+    /*
     ISOTime(double h, bool hfrac, double m, bool mfrac, ISOTimezone tz = {}) : 
-        hour{h}, hour_fractional{hfrac}, 
-        minutes{m}, minutes_fractional{mfrac}, has_minutes{true}, 
-        timezone{tz} {
+        hour_{h}, hour_fractional_{hfrac}, 
+        minutes_{m}, minutes_fractional_{mfrac}, has_minutes_{true}, 
+        timezone_{tz} {
       validate();
     }
 
     ISOTime(double h, bool hfrac, double m, bool mfrac, double s, bool sfrac, ISOTimezone tz = {}) : 
-        hour{h}, hour_fractional{hfrac}, 
-        minutes{m}, minutes_fractional{mfrac}, has_minutes{true}, 
-        seconds{s}, seconds_fractional{sfrac}, has_seconds{true}, 
-        timezone{tz} {
+        hour_{h}, hour_fractional_{hfrac}, 
+        minutes_{m}, minutes_fractional_{mfrac}, has_minutes_{true}, 
+        seconds_{s}, seconds_fractional_{sfrac}, has_seconds_{true}, 
+        timezone_{tz} {
       validate();
     }
 
     ISOTime(double h, bool hfrac, double m, bool mfrac, bool hasm, double s, bool sfrac, bool hass, ISOTimezone tz = {}) : 
-        hour{h}, hour_fractional{hfrac}, 
-        minutes{m}, minutes_fractional{mfrac}, has_minutes{hasm}, 
-        seconds{s}, seconds_fractional{sfrac}, has_seconds{hass}, 
-        timezone{tz} {
+        hour_{h}, hour_fractional_{hfrac}, 
+        minutes_{m}, minutes_fractional_{mfrac}, has_minutes_{hasm}, 
+        seconds_{s}, seconds_fractional_{sfrac}, has_seconds_{hass}, 
+        timezone_{tz} {
       validate();
+    }
+    */
+
+    void set_hour(double value, bool fractional) {
+      if (value < 0.0 || value > 24) throw std::runtime_error("Invalid time.");
+      if (fractional && (minutes_fractional_ || seconds_fractional_)) 
+        throw std::runtime_error("Invalid time.");
+      hour_ = value;
+      hour_fractional_ = fractional;
+    }
+
+    double hour() const {
+      return hour_;
+    }
+
+    bool hour_fractional() const {
+      return hour_fractional_;
     }
 
     void set_minutes(double value, bool fractional) {
-      if (hour_fractional) throw std::runtime_error("Invalid time.");
+      if (hour_fractional_) throw std::runtime_error("Invalid time.");
       if (value < 0.0 || value >= 60) throw std::runtime_error("Invalid time.");
-      has_minutes = true;
-      minutes = value;
-      minutes_fractional = fractional;
+      if (hour_ == 24 && value != 0) throw std::runtime_error("Invalid time.");
+      has_minutes_ = true;
+      minutes_ = value;
+      minutes_fractional_ = fractional;
+    }
+
+    bool has_minutes() const {
+      return has_minutes_;
+    }
+
+    double minutes() const {
+      if (!has_minutes_) throw std::runtime_error("Time does not have minutes.");
+      return minutes_;
+    }
+
+    bool minutes_fractional() const {
+      if (!has_minutes_) throw std::runtime_error("Time does not have minutes.");
+      return minutes_fractional_;
     }
 
     void set_seconds(double value, bool fractional) {
-      if (hour_fractional) throw std::runtime_error("Invalid time.");
-      if (minutes_fractional) throw std::runtime_error("Invalid time.");
-      if (!has_minutes) throw std::runtime_error("Invalid time.");
+      if (hour_fractional_) throw std::runtime_error("Invalid time.");
+      if (minutes_fractional_) throw std::runtime_error("Invalid time.");
+      if (!has_minutes_) throw std::runtime_error("Invalid time.");
       if (value < 0.0 || value >= 60) throw std::runtime_error("Invalid time.");
-      has_seconds = true;
-      seconds = value;
-      seconds_fractional = fractional;
+      if (hour_ == 24 && value != 0) throw std::runtime_error("Invalid time.");
+      has_seconds_ = true;
+      seconds_ = value;
+      seconds_fractional_ = fractional;
+    }
+
+    bool has_seconds() const {
+      return has_seconds_;
+    }
+
+    double seconds() const {
+      if (!has_seconds_) throw std::runtime_error("Time does not have seconds.");
+      return seconds_;
+    }
+
+    bool seconds_fractional() const {
+      if (!has_seconds_) throw std::runtime_error("Time does not have seconds.");
+      return seconds_fractional_;
     }
 
     void set_timezone(const ISOTimezone& tz) {
-      timezone = tz;
+      timezone_ = tz;
+    }
+
+    const ISOTimezone& timezone() const {
+      return timezone_;
     }
 
 
   private:
 
     void validate() {
-      if (has_seconds && !has_minutes) throw std::runtime_error("Invalid time.");
-      if (!has_minutes && minutes != 0.0) throw std::runtime_error("Invalid time.");
-      if (!has_seconds && seconds != 0.0) throw std::runtime_error("Invalid time.");
-      if (hour_fractional && (has_minutes || has_seconds))  throw std::runtime_error("Invalid time.");
-      if (minutes_fractional && has_seconds)  throw std::runtime_error("Invalid time.");
+      if (has_seconds_ && !has_minutes_) throw std::runtime_error("Invalid time.");
+      if (!has_minutes_ && minutes_ != 0.0) throw std::runtime_error("Invalid time.");
+      if (!has_seconds_ && seconds_ != 0.0) throw std::runtime_error("Invalid time.");
+      if (hour_fractional_ && (has_minutes_ || has_seconds_))  throw std::runtime_error("Invalid time.");
+      if (minutes_fractional_ && has_seconds_)  throw std::runtime_error("Invalid time.");
       // TODO: check is hour = 24 is allowed
-      if (hour < 0.0 || hour > 24.0) throw std::runtime_error("Invalid time.");
-      if (has_minutes && (minutes < 0.0 || minutes > 60.0)) throw std::runtime_error("Invalid time.");
-      if (has_seconds && (seconds < 0.0 || seconds > 60.0)) throw std::runtime_error("Invalid time.");
+      if (hour_ < 0.0 || hour_ > 24.0) throw std::runtime_error("Invalid time.");
+      if (has_minutes_ && (minutes_ < 0.0 || minutes_ > 60.0)) throw std::runtime_error("Invalid time.");
+      if (has_seconds_ && (seconds_ < 0.0 || seconds_ > 60.0)) throw std::runtime_error("Invalid time.");
     }
     
-
-  public:
     // hour
-    double hour = 0.0;
-    bool   hour_fractional = false;
+    double hour_ = 0.0;
+    bool   hour_fractional_ = false;
     // minutes; optional
-    double minutes = 0.0;
-    bool   minutes_fractional = false;
-    bool   has_minutes = false;
+    double minutes_ = 0.0;
+    bool   minutes_fractional_ = false;
+    bool   has_minutes_ = false;
     // seconds; optional
-    double seconds = 0.0;
-    bool   seconds_fractional = false;
-    bool   has_seconds = false;
+    double seconds_ = 0.0;
+    bool   seconds_fractional_ = false;
+    bool   has_seconds_ = false;
     // timezone
-    ISOTimezone timezone;
+    ISOTimezone timezone_;
 };
 
 
