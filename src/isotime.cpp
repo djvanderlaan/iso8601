@@ -17,7 +17,7 @@ ISOTime make_standard(const ISOTime& time, bool fill_missing) {
   if (fill_missing && !t.has_minutes()) {
     t.set_minutes(0, false);
   }
-  if (t.has_minutes() && t.seconds_fractional()) {
+  if (t.has_seconds() && t.seconds_fractional()) {
     // check if seconds are practically integer
     const double sround = std::round(t.seconds());
     if (std::abs(t.seconds() - sround) < 1E-10) {
