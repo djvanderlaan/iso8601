@@ -1,22 +1,11 @@
 
-#include "parsedate.h"
+#include "iso8601.h"
 #include "utils.h"
 
 int getint(const std::string_view& str, std::string_view::size_type nchar) {
   return strtoint(str.substr(0, nchar));
 }
 
-bool starts_with(const std::string_view& str, const std::string_view& x) {
-  if (str.size() < x.size()) return false;
-  bool result = true;
-  for (auto i = 0UL; i < x.size(); ++i) 
-    if (x[i] != str[i]) result = false;
-  return result;
-}
-
-bool starts_with(const std::string_view& str, char x) {
-  return str.size() > 0 && str.front() == x;
-}
 
 ISODate parsedate(std::string_view str) {
   //std::string_view::size_type pos = 0;

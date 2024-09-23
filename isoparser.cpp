@@ -1,10 +1,22 @@
 #include "utils.h"
-#include "parsetime.h"
-#include "parsedate.h"
+#include "iso8601.h"
 
 #include <iostream>
 #include <array>
 
+enum class ISOType { Date, Time, DateTime, Duration, TimeInterval, RepeatingInterval };
+
+ISOType determineisotype(const std::string_view& str) {
+  if (contains(str, '/')) return ISOType::TimeInterval;
+  if (starts_with(str, 'P')) return ISOType::Duration;
+  if (starts_with(str, 'R')) return ISOType::RepeatingInterval;
+  if (starts_with(str, 'T') || (str.size() > 2 && str[2] == ':'))
+    return ISOType::Time;
+  // we now have either a date or datetime; a datetime can either be
+  // <data>T<time> or <date> <time>; officially only T is allowed
+  if (contains(str, 'T') || contains(str, ' ')) return ISOType::DateTime;
+  return ISOType::Date;
+}
 
 std::pair<ISODate, ISOTime> parsedatetime(std::string_view str) {
   const auto date_end_pos = find_from_table(str, "/TP ");
@@ -50,8 +62,13 @@ int main(int argc, char* argv[]) {
     // Skip empty lines
     if (line.empty()) continue;
     std::cout << "Parsing '" << line << "'\n";
-    const auto dt = parsedatetime(line);
-    std::cout << dt.first << dt.second << "\n";
+    try {
+      const auto dt = parsedatetime(line);
+      std::cout << dt.first << dt.second << "\n";
+    } catch (std::exception& e) {
+      std::cout << "<invalid>\n";
+      //std::cerr << e.what() << "\n";
+    }
 
     /*
     //std::cout << "Parsing '" << line << "'\n";
