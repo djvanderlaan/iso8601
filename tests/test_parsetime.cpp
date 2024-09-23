@@ -1,7 +1,7 @@
 
 #include "catch_amalgamated.hpp"
 
-#include "parsetime.h"
+#include "iso8601.h"
 
 TEST_CASE("Time parsing THH:MM:SS", "[parsetime]") {
   ISOTime time = parsetime("T12:23:34");

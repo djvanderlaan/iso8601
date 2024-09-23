@@ -1,7 +1,7 @@
 
 #include "catch_amalgamated.hpp"
 
-#include "parsedate.h"
+#include "iso8601.h"
 
 TEST_CASE("Date parsing YYYY", "[parsedate]") {
   ISODate date = parsedate("2022");
