@@ -2,12 +2,14 @@
 #include "iso8601.h"
 #include "utils.h"
 
+namespace ISO8601 {
+
 int getint(const std::string_view& str, std::string_view::size_type nchar) {
   return strtoint(str.substr(0, nchar));
 }
 
 
-ISODate parsedate(std::string_view str) {
+Date parsedate(std::string_view str) {
   //std::string_view::size_type pos = 0;
   if (str.size() < 1) throw std::runtime_error("Invalid ISO8601 date");
   int sign = 1;
@@ -21,7 +23,7 @@ ISODate parsedate(std::string_view str) {
     // TODO:we have parial year; for now we don't accept this
     throw std::runtime_error("Invalid ISO8601 date");
   }
-  ISODate result{sign * getint(str, 4L)};
+  Date result{sign * getint(str, 4L)};
   str.remove_prefix(4);
   // Determine if we have extended format e.g. YYYY-MM-DD or compact 
   // format e.g. YYYYMMDD; if we have extended format - needs to be used all
@@ -54,20 +56,21 @@ ISODate parsedate(std::string_view str) {
       throw std::runtime_error("Invalid ISO8601 date");
   }
   // Weekday
-  if (str.size() > 0 && result.type() == ISODate::YEARWEEKDAY) {
+  if (str.size() > 0 && result.type() == Date::YEARWEEKDAY) {
     result.set_weekday(getint(str, 1));
     str.remove_prefix(1);
   }
   // Day of month
-  if (str.size() > 0 && result.type() == ISODate::YEARMONTHDAY) {
+  if (str.size() > 0 && result.type() == Date::YEARMONTHDAY) {
     if (str.size() < 2) throw std::runtime_error("Invalid ISO8601 date");
     result.set_day(getint(str, 2));
     str.remove_prefix(2);
   }
   // Date YYYYMM is not allowed to avoid confusion with YYMMDD
-  if (!extended_format && result.type() == ISODate::YEARMONTHDAY && !result.has_day()) 
+  if (!extended_format && result.type() == Date::YEARMONTHDAY && !result.has_day()) 
     throw std::runtime_error("Invalid ISO8601 date");
   if (str.size() > 0) throw std::runtime_error("Invalid ISO8601 date");
   return result;
 }
 
+}

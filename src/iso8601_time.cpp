@@ -1,9 +1,12 @@
-#include "isotime.h"
+#include "iso8601_time.h"
 #include <iomanip>
 #include <cmath>
 
-ISOTime make_standard(const ISOTime& time, bool fill_missing) {
-  ISOTime t = time;
+
+namespace ISO8601 {
+
+Time make_standard(const Time& time, bool fill_missing) {
+  Time t = time;
   if (t.hour_fractional()) {
     const double hf = t.hour();
     t.set_hour(std::floor(t.hour()), false);
@@ -30,7 +33,7 @@ ISOTime make_standard(const ISOTime& time, bool fill_missing) {
   return t;
 }
 
-std::ostream& operator<<(std::ostream& stream, const ISOTimezone& tz) {
+std::ostream& operator<<(std::ostream& stream, const Timezone& tz) {
   if (tz.localtime) {
     // do nothing
   } else if (tz.offset_hours == 0 && tz.offset_minutes == 0) {
@@ -43,7 +46,7 @@ std::ostream& operator<<(std::ostream& stream, const ISOTimezone& tz) {
   return stream;
 }
 
-std::ostream& operator<<(std::ostream& stream, const ISOTime& time) {
+std::ostream& operator<<(std::ostream& stream, const Time& time) {
   stream << 'T';
   if (time.hour_fractional()) {
     if (time.hour() < 10) stream << '0';
@@ -72,5 +75,7 @@ std::ostream& operator<<(std::ostream& stream, const ISOTime& time) {
   stream << time.timezone();
 
   return stream;
+}
+
 }
 

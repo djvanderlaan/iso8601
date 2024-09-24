@@ -1,6 +1,8 @@
 #include "iso8601.h"
 #include "utils.h"
 
+namespace ISO8601 {
+
 ISOType determineisotype(std::string_view str) {
   if (contains(str, '/')) return ISOType::TimeInterval;
   if (starts_with(str, 'P')) return ISOType::Duration;
@@ -13,3 +15,4 @@ ISOType determineisotype(std::string_view str) {
   return ISOType::Date;
 }
 
+}

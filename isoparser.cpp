@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     if (line.empty()) continue;
     std::cout << "Parsing '" << line << "'\n";
     try {
-      const auto dt = parsedatetime(line);
+      const auto dt = ISO8601::parsedatetime(line);
       std::cout << dt.date() << dt.time() << "\n";
     } catch (std::exception& e) {
       std::cout << "<invalid>\n";

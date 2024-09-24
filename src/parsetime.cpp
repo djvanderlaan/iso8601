@@ -1,6 +1,8 @@
 #include "iso8601.h"
 #include "utils.h"
 
+namespace ISO8601 {
+
 typedef std::pair<double, bool> Fractional;
 
 Fractional readfractime(const std::string_view& str, std::string_view::size_type& pos) {
@@ -30,14 +32,14 @@ bool timezonestart(char c) {
   return c == 'Z' || c == '+' || c == '-';
 }
 
-ISOTimezone parse_timezone(const std::string_view& str, std::string_view::size_type& pos) {
+Timezone parse_timezone(const std::string_view& str, std::string_view::size_type& pos) {
   const auto end = str.size();
   pos = 0;
   const auto nchar_remain = end - pos;
   if (nchar_remain == 0) {
-    return ISOTimezone{};
+    return Timezone{};
   } else if (nchar_remain == 1 && str.at(pos) == 'Z') {
-    return ISOTimezone{false};
+    return Timezone{false};
   } else if (str.at(pos) == '-' || str.at(pos) == '+') {
     if (nchar_remain < 3) throw std::runtime_error("Invalid time zone");
     int hour = strtoint(str.substr(pos, pos+3));
@@ -54,13 +56,13 @@ ISOTimezone parse_timezone(const std::string_view& str, std::string_view::size_t
     } else {
       throw std::runtime_error("Invalid time zone");
     }
-    return ISOTimezone{false, hour, minutes};
+    return Timezone{false, hour, minutes};
   } else {
     throw std::runtime_error("Invalid time zone");
   }
 }
 
-ISOTime parsetime(std::string_view str) {
+Time parsetime(std::string_view str) {
   std::string_view::size_type pos = 0;
   if (str.size() < 1) throw std::runtime_error("Invalid ISO8601 time");
   const bool starts_with_T = str.front() == 'T';
@@ -68,7 +70,7 @@ ISOTime parsetime(std::string_view str) {
 
   // Hours
   const auto r = readfractime(str, pos);
-  ISOTime result{r.first, r.second};
+  Time result{r.first, r.second};
   str = str.substr(pos);
   // Minutes
   bool extended_format = false;
@@ -104,3 +106,4 @@ ISOTime parsetime(std::string_view str) {
   return result;
 }
 
+}

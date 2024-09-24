@@ -2,9 +2,10 @@
 #include "catch_amalgamated.hpp"
 
 #include "iso8601.h"
+using namespace ISO8601;
 
 TEST_CASE("Time parsing THH:MM:SS", "[parsetime]") {
-  ISOTime time = parsetime("T12:23:34");
+  Time time = parsetime("T12:23:34");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -13,14 +14,14 @@ TEST_CASE("Time parsing THH:MM:SS", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing HH:MM:SS", "[parsetime]") {
-  ISOTime time = parsetime("12:23:34");
+  Time time = parsetime("12:23:34");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -29,14 +30,14 @@ TEST_CASE("Time parsing HH:MM:SS", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THHMMSS", "[parsetime]") {
-  ISOTime time = parsetime("T122334");
+  Time time = parsetime("T122334");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -45,14 +46,14 @@ TEST_CASE("Time parsing THHMMSS", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THH", "[parsetime]") {
-  ISOTime time = parsetime("T12");
+  Time time = parsetime("T12");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE_FALSE( time.has_minutes() );
@@ -61,14 +62,14 @@ TEST_CASE("Time parsing THH", "[parsetime]") {
   REQUIRE_FALSE( time.has_seconds() );
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THH.hhh", "[parsetime]") {
-  ISOTime time = parsetime("T12.123");
+  Time time = parsetime("T12.123");
   REQUIRE( time.hour() == 12.123 );
   REQUIRE( time.hour_fractional()  );
   REQUIRE_FALSE( time.has_minutes() );
@@ -77,14 +78,14 @@ TEST_CASE("Time parsing THH.hhh", "[parsetime]") {
   REQUIRE_FALSE( time.has_seconds() );
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THH:MM.mmm", "[parsetime]") {
-  ISOTime time = parsetime("T12:23.123");
+  Time time = parsetime("T12:23.123");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -93,14 +94,14 @@ TEST_CASE("Time parsing THH:MM.mmm", "[parsetime]") {
   REQUIRE_FALSE( time.has_seconds() );
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THHMM.mmm", "[parsetime]") {
-  ISOTime time = parsetime("T1223.123");
+  Time time = parsetime("T1223.123");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -109,14 +110,14 @@ TEST_CASE("Time parsing THHMM.mmm", "[parsetime]") {
   REQUIRE_FALSE( time.has_seconds() );
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THHMM", "[parsetime]") {
-  ISOTime time = parsetime("T1223");
+  Time time = parsetime("T1223");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -125,14 +126,14 @@ TEST_CASE("Time parsing THHMM", "[parsetime]") {
   REQUIRE_FALSE( time.has_seconds() );
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THH:MM:SS.sss", "[parsetime]") {
-  ISOTime time = parsetime("T12:23:34.123");
+  Time time = parsetime("T12:23:34.123");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -141,14 +142,14 @@ TEST_CASE("Time parsing THH:MM:SS.sss", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34.123 );
   REQUIRE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THHMMSS.sss", "[parsetime]") {
-  ISOTime time = parsetime("T122334.123");
+  Time time = parsetime("T122334.123");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -157,7 +158,7 @@ TEST_CASE("Time parsing THHMMSS.sss", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34.123 );
   REQUIRE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
@@ -182,7 +183,7 @@ TEST_CASE("Time parsing invalid cases", "[parsetime]") {
 }
 
 TEST_CASE("Time parsing THH:MM:SSZ", "[parsetime]") {
-  ISOTime time = parsetime("T12:23:34Z");
+  Time time = parsetime("T12:23:34Z");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -191,14 +192,14 @@ TEST_CASE("Time parsing THH:MM:SSZ", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE_FALSE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THH:MM:SS+01", "[parsetime]") {
-  ISOTime time = parsetime("T12:23:34+01");
+  Time time = parsetime("T12:23:34+01");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -207,14 +208,14 @@ TEST_CASE("Time parsing THH:MM:SS+01", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE_FALSE( tz.localtime );
   REQUIRE( tz.offset_hours == 1 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THH:MM:SS+0100", "[parsetime]") {
-  ISOTime time = parsetime("T12:23:34+0100");
+  Time time = parsetime("T12:23:34+0100");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -223,14 +224,14 @@ TEST_CASE("Time parsing THH:MM:SS+0100", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE_FALSE( tz.localtime );
   REQUIRE( tz.offset_hours == 1 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THH:MM:SS-03:30", "[parsetime]") {
-  ISOTime time = parsetime("T12:23:34-03:30");
+  Time time = parsetime("T12:23:34-03:30");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -239,14 +240,14 @@ TEST_CASE("Time parsing THH:MM:SS-03:30", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE_FALSE( tz.localtime );
   REQUIRE( tz.offset_hours == -3 );
   REQUIRE( tz.offset_minutes == 30 );
 }
 
 TEST_CASE("Time parsing THH:MM:SS.sssZ", "[parsetime]") {
-  ISOTime time = parsetime("T12:23:34.123Z");
+  Time time = parsetime("T12:23:34.123Z");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -255,14 +256,14 @@ TEST_CASE("Time parsing THH:MM:SS.sssZ", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34.123 );
   REQUIRE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE_FALSE( tz.localtime );
   REQUIRE( tz.offset_hours == 0 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THH:MM.mmm-03:30", "[parsetime]") {
-  ISOTime time = parsetime("T12:23.123-03:30");
+  Time time = parsetime("T12:23.123-03:30");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -271,14 +272,14 @@ TEST_CASE("Time parsing THH:MM.mmm-03:30", "[parsetime]") {
   REQUIRE_FALSE( time.has_seconds() );
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE_FALSE( tz.localtime );
   REQUIRE( tz.offset_hours == -3 );
   REQUIRE( tz.offset_minutes == 30 );
 }
 
 TEST_CASE("Time parsing THH+01:00", "[parsetime]") {
-  ISOTime time = parsetime("T12+01:00");
+  Time time = parsetime("T12+01:00");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE_FALSE( time.has_minutes() );
@@ -287,14 +288,14 @@ TEST_CASE("Time parsing THH+01:00", "[parsetime]") {
   REQUIRE_FALSE( time.has_seconds() );
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE_FALSE( tz.localtime );
   REQUIRE( tz.offset_hours == 1 );
   REQUIRE( tz.offset_minutes == 0 );
 }
 
 TEST_CASE("Time parsing THHMMSS+0100", "[parsetime]") {
-  ISOTime time = parsetime("T122334+0100");
+  Time time = parsetime("T122334+0100");
   REQUIRE( time.hour() == 12 );
   REQUIRE_FALSE( time.hour_fractional()  );
   REQUIRE( time.has_minutes() );
@@ -303,7 +304,7 @@ TEST_CASE("Time parsing THHMMSS+0100", "[parsetime]") {
   REQUIRE( time.has_seconds() );
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
-  ISOTimezone tz = time.timezone();
+  Timezone tz = time.timezone();
   REQUIRE_FALSE( tz.localtime );
   REQUIRE( tz.offset_hours == 1 );
   REQUIRE( tz.offset_minutes == 0 );

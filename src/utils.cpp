@@ -2,6 +2,8 @@
 
 #include<stdexcept>
 
+namespace ISO8601 {
+
 std::string_view::size_type find_from_table(const std::string_view& str, std::string_view table) {
   for (std::string_view::size_type i = 0; str.size(); ++i) 
     for (const char& c: table) if (str[i] == c) return i;
@@ -78,4 +80,6 @@ int strtoint(const std::string_view& str) {
     }
   }
   return sign * value;
+}
+
 }

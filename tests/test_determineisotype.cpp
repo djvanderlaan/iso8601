@@ -3,6 +3,8 @@
 
 #include "iso8601.h"
 
+using namespace ISO8601;
+
 TEST_CASE("Detect ISO8601 type", "[determineisotype]") {
 
   REQUIRE( determineisotype("2011-12-23") == ISOType::Date );

@@ -2,10 +2,11 @@
 #include "catch_amalgamated.hpp"
 
 #include "iso8601.h"
+using namespace ISO8601;
 
 TEST_CASE("Date parsing YYYY", "[parsedate]") {
-  ISODate date = parsedate("2022");
-  REQUIRE( date.type() == ISODate::YEAR );
+  Date date = parsedate("2022");
+  REQUIRE( date.type() == Date::YEAR );
   REQUIRE( date.year() == 2022 );
   REQUIRE_FALSE( date.has_month()  );
   REQUIRE_THROWS( date.month() == 12 );
@@ -20,20 +21,20 @@ TEST_CASE("Date parsing YYYY", "[parsedate]") {
 }
   
 TEST_CASE("Date parsing -YYYY", "[parsedate]") {
-  ISODate date = parsedate("-2022");
-  REQUIRE( date.type() == ISODate::YEAR );
+  Date date = parsedate("-2022");
+  REQUIRE( date.type() == Date::YEAR );
   REQUIRE( date.year() == -2022 );
 }
   
 TEST_CASE("Date parsing +YYYY", "[parsedate]") {
-  ISODate date = parsedate("+2022");
-  REQUIRE( date.type() == ISODate::YEAR );
+  Date date = parsedate("+2022");
+  REQUIRE( date.type() == Date::YEAR );
   REQUIRE( date.year() == 2022 );
 }
 
 TEST_CASE("Date parsing YYYY-MM-DD", "[parsedate]") {
-  ISODate date = parsedate("2022-12-22");
-  REQUIRE( date.type() == ISODate::YEARMONTHDAY );
+  Date date = parsedate("2022-12-22");
+  REQUIRE( date.type() == Date::YEARMONTHDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_month()  );
   REQUIRE( date.month() == 12 );
@@ -48,8 +49,8 @@ TEST_CASE("Date parsing YYYY-MM-DD", "[parsedate]") {
 }
   
 TEST_CASE("Date parsing YYYYMMDD", "[parsedate]") {
-  ISODate date = parsedate("20221222");
-  REQUIRE( date.type() == ISODate::YEARMONTHDAY );
+  Date date = parsedate("20221222");
+  REQUIRE( date.type() == Date::YEARMONTHDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_month()  );
   REQUIRE( date.month() == 12 );
@@ -58,8 +59,8 @@ TEST_CASE("Date parsing YYYYMMDD", "[parsedate]") {
 }
 
 TEST_CASE("Date parsing YYYY-MM", "[parsedate]") {
-  ISODate date = parsedate("2022-12");
-  REQUIRE( date.type() == ISODate::YEARMONTHDAY );
+  Date date = parsedate("2022-12");
+  REQUIRE( date.type() == Date::YEARMONTHDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_month()  );
   REQUIRE( date.month() == 12 );
@@ -68,8 +69,8 @@ TEST_CASE("Date parsing YYYY-MM", "[parsedate]") {
 }
 
 TEST_CASE("Date parsing -YYYYMMDD", "[parsedate]") {
-  ISODate date = parsedate("-20221222");
-  REQUIRE( date.type() == ISODate::YEARMONTHDAY );
+  Date date = parsedate("-20221222");
+  REQUIRE( date.type() == Date::YEARMONTHDAY );
   REQUIRE( date.year() == -2022 );
   REQUIRE( date.has_month()  );
   REQUIRE( date.month() == 12 );
@@ -94,8 +95,8 @@ TEST_CASE("Date parsing invalid dates YYYY-MM-DD", "[parsedate]") {
 }
 
 TEST_CASE("Date parsing YYYY-DDD", "[parsedate]") {
-  ISODate date = parsedate("2022-123");
-  REQUIRE( date.type() == ISODate::YEARDAY );
+  Date date = parsedate("2022-123");
+  REQUIRE( date.type() == Date::YEARDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_yearday() );
   REQUIRE( date.yearday() == 123); 
@@ -110,8 +111,8 @@ TEST_CASE("Date parsing YYYY-DDD", "[parsedate]") {
 }
   
 TEST_CASE("Date parsing YYYYDDD", "[parsedate]") {
-  ISODate date = parsedate("2022123");
-  REQUIRE( date.type() == ISODate::YEARDAY );
+  Date date = parsedate("2022123");
+  REQUIRE( date.type() == Date::YEARDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_yearday() );
   REQUIRE( date.yearday() == 123); 
@@ -126,8 +127,8 @@ TEST_CASE("Date parsing invalid dates YYYY-DDD", "[parsedate]") {
 }
   
 TEST_CASE("Date parsing YYYY-Www-D", "[parsedate]") {
-  ISODate date = parsedate("2022-W12-3");
-  REQUIRE( date.type() == ISODate::YEARWEEKDAY );
+  Date date = parsedate("2022-W12-3");
+  REQUIRE( date.type() == Date::YEARWEEKDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_week() );
   REQUIRE( date.week() == 12); 
@@ -142,8 +143,8 @@ TEST_CASE("Date parsing YYYY-Www-D", "[parsedate]") {
 }
   
 TEST_CASE("Date parsing YYYYWwwD", "[parsedate]") {
-  ISODate date = parsedate("2022W123");
-  REQUIRE( date.type() == ISODate::YEARWEEKDAY );
+  Date date = parsedate("2022W123");
+  REQUIRE( date.type() == Date::YEARWEEKDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_week() );
   REQUIRE( date.week() == 12); 
@@ -152,8 +153,8 @@ TEST_CASE("Date parsing YYYYWwwD", "[parsedate]") {
 }
   
 TEST_CASE("Date parsing YYYYWww", "[parsedate]") {
-  ISODate date = parsedate("2022W12");
-  REQUIRE( date.type() == ISODate::YEARWEEKDAY );
+  Date date = parsedate("2022W12");
+  REQUIRE( date.type() == Date::YEARWEEKDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_week() );
   REQUIRE( date.week() == 12); 
@@ -162,8 +163,8 @@ TEST_CASE("Date parsing YYYYWww", "[parsedate]") {
 }
 
 TEST_CASE("Date parsing YYYY-Www", "[parsedate]") {
-  ISODate date = parsedate("2022W12");
-  REQUIRE( date.type() == ISODate::YEARWEEKDAY );
+  Date date = parsedate("2022W12");
+  REQUIRE( date.type() == Date::YEARWEEKDAY );
   REQUIRE( date.year() == 2022 );
   REQUIRE( date.has_week() );
   REQUIRE( date.week() == 12); 
