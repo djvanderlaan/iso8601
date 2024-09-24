@@ -1,34 +1,12 @@
 #ifndef iso8601_time_h
 #define iso8601_time_h
 
+#include "iso8601_timezone.h"
+
 #include <stdexcept>
 #include <ostream>
 
 namespace ISO8601 {
-
-  class Timezone {
-    public:
-      bool localtime = true;
-      int offset_hours = 0;
-      int offset_minutes = 0;
-
-      Timezone(bool local = true, int hours = 0, int minutes = 0) : 
-          localtime(local), offset_hours{hours}, offset_minutes(minutes) {
-        if (localtime) {
-          if (offset_hours != 0 || offset_minutes != 0) {
-            throw std::runtime_error("Local time should not have a offset.");
-          }
-        } else {
-          if (offset_hours < -12 || offset_hours > 12)
-            throw std::runtime_error("Invalid offset of time zone.");
-          if (offset_minutes < 0 || offset_minutes >= 60)
-            throw std::runtime_error("Invalid offset of time zone.");
-          if ((offset_hours == -12 || offset_hours == 12) && (offset_minutes != 0))
-            throw std::runtime_error("Invalid offset of time zone.");
-        }
-      }
-  };
-
 
   class Time {
     public:
@@ -39,9 +17,7 @@ namespace ISO8601 {
       }
 
       void set_hour(double value, bool fractional) {
-        if (value < 0.0 || value > 24) throw std::runtime_error("Invalid time.");
-        if (fractional && (minutes_fractional_ || seconds_fractional_)) 
-          throw std::runtime_error("Invalid time.");
+        validate();
         hour_ = value;
         hour_fractional_ = fractional;
       }
@@ -141,11 +117,10 @@ namespace ISO8601 {
   };
 
 
-  Time make_standard(const Time& time, bool fill_missing = false);
+  Time remove_fractions(const Time& time, bool round_seconds = false);
+  Time fill_missing(const Time& time);
 
-  std::ostream& operator<<(std::ostream& stream, const Timezone& tz);
   std::ostream& operator<<(std::ostream& stream, const Time& time);
-
 }
 
 #endif

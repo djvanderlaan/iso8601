@@ -30,9 +30,9 @@ TEST_CASE("Datetime parsing YYYY-MM-DDTHH:MM:SS", "[parsedatetime]") {
   REQUIRE( time.seconds() == 34 );
   REQUIRE_FALSE( time.seconds_fractional() );
   Timezone tz = time.timezone();
-  REQUIRE( tz.localtime );
-  REQUIRE( tz.offset_hours == 0 );
-  REQUIRE( tz.offset_minutes == 0 );
+  REQUIRE( tz.localtime() );
+  REQUIRE( tz.offset_hours() == 0 );
+  REQUIRE( tz.offset_minutes() == 0 );
 }
 
 TEST_CASE("Datetime parsing YYYY-Www-D HH:MM.mmm", "[parsedatetime]") {
@@ -62,9 +62,9 @@ TEST_CASE("Datetime parsing YYYY-Www-D HH:MM.mmm", "[parsedatetime]") {
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
   Timezone tz = time.timezone();
-  REQUIRE( tz.localtime );
-  REQUIRE( tz.offset_hours == 0 );
-  REQUIRE( tz.offset_minutes == 0 );
+  REQUIRE( tz.localtime() );
+  REQUIRE( tz.offset_hours() == 0 );
+  REQUIRE( tz.offset_minutes() == 0 );
 }
 
 TEST_CASE("Datetime parsing YYYY-DDDTHHZ", "[parsedatetime]") {
@@ -94,9 +94,9 @@ TEST_CASE("Datetime parsing YYYY-DDDTHHZ", "[parsedatetime]") {
   REQUIRE_THROWS( time.seconds() == 34 );
   REQUIRE_THROWS( time.seconds_fractional() );
   Timezone tz = time.timezone();
-  REQUIRE_FALSE( tz.localtime );
-  REQUIRE( tz.offset_hours == 0 );
-  REQUIRE( tz.offset_minutes == 0 );
+  REQUIRE_FALSE( tz.localtime() );
+  REQUIRE( tz.offset_hours() == 0 );
+  REQUIRE( tz.offset_minutes() == 0 );
 }
 
 TEST_CASE("Datetime parsing invalid dates", "[parsedatetime]") {

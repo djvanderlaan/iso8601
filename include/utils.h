@@ -8,10 +8,6 @@ namespace ISO8601 {
 
   std::string_view::size_type find_from_table(const std::string_view& str, std::string_view table);
 
-  bool all_num(const std::string_view& str);
-
-  std::string_view::size_type find_non_num(const std::string_view& str);
-
   int strtoint(const std::string_view& str);
 
   std::string_view::size_type count_numeric(const std::string_view& str);
