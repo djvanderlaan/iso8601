@@ -3,6 +3,7 @@
 
 #include "iso8601_date.h"
 #include "iso8601_time.h"
+#include <ostream>
 
 namespace ISO8601 {
 
@@ -40,6 +41,8 @@ namespace ISO8601 {
       Date date_;
       Time time_;
   };
+
+  std::ostream& operator<<(std::ostream& stream, const Datetime& datetime);
 
 }
 
