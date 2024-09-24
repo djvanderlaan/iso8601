@@ -4,35 +4,6 @@
 #include <iostream>
 #include <array>
 
-std::pair<ISODate, ISOTime> parsedatetime(std::string_view str) {
-  const auto date_end_pos = find_from_table(str, "/TP ");
-  ISODate date = parsedate(str.substr(0, date_end_pos));
-  // Wee need a full date; check for that
-  switch (date.type()) {
-    case ISODate::YEAR:
-      throw std::runtime_error("Invalid ISO8601 date-time");
-    case ISODate::YEARMONTHDAY:
-      if (!date.has_month() || !date.has_day())
-        throw std::runtime_error("Invalid ISO8601 date-time");
-      break;
-    case ISODate::YEARWEEKDAY:
-      if (!date.has_week() || !date.has_weekday())
-        throw std::runtime_error("Invalid ISO8601 date-time");
-      break;
-    case ISODate::YEARDAY:
-      if (!date.has_yearday())
-        throw std::runtime_error("Invalid ISO8601 date-time");
-      break;
-  }
-  str.remove_prefix(date_end_pos);
-  if (str.size() < 1 || str.front() == '/') 
-    throw std::runtime_error("Invalid ISO8601 date-time");
-  if (str.front() == ' ') str.remove_prefix(1);
-  ISOTime time = parsetime(str);
-  return std::make_pair(date, time);
-}
-
-
 
 int main(int argc, char* argv[]) {
 
@@ -50,7 +21,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Parsing '" << line << "'\n";
     try {
       const auto dt = parsedatetime(line);
-      std::cout << dt.first << dt.second << "\n";
+      std::cout << dt.date() << dt.time() << "\n";
     } catch (std::exception& e) {
       std::cout << "<invalid>\n";
       //std::cerr << e.what() << "\n";
