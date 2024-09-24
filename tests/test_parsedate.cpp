@@ -172,7 +172,7 @@ TEST_CASE("Date parsing YYYY-Www", "[parsedate]") {
   REQUIRE_THROWS( date.weekday()); 
 }
 
-TEST_CASE("Date parsing invalid dates YYYY-Www-D", "[parsedate]") {
+TEST_CASE("Date parsing invalid dates", "[parsedate]") {
   REQUIRE_THROWS( parsedate("2022-W123") );
   REQUIRE_THROWS( parsedate("2022-W54-3") );
   REQUIRE_THROWS( parsedate("2022-W00-3") );
