@@ -5,7 +5,7 @@
 
 namespace ISO8601 {
 
-  Time remove_fractions(const Time& time, bool round_seconds) {
+  Time removefractions(const Time& time, bool round_seconds) {
     Time t = time;
     if (t.hour_fractional()) {
       const double hf = t.hour();
@@ -27,10 +27,10 @@ namespace ISO8601 {
     return t;
   }
 
-  Time fill_missing(const Time& time) {
+  Time fillmissing(const Time& time) {
     Time t = time;
     if (time.hour_fractional() || (time.has_minutes() && time.minutes_fractional())) {
-      t = remove_fractions(time);
+      t = removefractions(time);
     }
     if (!t.has_minutes()) {
       t.set_minutes(0, false);

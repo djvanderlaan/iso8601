@@ -127,6 +127,8 @@ namespace ISO8601 {
       int yearday_ = -1;
   };
 
+
+  Date fillmissing(Date date);
   std::ostream& operator<<(std::ostream& stream, const Date& date);
 
 }

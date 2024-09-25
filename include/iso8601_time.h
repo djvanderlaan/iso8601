@@ -117,8 +117,8 @@ namespace ISO8601 {
   };
 
 
-  Time remove_fractions(const Time& time, bool round_seconds = false);
-  Time fill_missing(const Time& time);
+  Time removefractions(const Time& time, bool round_seconds = false);
+  Time fillmissing(const Time& time);
 
   std::ostream& operator<<(std::ostream& stream, const Time& time);
 }

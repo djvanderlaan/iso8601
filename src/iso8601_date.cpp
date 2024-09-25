@@ -4,6 +4,25 @@
 
 namespace ISO8601 {
 
+  Date fillmissing(Date date) {
+    switch (date.type()) {
+      case Date::YEAR:
+        date.set_month(1);
+        date.set_day(1);
+        break;
+      case Date::YEARMONTHDAY:
+        if (!date.has_month()) date.set_month(1);
+        if (!date.has_day()) date.set_day(1);
+        break;
+      case Date::YEARWEEKDAY:
+        if (!date.has_weekday()) date.set_weekday(1);
+      case Date::YEARDAY:
+        // nothing to do
+        break;
+    }
+    return date;
+  }
+
   std::ostream& operator<<(std::ostream& stream, const Date& date) {
     stream << std::setw(4) << std::setfill('0') << date.year();
     if (date.type() == Date::YEARMONTHDAY) {
