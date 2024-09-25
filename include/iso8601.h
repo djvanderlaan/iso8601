@@ -8,8 +8,8 @@
 
 namespace ISO8601 {
 
-  enum class ISOType { Date, Time, DateTime, Duration, TimeInterval, RepeatingInterval };
-  ISOType determinetype(std::string_view str);
+  enum class ISO8601Type { Date, Time, DateTime, Duration, TimeInterval, RepeatingInterval };
+  ISO8601Type determinetype(std::string_view str);
 
   Date parsedate(std::string_view str);
   Time parsetime(std::string_view str);
