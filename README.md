@@ -5,7 +5,7 @@ and generate appropiate objects containing the date and time information.
 
 Some example code:
 
-```{.cpp}
+```cpp
 #include <iso8601.h>
 #include <iostream>
 
