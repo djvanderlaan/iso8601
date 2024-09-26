@@ -10,8 +10,8 @@ TEST_CASE("Detect ISO8601 type", "[determinetype]") {
   REQUIRE( determinetype("2011-12-23") == ISO8601Type::Date );
   REQUIRE( determinetype("20111223") == ISO8601Type::Date );
   REQUIRE( determinetype("2011") == ISO8601Type::Date );
-  REQUIRE( determinetype("2011-12-23 12:34") == ISO8601Type::DateTime );
-  REQUIRE( determinetype("2011-12-23T12:34") == ISO8601Type::DateTime );
+  REQUIRE( determinetype("2011-12-23 12:34") == ISO8601Type::Datetime );
+  REQUIRE( determinetype("2011-12-23T12:34") == ISO8601Type::Datetime );
   REQUIRE( determinetype("12:34") == ISO8601Type::Time );
   REQUIRE( determinetype("1234") == ISO8601Type::Date );
   REQUIRE( determinetype("T12:34") == ISO8601Type::Time );

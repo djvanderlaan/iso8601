@@ -8,7 +8,7 @@
 
 namespace ISO8601 {
 
-  enum class ISO8601Type { Date, Time, DateTime, Duration, TimeInterval, RepeatingInterval };
+  enum class ISO8601Type { Date, Time, Datetime, Duration, TimeInterval, RepeatingInterval };
   ISO8601Type determinetype(std::string_view str);
 
   Date parsedate(std::string_view str);

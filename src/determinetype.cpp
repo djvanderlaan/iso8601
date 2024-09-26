@@ -11,7 +11,7 @@ namespace ISO8601 {
       return ISO8601Type::Time;
     // we now have either a date or datetime; a datetime can either be
     // <data>T<time> or <date> <time>; officially only T is allowed
-    if (contains(str, 'T') || contains(str, ' ')) return ISO8601Type::DateTime;
+    if (contains(str, 'T') || contains(str, ' ')) return ISO8601Type::Datetime;
     return ISO8601Type::Date;
   }
 

@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
           std::cout << t << "\n";
           break;
         }
-        case ISO8601::ISO8601Type::DateTime: {
+        case ISO8601::ISO8601Type::Datetime: {
           const auto dt = ISO8601::parsedatetime(line);
           std::cout << dt << "\n";
           break;
