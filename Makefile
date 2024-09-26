@@ -12,7 +12,7 @@ CXXFLAGS   = -I$(INCLUDEDIR) -I$(TESTSDIR) -Wall
 
 VPATH      = $(INCLUDEDIR):$(SOURCEDIR):$(TMPDIR):$(TESTSDIR)
 
-target     = isoparser
+target     = iso8601_standardise
 sources    = $(wildcard src/*.cpp)
 objects    = $(notdir $(patsubst %.cpp, %.o, $(target).cpp $(sources)))
 
