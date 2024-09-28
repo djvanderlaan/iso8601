@@ -46,6 +46,8 @@ namespace ISO8601 {
 
   Datetime tozulu(const Datetime& datetime);
 
+  Datetime fillmissing(const Datetime& datetime);
+
 }
 
 #endif

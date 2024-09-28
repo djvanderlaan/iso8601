@@ -151,25 +151,10 @@ namespace ISO8601 {
     t.set_timezone(Timezone{false, 0, 0});
     return Datetime(d, t);
   }
-  /*
-  # subtract hour from hour
-  t$hour <- t$hour - 1L
-  # handle day crossing
-  s <- t$hour < 0L
-  t$hour[s] <- t$hour + 24L
-  t$mday[s] <- t$mday - 1L;
-  # handle month crossing
-  s <- t$day < 1L
-  t$day[s & t$mon %in% c(1, 2, 4, 6, 8, 9, 11)] <- 31L
-  t$day[s & t$mon %in% c(5, 7, 10, 12)] <- 30L
-  t$day[s & t$mon == 3] <- ifelse(isleapyear(t$year), 29L, 28L)
-  t$mon[s] <- t$mon - 1L
-  # handle year crossing
-  s <- t$mon < 1L
-  t$mon[s] <- 12L
-  t$year[s] <- t$year - 1L
-  t
-  */
+
+  Datetime fillmissing(const Datetime& datetime) {
+    return Datetime{fillmissing(datetime.date()), fillmissing(datetime.time())};
+  }
 
 
 }

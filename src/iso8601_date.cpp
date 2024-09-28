@@ -41,5 +41,5 @@ namespace ISO8601 {
     }
     return stream;
   }
-
 }
+
