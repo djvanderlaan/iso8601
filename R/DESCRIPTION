@@ -1,0 +1,24 @@
+Package: iso8601
+Type: Package
+Title: Working with ISO8601 dates and times
+Version: 0.0.1
+Authors@R: 
+    person(given = "Jan",
+           family = "van der Laan",
+           role = c("aut", "cre"),
+           email = "r@eoos.dds.nl",
+           comment = c(ORCID = "0000-0002-0693-1514"))
+Description: Functions to parse ISO8601 dates, times, and date-times.
+BugReports: https://github.com/djvanderlaan/iso8601/issues
+URL: https://github.com/djvanderlaan/iso8601
+Depends:
+    R (>= 3.6.0)
+Imports:
+    utils,
+    Rcpp,
+    methods
+LinkingTo: Rcpp
+VignetteBuilder: simplermarkdown
+License: GPL-3
+Encoding: UTF-8
+RoxygenNote: 7.3.2
