@@ -31,7 +31,7 @@ namespace ISO8601 {
             break;
           case 3:
             day = isleapyear(year) ? 29L : 28L;
-            month = 1L;
+            month = 2L;
             break;
           case 2:
           case 4:
@@ -95,10 +95,11 @@ namespace ISO8601 {
       int month = date.month();
       int year = date.year();
       if (day > ndaysinmonth(year, month)) {
+        day = 1L;
         month += 1L;
         if (month > 12L) {
           month = 1L;
-          year += 1L
+          year += 1L;
         }
       }
       date = Date{year};
@@ -107,15 +108,12 @@ namespace ISO8601 {
     } else if (date.type() == Date::YEARDAY) {
       if (!date.has_yearday()) 
         throw std::runtime_error("Incomplete date.");
-      if (date.yearday() == 1L) {
-        date = Date{date.year() - 1};
-        if (isleapyear(date.year())) {
-          date.set_yearday(366L);
-        } else {
-          date.set_yearday(365L);
-        }
+      int ndaysinyear = isleapyear(date.year()) ? 366 : 365;
+      if (date.yearday() == ndaysinyear) {
+        date = Date{date.year() + 1};
+        date.set_yearday(1L);
       } else {
-        date.set_yearday(date.yearday() - 1L);
+        date.set_yearday(date.yearday() + 1L);
       }
     }
     return date;
@@ -130,8 +128,9 @@ namespace ISO8601 {
     if (tz.offset_minutes() != 0 && !t.has_minutes())
       throw std::runtime_error("Incomplete time.");
     // update minutes
-    double minutes = t.minutes() + tz.offset_minutes();
-    double hour    = t.hour() + tz.offset_hours();
+    double minutes = tz.offset_hours() < 0 ? t.minutes() + tz.offset_minutes() : 
+      t.minutes() - tz.offset_minutes();
+    double hour    = t.hour() - tz.offset_hours();
     if (minutes < 0) {
       hour -= 1;
       minutes += 60;
@@ -149,6 +148,7 @@ namespace ISO8601 {
     }
     t.set_hour(hour, t.hour_fractional());
     t.set_minutes(minutes, t.minutes_fractional());
+    t.set_timezone(Timezone{false, 0, 0});
     return Datetime(d, t);
   }
   /*

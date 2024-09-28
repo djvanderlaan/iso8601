@@ -34,9 +34,10 @@ typedef std::pair<double, bool> Fractional;
   }
 
   Timezone parse_timezone(const std::string_view& str, std::string_view::size_type& pos) {
-    const auto end = str.size();
+    //const auto end = str.size();
     pos = 0;
-    const auto nchar_remain = end - pos;
+    //const auto nchar_remain = end - pos;
+    const auto nchar_remain = str.size();
     if (nchar_remain == 0) {
       return Timezone{};
     } else if (nchar_remain == 1 && str.at(pos) == 'Z') {
