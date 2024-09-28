@@ -44,6 +44,8 @@ namespace ISO8601 {
 
   std::ostream& operator<<(std::ostream& stream, const Datetime& datetime);
 
+  Datetime tozulu(const Datetime& datetime);
+
 }
 
 #endif
