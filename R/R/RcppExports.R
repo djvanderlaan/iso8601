@@ -5,7 +5,7 @@ rcpp_test <- function(a) {
     .Call('_iso8601_rcpp_test', PACKAGE = 'iso8601', a)
 }
 
-rcpp_parse <- function(str) {
-    .Call('_iso8601_rcpp_parse', PACKAGE = 'iso8601', str)
+rcpp_parse <- function(in_str) {
+    .Call('_iso8601_rcpp_parse', PACKAGE = 'iso8601', in_str)
 }
 
