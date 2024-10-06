@@ -41,5 +41,42 @@ namespace ISO8601 {
     }
     return stream;
   }
+
+
+  Date toyearmonthday(const Date& date) {
+    if (data.type() == Date::YEARDAY) {
+      Date d{date.year()};
+      int yearday = date.yearday();
+
+      return d;
+    }
+    return date;
+  }
+
 }
+
+/*
+ *
+
+isleapyear <- function(y) {
+  (y %% 4 == 0) && !((y %% 100 == 0) && (y %% 400 != 0))
+}
+
+monthdays <- list(
+  c(1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366), 
+  c(1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336, 367))
+monthdays
+
+year <- 2024
+yearday <- 62
+index <- ifelse(isleapyear(year), 2, 1)
+mon <- which(yearday >= monthdays[[index]]) |> tail(1)
+mon
+yearday - monthdays[[index]][mon] + 1
+
+
+
+day <- k
+
+*/
 

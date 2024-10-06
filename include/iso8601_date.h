@@ -131,6 +131,11 @@ namespace ISO8601 {
   Date fillmissing(Date date);
   std::ostream& operator<<(std::ostream& stream, const Date& date);
 
+  constexpr bool isleapyear (int year) {
+    return (year % 4 == 0) & !((year % 100 == 0) & (year % 400 != 0));
+  }
+
+
 }
 
 #endif

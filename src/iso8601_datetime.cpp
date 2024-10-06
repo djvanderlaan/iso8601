@@ -9,10 +9,6 @@ namespace ISO8601 {
     return stream;
   }
 
-  constexpr bool isleapyear (int y) {
-    return (y % 4 == 0) & !((y % 100 == 0) & (y % 400 != 0));
-  }
-
   Date subtractday(Date date) {
     if (date.type() == Date::YEARWEEKDAY) {
       throw std::runtime_error("tozulu() not defined for dates of type YEARWEEKDAY.");
