@@ -139,6 +139,8 @@ namespace ISO8601 {
   std::ostream& operator<<(std::ostream& stream, const Date& date);
 
   Date toyearmonthday(const Date& date);
+  Date toyearday(const Date& date);
+  Date toyearweekday(const Date& date);
 
 
 }

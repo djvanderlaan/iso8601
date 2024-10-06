@@ -118,7 +118,7 @@ namespace ISO8601 {
       case Date::YEARMONTHDAY:
       {
         Date d{date.year()};
-        size_t offset = isleapyear(date.year()) ? 13 : 0;
+        const size_t offset = isleapyear(date.year()) ? 13 : 0;
         d.set_yearday(MONTHSTARTDAY[date.month()+offset-1L] + date.day() - 1L);
         return d;
       }
@@ -126,7 +126,16 @@ namespace ISO8601 {
         // do nothing already correct type
         return date;
       case Date::YEARWEEKDAY:
-        throw std::runtime_error("Cannot convert year-week-day to year-day. Not implemented.");
+      {
+        int year = date.year();
+        int yearday = (date.week() - 1)*7 + date.weekday() + weekoffset(date.year());
+        if (yearday < 1) year -= 1;
+        Date d{year};
+        const size_t offset = isleapyear(date.year()) ? 13 : 0;
+        if (yearday < 1) yearday = MONTHSTARTDAY[offset+12] + yearday;
+        d.set_yearday(yearday);
+        return d;
+      }
     }
     return date;
   }
@@ -151,7 +160,7 @@ namespace ISO8601 {
         return d;
       }
       case Date::YEARWEEKDAY:
-        int yearday = (date.week() - 1)*7 + date.weekday() + weekoffset(date.year());
+        const int yearday = (date.week() - 1)*7 + date.weekday() + weekoffset(date.year());
         if (yearday < 1) {
           // easier to go to month directly instead of working with negative yearday
           Date d{date.year()-1};
@@ -172,6 +181,37 @@ namespace ISO8601 {
     return date;
   }
 
+  Date toyearweekday(const Date& date) {
+    switch(date.type()) {
+      case Date::YEAR:
+        throw std::runtime_error("Incomplete date. Cannot convert to year-month-day.");
+      case Date::YEARMONTHDAY:
+        return toyearweekday(toyearday(date));
+      case Date::YEARDAY: 
+      {
+        const int offset = weekoffset(date.year());
+        int week = (-offset + date.yearday()-1 + 7) / 7;
+        int year = date.year();
+        // calculate weekday before we change year or week around year border
+        const int weekday = (dow1st(year) + date.yearday() - 2) % 7 +1;
+        if (week < 1) {
+          year = year - 1;
+          week = nweeks(year) + week;
+        } else if (week > nweeks(year)) {
+          week = 1;
+          year = year + 1;
+        }
+        Date d{year};
+        d.set_week(week);
+        d.set_weekday(weekday);
+        return d;
+      }
+      case Date::YEARWEEKDAY:
+        // do nothing already correct type
+        return date;
+    }
+    return date;
+  }
 
 }
 
