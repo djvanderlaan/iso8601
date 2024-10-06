@@ -60,3 +60,45 @@ TEST_CASE("To year month day YEAR", "[toyearmonthday]") {
   REQUIRE_THROWS( toyearmonthday(date) );
 }
 
+
+TEST_CASE("To year month day YEARWEEKDAY", "[toyearmonthday]") {
+
+  Date date = parsedate("2024-W41-4");
+  Date date2 = toyearmonthday(date);
+  REQUIRE(date2.type() == ISO8601::Date::YEARMONTHDAY);
+  REQUIRE(date2.year() == 2024);
+  REQUIRE(date2.month() == 10);
+  REQUIRE(date2.day() == 10);
+
+  date = parsedate("2004-W41-7");
+  date2 = toyearmonthday(date);
+  REQUIRE(date2.type() == ISO8601::Date::YEARMONTHDAY);
+  REQUIRE(date2.year() == 2004);
+  REQUIRE(date2.month() == 10);
+  REQUIRE(date2.day() == 10);
+
+  date = parsedate("2024-W01-1");
+  date2 = toyearmonthday(date);
+  REQUIRE(date2.type() == ISO8601::Date::YEARMONTHDAY);
+  REQUIRE(date2.year() == 2024);
+  REQUIRE(date2.month() == 1);
+  REQUIRE(date2.day() == 1);
+
+  date = parsedate("2025-W01-1");
+  date2 = toyearmonthday(date);
+  REQUIRE(date2.type() == ISO8601::Date::YEARMONTHDAY);
+  REQUIRE(date2.year() == 2024);
+  REQUIRE(date2.month() == 12);
+  REQUIRE(date2.day() == 30);
+
+  date = parsedate("2023-W01-1");
+  date2 = toyearmonthday(date);
+  REQUIRE(date2.type() == ISO8601::Date::YEARMONTHDAY);
+  REQUIRE(date2.year() == 2023);
+  REQUIRE(date2.month() == 1);
+  REQUIRE(date2.day() == 2);
+
+  date = parsedate("2023-W01");
+  REQUIRE_THROWS( toyearmonthday(date) );
+}
+

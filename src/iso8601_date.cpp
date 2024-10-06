@@ -46,36 +46,6 @@ namespace ISO8601 {
   }
 
 
-  Date toyearmonthday(const Date& date) {
-    switch(date.type()) {
-      case Date::YEAR:
-        throw std::runtime_error("Incomplete date. Cannot convert to year-month-day.");
-      case Date::YEARMONTHDAY:
-        // do nothing already correct type
-        return date;
-      case Date::YEARDAY: 
-      {
-        const std::array<int, 26> monthstartday = {
-          1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366,  // regular
-          1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336, 367   // leapyear
-        };
-        Date d{date.year()};
-        int yearday = date.yearday();
-        size_t offset = isleapyear(date.year()) ? 13 : 0;
-        int month = 0;
-        for (size_t i = 0; i < 13; ++i) 
-          if (yearday >= monthstartday[i+offset]) month = i+1;
-        d.set_month(month);
-        d.set_day(yearday - monthstartday[month+offset-1L] + 1);
-        return d;
-      }
-      case Date::YEARWEEKDAY:
-        throw std::runtime_error("Cannot convert year-week-day to year-month-day. Not implemented.");
-    }
-    return date;
-  }
-
-
   // The following contains the following information for the years 0..400. The 
   // Gregorian calendar has a 400 year period. 
   // - last 3 bits: the day of the week (0=mon, .. 7=sun) the 1st of January 
@@ -101,37 +71,107 @@ namespace ISO8601 {
     4, 5, 6, 1, 2, 11, 4, 6, 0, 1, 10, 4, 5, 6, 0, 2, 11, 4, 5, 0, 1, 2, 11, 
     5, 6, 0, 1, 11, 4, 5, 6, 1, 2, 11, 4, 6, 0, 1, 10, 4, 5, 6, 0, 2, 11, 4};
 
+  // Week day of 1st of January: 1 = mon, ... , 7 = sun
   constexpr int dow1st(int year) {
     return (YEARSTARTDAY[year % 400] & 7)+1;
   }
+  // Number of weeks in a given year
   constexpr int nweeks(int year) {
     return (YEARSTARTDAY[year % 400] & 8) > 0 ? 53 : 52;
   }
+  // The number of days the first day of the first week is away from the 
+  // first day of the year
+  constexpr int weekoffset(int year) {
+    int d = dow1st(year);
+    switch (d) {
+      case 1:
+        return 0;
+      case 2:
+        return -1; // if 1st Jan is a Tuesday, the first day of the week 
+                   // starts on 31st of December
+      case 3:
+        return -2;
+      case 4:
+        return -3;
+      case 5:
+        return 3;  // if 1st Jan is a Friday, the week start monday the 
+                   // 4th of January
+      case 6:
+        return 2;
+      case 7:
+        return 1;
+      default:
+        throw std::runtime_error("Invalid weekday.");
+    }
+  }
+
+  // Starting day of month counted from the 1st of January
+  static const std::array<int, 26> MONTHSTARTDAY = {
+    1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366,  // regular
+    1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336, 367   // leapyear
+  };
+
+  Date toyearday(const Date& date) {
+    switch(date.type()) {
+      case Date::YEAR:
+        throw std::runtime_error("Incomplete date. Cannot convert to year-day.");
+      case Date::YEARMONTHDAY:
+      {
+        Date d{date.year()};
+        size_t offset = isleapyear(date.year()) ? 13 : 0;
+        d.set_yearday(MONTHSTARTDAY[date.month()+offset-1L] + date.day() - 1L);
+        return d;
+      }
+      case Date::YEARDAY: 
+        // do nothing already correct type
+        return date;
+      case Date::YEARWEEKDAY:
+        throw std::runtime_error("Cannot convert year-week-day to year-day. Not implemented.");
+    }
+    return date;
+  }
+
+  Date toyearmonthday(const Date& date) {
+    switch(date.type()) {
+      case Date::YEAR:
+        throw std::runtime_error("Incomplete date. Cannot convert to year-month-day.");
+      case Date::YEARMONTHDAY:
+        // do nothing already correct type
+        return date;
+      case Date::YEARDAY: 
+      {
+        Date d{date.year()};
+        int yearday = date.yearday();
+        size_t offset = isleapyear(date.year()) ? 13 : 0;
+        int month = 0;
+        for (size_t i = 0; i < 13; ++i) 
+          if (yearday >= MONTHSTARTDAY[i+offset]) month = i+1;
+        d.set_month(month);
+        d.set_day(yearday - MONTHSTARTDAY[month+offset-1L] + 1);
+        return d;
+      }
+      case Date::YEARWEEKDAY:
+        int yearday = (date.week() - 1)*7 + date.weekday() + weekoffset(date.year());
+        if (yearday < 1) {
+          // easier to go to month directly instead of working with negative yearday
+          Date d{date.year()-1};
+          d.set_month(12);
+          d.set_day(31 + yearday);
+          return d;
+        } else {
+          Date d{date.year()};
+          size_t offset = isleapyear(date.year()) ? 13 : 0;
+          int month = 0;
+          for (size_t i = 0; i < 13; ++i) 
+            if (yearday >= MONTHSTARTDAY[i+offset]) month = i+1;
+          d.set_month(month);
+          d.set_day(yearday - MONTHSTARTDAY[month+offset-1L] + 1);
+          return d;
+        }
+    }
+    return date;
+  }
+
 
 }
-
-/*
- *
-
-isleapyear <- function(y) {
-  (y %% 4 == 0) && !((y %% 100 == 0) && (y %% 400 != 0))
-}
-
-monthdays <- list(
-  c(1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366), 
-  c(1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336, 367))
-monthdays
-
-year <- 2024
-yearday <- 62
-index <- ifelse(isleapyear(year), 2, 1)
-mon <- which(yearday >= monthdays[[index]]) |> tail(1)
-mon
-yearday - monthdays[[index]][mon] + 1
-
-
-
-day <- k
-
-*/
 
