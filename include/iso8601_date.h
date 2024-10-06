@@ -6,6 +6,11 @@
 
 namespace ISO8601 {
 
+  constexpr bool isleapyear (int year) {
+    return (year % 4 == 0) & !((year % 100 == 0) & (year % 400 != 0));
+  }
+
+
   class Date {
     public:
 
@@ -98,6 +103,8 @@ namespace ISO8601 {
       void set_yearday(int yearday) {
         if (yearday < 1 || yearday > 366 || (type_ != YEAR && type_ != YEARDAY)) 
           throw std::runtime_error("Invalid date.");
+        if (!isleapyear(year_) && yearday > 365)
+          throw std::runtime_error("Invalid date.");
         if (type_ == YEAR) type_ = YEARDAY;
         yearday_ = yearday;
       }
@@ -131,9 +138,7 @@ namespace ISO8601 {
   Date fillmissing(Date date);
   std::ostream& operator<<(std::ostream& stream, const Date& date);
 
-  constexpr bool isleapyear (int year) {
-    return (year % 4 == 0) & !((year % 100 == 0) & (year % 400 != 0));
-  }
+  Date toyearmonthday(const Date& date);
 
 
 }

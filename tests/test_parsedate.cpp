@@ -120,7 +120,8 @@ TEST_CASE("Date parsing YYYYDDD", "[parsedate]") {
 
 TEST_CASE("Date parsing invalid dates YYYY-DDD", "[parsedate]") {
   REQUIRE_THROWS( parsedate("2022-000") );
-  REQUIRE_NOTHROW( parsedate("2022-366") );
+  REQUIRE_THROWS( parsedate("2022-366") );
+  REQUIRE_NOTHROW( parsedate("2024-366") );
   REQUIRE_THROWS( parsedate("2022-367") );
   REQUIRE_THROWS( parsedate("2022-123-") );
   REQUIRE_THROWS( parsedate("2022-123 ") );
