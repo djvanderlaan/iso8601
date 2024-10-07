@@ -18,9 +18,9 @@ parsedatetime <- function(x) {
 }
 
 
-res <- parsedatetime(c("2024-01-01T12:30", "2024-01-01T12:30"))
-res
-onclass(res)
+#res <- parsedatetime(c("2024-01-01T12:30", "2024-01-01T12:30"))
+#res
+#unclass(res)
 
 #
 #
