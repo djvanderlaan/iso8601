@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
       switch (type) {
         case ISO8601::ISO8601Type::Date: {
           const auto d = ISO8601::parsedate(line);
-          std::cout << ISO8601::toyearweekday(d) << "\n";
+          std::cout << d << "\n";
           break;
         }
         case ISO8601::ISO8601Type::Time: {

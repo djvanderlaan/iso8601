@@ -3,8 +3,6 @@
 #include <array>
 #include <cstdint>
 
-#include <iostream>
-
 namespace ISO8601 {
 
   Date fillmissing(Date date) {
@@ -19,6 +17,7 @@ namespace ISO8601 {
         break;
       case Date::YEARWEEKDAY:
         if (!date.has_weekday()) date.set_weekday(1);
+        break;
       case Date::YEARDAY:
         // nothing to do
         break;
@@ -43,6 +42,27 @@ namespace ISO8601 {
         stream << '-' << std::setw(3) << std::setfill('0') << date.yearday();
     }
     return stream;
+  }
+
+  bool iscomplete(const Date& date) {
+    // Check if we have a full date
+    switch (date.type()) {
+      case Date::YEAR:
+        return true;
+      case Date::YEARMONTHDAY:
+        if (!date.has_month() || !date.has_day())
+          return false;
+        break;
+      case Date::YEARWEEKDAY:
+        if (!date.has_week() || !date.has_weekday())
+          return false;
+        break;
+      case Date::YEARDAY:
+        if (!date.has_yearday())
+          return false;
+        break;
+    }
+    return true;
   }
 
 

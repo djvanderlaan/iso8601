@@ -138,6 +138,8 @@ namespace ISO8601 {
   Date fillmissing(Date date);
   std::ostream& operator<<(std::ostream& stream, const Date& date);
 
+  bool iscomplete(const Date& date);
+
   Date toyearmonthday(const Date& date);
   Date toyearday(const Date& date);
   Date toyearweekday(const Date& date);
