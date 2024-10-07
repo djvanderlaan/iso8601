@@ -1,5 +1,5 @@
 
-.PHONY: build check document install vignettes
+.PHONY: build check document install vignettes clean getlib
 
 build: document
 	cd work && R CMD build ../
@@ -19,4 +19,8 @@ vignettes: build
 install: build
 	R CMD INSTALL `ls work/iso8601*.tar.gz | sort | tail -n 1` 
 
+clean: 
+	rm -f src/utils.* src/iso8601* src/parse* src/determine* src/RcppExports.cpp src/*.o R/RcppExports.R
 
+getlib: clean
+	cp ../include/*.h ../src/*.cpp ./src

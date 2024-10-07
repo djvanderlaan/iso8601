@@ -5,7 +5,7 @@ rcpp_test <- function(a) {
     .Call('_iso8601_rcpp_test', PACKAGE = 'iso8601', a)
 }
 
-rcpp_standardise_datetime <- function(in_str) {
-    .Call('_iso8601_rcpp_standardise_datetime', PACKAGE = 'iso8601', in_str)
+rcpp_standardise_datetime <- function(in_str, fill_missing = TRUE, to_ymd = TRUE, to_zulu = TRUE) {
+    .Call('_iso8601_rcpp_standardise_datetime', PACKAGE = 'iso8601', in_str, fill_missing, to_ymd, to_zulu)
 }
 

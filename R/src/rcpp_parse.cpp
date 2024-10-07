@@ -14,7 +14,8 @@ IntegerVector rcpp_test(IntegerVector a) {
 }
 
 // [[Rcpp::export]]
-DataFrame rcpp_standardise_datetime(CharacterVector in_str) {
+DataFrame rcpp_standardise_datetime(CharacterVector in_str, 
+    bool fill_missing = true, bool to_ymd = true, bool to_zulu = true) {
   CharacterVector result(in_str.size());
   IntegerVector datetype(in_str.size());
   std::ostringstream ostream; 
@@ -24,8 +25,10 @@ DataFrame rcpp_standardise_datetime(CharacterVector in_str) {
       if (!CharacterVector::is_na(in_str[i])) {
         const std::string_view str{in_str[i]};
         ISO8601::Datetime dt = ISO8601::parsedatetime(str);
-        dt = ISO8601::fillmissing(dt);
-        dt = tozulu(dt);
+        if (fill_missing) dt = ISO8601::fillmissing(dt);
+        if (to_ymd && dt.date().type() != ISO8601::Date::YEARMONTHDAY) 
+          dt.date( toyearmonthday(dt.date()) );
+        if (to_zulu) dt = tozulu(dt);
         ostream << dt << std::ends;
         result[i] = ostream.str();
         switch (dt.date().type()) {
@@ -46,7 +49,7 @@ DataFrame rcpp_standardise_datetime(CharacterVector in_str) {
         result[i] = CharacterVector::get_na();
       }
     } catch(const std::exception& e) {
-    result[i] = CharacterVector::get_na();
+      result[i] = CharacterVector::get_na();
     }
   }
   return DataFrame::create(
