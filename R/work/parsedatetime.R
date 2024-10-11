@@ -1,7 +1,31 @@
 pkgload::load_all()
 
+x <- parsedatetime(c("2024-01-01T12:30", "2024-W01-1T12:30Z",
+  "2024-001T12:30+01"))
+x
+attr(x, "timezone")
+
+x <- parsedatetime(c("2024-01-01T12:30", "2024-01-01T12:30Z",
+   "2024-01-01T12:30+01"))
+ x
+ attr(x, "timezone")
 
 res <- parsedatetime(c("2024-01-01T12:30", "2024-01-01T12:30Z"))
+res
+attr(res, "timezone")
+
+res <- parsedatetime(c("2024-01-01T12:30Z", "2024-01-01T12:30Z"))
+res
+attr(res, "timezone")
+
+res <- parsedatetime(c("2024-01-01T12:30+01", "2024-01-01T12:30Z"))
+res
+attr(res, "timezone")
+
+res <- parsedatetime(character(0))
+res
+attr(res, "timezone")
+
 res
 unclass(res)
 class(res)
