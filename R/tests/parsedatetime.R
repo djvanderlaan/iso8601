@@ -26,3 +26,15 @@ x <- parsedatetime(character(0))
 expect_equal(x, 
   structure(as.POSIXct(numeric(0), tz="GMT"), timezone = character(0)))
 
+x <- parsedatetime(NA_character_)
+expect_equal(x[4], as.POSIXct(NA_character_, tz = ""), 
+  attributes = FALSE)
+expect_equal(attr(x, "tzone"), attr(as.POSIXct(0), "tzone"))
+expect_equal(attr(x, "timezone"), c(NA_character_))
+
+expect_warning(x <- parsedatetime("foo"))
+expect_equal(x[4], as.POSIXct(NA_character_, tz = ""), 
+  attributes = FALSE)
+expect_equal(attr(x, "tzone"), attr(as.POSIXct(0), "tzone"))
+expect_equal(attr(x, "timezone"), c(NA_character_))
+

@@ -29,6 +29,13 @@
 #' @export
 parsedatetime <- function(x) {
   res <- rcpp_parse_datetime(x)
+  fail <- is.na(res$year) & !is.na(x)
+  if (any(fail)) {
+    sel <- which(fail)
+    warning("Parsing failed for ", 
+      paste0("'", x[utils::head(sel, 5)], "'", collapse = ", "),
+      if (length(sel) > 5) ", ..." else ".")
+  }
   n <- length(x)
   res$mon <- res$mon - 1L
   res$year <- res$year - 1900L
@@ -38,8 +45,8 @@ parsedatetime <- function(x) {
   res$gmtoff <- ifelse(res$zone == "Z", 0L, NA_integer_) 
   res <- res[c("sec", "min", "hour", "mday", "mon", "year", "wday", 
     "yday", "isdst", "zone", "gmtoff")]
-  local <- all(res$zone == "")
-  gmt <- all(res$zone != "")
+  local <- all(res$zone == "" & !is.na(res$zone))
+  gmt <- all(res$zone != "" & !is.na(res$zone))
   tzone <- if (!gmt) "" else "GMT"
   # store original zones
   zoneorig <- res$zone
