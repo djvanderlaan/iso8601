@@ -1,6 +1,6 @@
 Package: iso8601
 Type: Package
-Title: ISO8601 Dates and Times
+Title: Working with ISO8601 Dates and Times
 Version: 0.0.1
 Authors@R: 
     person(given = "Jan",
