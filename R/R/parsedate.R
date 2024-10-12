@@ -1,9 +1,9 @@
-#' Convert date in ISO8601 format into R POSIXct object
+#' Convert date in ISO8601 format into R Date object
 #'
 #' @param x character vector of date-time objects
 #'
 #' @details
-#' Dates are acceptes in any of the formats supported by ISO8601.
+#' Dates are accepted in any of the formats supported by ISO8601.
 #'
 #' @return
 #' Returns a \code{\link{Date}} object with the same length as \code{x}. 

@@ -9,6 +9,10 @@ rcpp_parse_datetime <- function(in_str, fillmissing = TRUE) {
     .Call('_iso8601_rcpp_parse_datetime', PACKAGE = 'iso8601', in_str, fillmissing)
 }
 
+rcpp_parse_time <- function(in_str) {
+    .Call('_iso8601_rcpp_parse_time', PACKAGE = 'iso8601', in_str)
+}
+
 rcpp_standardise_datetime <- function(in_str, fillmissing = TRUE, toymd = TRUE, to_zulu = TRUE) {
     .Call('_iso8601_rcpp_standardise_datetime', PACKAGE = 'iso8601', in_str, fillmissing, toymd, to_zulu)
 }
