@@ -59,13 +59,13 @@ List rcpp_parse_datetime(CharacterVector in_str,
     }
   }
   return List::create(
-        Named("sec") = seconds,
-        Named("min") = minutes,
-        Named("hour") = hour,
-        Named("mday") = day,
-        Named("mon") = month,
-        Named("year") = year,
-        Named("zone") = timezone
-      );
+    Named("sec") = seconds,
+    Named("min") = minutes,
+    Named("hour") = hour,
+    Named("mday") = day,
+    Named("mon") = month,
+    Named("year") = year,
+    Named("zone") = timezone
+  );
 }
 
