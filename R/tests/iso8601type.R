@@ -1,0 +1,20 @@
+library(iso8601)
+
+source("helpers.R")
+
+expect_equal(iso8601type("T12"), "TH")
+expect_equal(iso8601type("2024"), "Y")
+expect_equal(iso8601type("2024-01-01T12.5"), "YMDTH.")
+expect_equal(iso8601type("2024-01-01T12"), "YMDTH")
+expect_equal(iso8601type("2024-W01-1T12:13.5"), "YWDTHM.")
+expect_equal(iso8601type("2024-W01-1T12:13"), "YWDTHM")
+expect_equal(iso8601type("2024-011T12:13:14.5"), "YDTHMS.")
+expect_equal(iso8601type("2024-011T12:13:14"), "YDTHMS")
+expect_equal(iso8601type("2024-01"), "YM")
+expect_equal(iso8601type("2024-W01"), "YW")
+expect_equal(iso8601type("T20:13:45Z"), "THMSZ")
+expect_equal(iso8601type("T20:13:45+01:10"), "THMS±Z")
+expect_equal(iso8601type("2024/2025"), "I")
+expect_equal(iso8601type("P1Y"), "P")
+expect_equal(iso8601type("R1Y"), "R")
+

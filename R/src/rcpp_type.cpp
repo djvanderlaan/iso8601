@@ -42,11 +42,12 @@ int rcpp_timezone_type(ISO8601::Timezone tz) {
 
 int rcpp_time_type(const ISO8601::Time& t) {
   const int tz = rcpp_timezone_type(t.timezone());
-  if (!t.has_minutes()) return tz + 10L;
-  if (t.minutes_fractional()) return tz*10L + 20L;
-  if (!t.has_seconds()) return tz + 30L;
-  if (t.seconds_fractional()) return tz + 40L;
-  return tz + 50L;
+  if (t.hour_fractional()) return tz + 10L;
+  if (!t.has_minutes()) return tz + 20L;
+  if (t.minutes_fractional()) return tz*10L + 30L;
+  if (!t.has_seconds()) return tz + 40L;
+  if (t.seconds_fractional()) return tz + 50L;
+  return tz + 60L;
 }
 
 
