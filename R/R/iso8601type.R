@@ -28,12 +28,12 @@
 #' @export
 iso8601type <- function(x) {
   res <- rcpp_type(x)
-  tz <- factor(res %% 10, levels = c(0, 1, 2), labels = c("", "Z", "±Z"))
+  tz <- factor(res %% 10, levels = c(0, 1, 2), labels = c("", "Z", "\u00B1Z"))
   t <- factor((res %/% 10) %% 10, levels = c(0, 1, 2, 3, 4, 5, 6), 
     labels = c("", "TH.", "TH", "THM.", "THM", "THMS.", "THMS"))
   d <- factor(((res %/% 10) %/% 10) %% 10, levels = c(0, 1, 2, 3, 4, 5, 6),
     labels = c("", "Y", "YM", "YMD", "YW", "YWD", "YD"))
-  o <- factor(res %/% 1000, levels = c(0, 1, 2, 2), labels = c("", "P", "I", "R"))
+  o <- factor(res %/% 1000, levels = c(0, 1, 2, 3), labels = c("", "P", "I", "R"))
   r <- paste0(o, d, t, tz)
   r[is.na(res)] <- NA
   r
