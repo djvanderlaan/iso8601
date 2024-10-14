@@ -87,9 +87,13 @@ List rcpp_parse_element(std::string_view str) {
 List rcpp_parse_iso_list(CharacterVector in_str) {
   List res(in_str.size());
   for (R_xlen_t i = 0, iend = in_str.size(); i < iend; ++i) {
-    const std::string_view str{in_str[i]};
-    res[i] = rcpp_parse_element(str);
-    if (List(res[i]).size() == 0) res[i] = NA_LOGICAL;
+    if (CharacterVector::is_na(in_str[i])) {
+      res[i] = NA_LOGICAL;
+    } else {
+      const std::string_view str{in_str[i]};
+      res[i] = rcpp_parse_element(str);
+      if (List(res[i]).size() == 0) res[i] = NA_LOGICAL;
+    }
   }
   return res;
 }
