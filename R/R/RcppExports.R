@@ -5,6 +5,10 @@ rcpp_parse_iso_list <- function(in_str) {
     .Call('_iso8601_rcpp_parse_iso_list', PACKAGE = 'iso8601', in_str)
 }
 
+rcpp_parse_iso_dateframe <- function(in_str) {
+    .Call('_iso8601_rcpp_parse_iso_dateframe', PACKAGE = 'iso8601', in_str)
+}
+
 rcpp_parse_date <- function(in_str) {
     .Call('_iso8601_rcpp_parse_date', PACKAGE = 'iso8601', in_str)
 }
