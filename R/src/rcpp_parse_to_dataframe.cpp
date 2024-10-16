@@ -43,12 +43,12 @@ class IntVec {
 };
 
 // [[Rcpp::export]]
-List rcpp_parse_iso_dateframe(CharacterVector in_str) {
+List rcpp_parse_iso_dateframe(CharacterVector in_str, int transformdate = 0) {
   // We use IntVec and NumVec here. In that way we only create vectors that are
   // needed. For example, most times week and weekday will not be used and it
   // would be wastefull to create the full size vectors. In this case only
   // vectors of size 0 are created.
-  IntVec isotype(in_str.size());
+  IntegerVector isotype(in_str.size(), NA_INTEGER);
   IntVec year(in_str.size());
   IntVec month(in_str.size());
   IntVec day(in_str.size());
@@ -71,6 +71,17 @@ List rcpp_parse_iso_dateframe(CharacterVector in_str) {
           case ISO8601::ISO8601Type::Date: {
               isotype[i] = 1;
               ISO8601::Date d = ISO8601::parsedate(str);
+              if (transformdate != 0) {
+                if (transformdate == 1) {
+                  d = ISO8601::fillmissing(d);
+                  d = ISO8601::toyearmonthday(d);
+                } else if (transformdate == 2) {
+                  d = ISO8601::fillmissing(d);
+                  d = ISO8601::toyearday(d);
+                } else {
+                  throw std::runtime_error("Invalid value for transformdate.");
+                }
+              }
               year[i] = d.year();
               if (d.has_month()) month[i] = d.month();
               if (d.has_day()) day[i] = d.day();
@@ -136,7 +147,7 @@ List rcpp_parse_iso_dateframe(CharacterVector in_str) {
   }
 
   return List::create(
-    Named("type") = isotype.vec(),
+    Named("type") = isotype,
     Named("year") = year.vec(),
     Named("month") = month.vec(),
     Named("day") = day.vec(),

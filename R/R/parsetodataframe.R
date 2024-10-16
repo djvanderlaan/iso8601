@@ -3,6 +3,9 @@
 #'
 #' @param x character vector of date, time or date-time strings
 #'
+#' @param transformdate Transform the date to the given format. This also
+#' immplies that missing parts of the date are replaces by values of 1.
+#'
 #' @return 
 #' Returns a \code{data.frame} with possibly the following columns:
 #'
@@ -28,12 +31,19 @@
 #' @examples
 #' parsetodataframe(c("2014-W01-1", "2041-02-12T12+00", NA, "T22"))
 #'
+#' parsetodataframe(c("2014-W01-1", "2041-02-12T12+00", NA, "T22"),
+#'   transformdate = "tomonthyearday")
+#'
 #' @useDynLib iso8601
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @export
-parsetodataframe <- function(x) {
-  res <- rcpp_parse_iso_dateframe(x)
+parsetodataframe <- function(x, 
+    transformdate = c("no", "tomonthyearday", "toyearday")) {
+  transformdate <- match.arg(transformdate)
+  transformdate <- match(transformdate, 
+    c("no", "tomonthyearday", "toyearday")) - 1L
+  res <- rcpp_parse_iso_dateframe(x, transformdate)
   res$type <- factor(res$type, levels = 1:6, labels = c("Date", "Time", 
       "Datetime", "Duration", "Interval", "RepeatingInterval"))
   sel <- sapply(res, \(x) length(x) != 0)

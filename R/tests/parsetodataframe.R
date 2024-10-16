@@ -29,3 +29,24 @@ x <- parsetodataframe(character(0))
 expect_equal(names(x), c("type"))
 expect_equal(nrow(x), 0)
 
+
+# Transformdate
+x <- parsetodataframe("2024-001", "tomonthyearday")
+expect_equal(names(x), c("type", "year", "month", "day"))
+expect_equal(x$year, 2024L)
+expect_equal(x$month, 1)
+expect_equal(x$day, 1)
+
+x <- parsetodataframe("2024-02-05", "toyearday")
+expect_equal(names(x), c("type", "year", "yearday"))
+expect_equal(x$year, 2024L)
+expect_equal(x$yearday, 36)
+
+x <- parsetodataframe("2024", "toyearday")
+expect_equal(names(x), c("type", "year", "yearday"))
+expect_equal(x$year, 2024L)
+expect_equal(x$yearday, 1)
+
+x <- parsetodataframe(NA_character_, "toyearday")
+expect_equal(names(x), c("type"))
+
