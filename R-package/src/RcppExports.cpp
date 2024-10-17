@@ -22,17 +22,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_parse_date
-List rcpp_parse_date(CharacterVector in_str);
-RcppExport SEXP _iso8601_rcpp_parse_date(SEXP in_strSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CharacterVector >::type in_str(in_strSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_parse_date(in_str));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcpp_parse_datetime
 List rcpp_parse_datetime(CharacterVector in_str, bool fillmissing);
 RcppExport SEXP _iso8601_rcpp_parse_datetime(SEXP in_strSEXP, SEXP fillmissingSEXP) {
@@ -53,20 +42,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type in_str(in_strSEXP);
     rcpp_result_gen = Rcpp::wrap(rcpp_parse_time(in_str));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpp_standardise_datetime
-CharacterVector rcpp_standardise_datetime(CharacterVector in_str, bool fillmissing, bool toymd, bool to_zulu);
-RcppExport SEXP _iso8601_rcpp_standardise_datetime(SEXP in_strSEXP, SEXP fillmissingSEXP, SEXP toymdSEXP, SEXP to_zuluSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CharacterVector >::type in_str(in_strSEXP);
-    Rcpp::traits::input_parameter< bool >::type fillmissing(fillmissingSEXP);
-    Rcpp::traits::input_parameter< bool >::type toymd(toymdSEXP);
-    Rcpp::traits::input_parameter< bool >::type to_zulu(to_zuluSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_standardise_datetime(in_str, fillmissing, toymd, to_zulu));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -98,10 +73,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_iso8601_rcpp_parse_iso_dateframe", (DL_FUNC) &_iso8601_rcpp_parse_iso_dateframe, 2},
-    {"_iso8601_rcpp_parse_date", (DL_FUNC) &_iso8601_rcpp_parse_date, 1},
     {"_iso8601_rcpp_parse_datetime", (DL_FUNC) &_iso8601_rcpp_parse_datetime, 2},
     {"_iso8601_rcpp_parse_time", (DL_FUNC) &_iso8601_rcpp_parse_time, 1},
-    {"_iso8601_rcpp_standardise_datetime", (DL_FUNC) &_iso8601_rcpp_standardise_datetime, 4},
     {"_iso8601_rcpp_standardise", (DL_FUNC) &_iso8601_rcpp_standardise, 4},
     {"_iso8601_rcpp_type", (DL_FUNC) &_iso8601_rcpp_type, 1},
     {NULL, NULL, 0}
