@@ -1,6 +1,7 @@
 #' Convert date in ISO8601 format into R Date object
 #'
-#' @param x character vector of date-time objects
+#' @param x character vector of ISO8601 date string. When the string also
+#' contains a time part, this is ignored.
 #'
 #' @details
 #' Dates are accepted in any of the formats supported by ISO8601.
@@ -9,7 +10,8 @@
 #' Returns a \code{\link{Date}} object with the same length as \code{x}. 
 #'
 #' @examples
-#' parsedate(c("2024-01-01", "2024-W01-1", "2024001"))
+#' parsedate(c("2024-01-01", "2024-W01-1", "2024001", 
+#'   "2024-01-01T12:30"))
 #'
 #' @useDynLib iso8601
 #' @import Rcpp

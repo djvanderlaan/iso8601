@@ -27,7 +27,7 @@ parsetime <- function(x) {
       paste0("'", x[utils::head(sel, 5)], "'", collapse = ", "),
       if (length(sel) > 5) ", ..." else ".")
   }
-  # rcpp_parse_date returns the number of seconds from 00:00:00. Convert to
+  # rcpp_parse_time returns the number of seconds from 00:00:00. Convert to
   # POSIXct; this means we get a time on 1970-01-01. 
   res <- as.POSIXct(res, tz = "GMT")
   structure(res, class = c("Time", "POSIXct", "POSIXt"), tzone = "GMT")
