@@ -70,6 +70,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_standardise
+CharacterVector rcpp_standardise(CharacterVector in_str, bool fillmissing, bool toymd, bool to_zulu);
+RcppExport SEXP _iso8601_rcpp_standardise(SEXP in_strSEXP, SEXP fillmissingSEXP, SEXP toymdSEXP, SEXP to_zuluSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type in_str(in_strSEXP);
+    Rcpp::traits::input_parameter< bool >::type fillmissing(fillmissingSEXP);
+    Rcpp::traits::input_parameter< bool >::type toymd(toymdSEXP);
+    Rcpp::traits::input_parameter< bool >::type to_zulu(to_zuluSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_standardise(in_str, fillmissing, toymd, to_zulu));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_type
 IntegerVector rcpp_type(CharacterVector in_str);
 RcppExport SEXP _iso8601_rcpp_type(SEXP in_strSEXP) {
@@ -88,6 +102,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_iso8601_rcpp_parse_datetime", (DL_FUNC) &_iso8601_rcpp_parse_datetime, 2},
     {"_iso8601_rcpp_parse_time", (DL_FUNC) &_iso8601_rcpp_parse_time, 1},
     {"_iso8601_rcpp_standardise_datetime", (DL_FUNC) &_iso8601_rcpp_standardise_datetime, 4},
+    {"_iso8601_rcpp_standardise", (DL_FUNC) &_iso8601_rcpp_standardise, 4},
     {"_iso8601_rcpp_type", (DL_FUNC) &_iso8601_rcpp_type, 1},
     {NULL, NULL, 0}
 };

@@ -18,7 +18,7 @@
 #' of the ISO8601 date-time.
 #'
 #' @examples
-#' x <- parsedatetime(c("2024-01-01T12:30", "2024-W01-1T12:30Z",
+#' x <- iso8601todatetime(c("2024-01-01T12:30", "2024-W01-1T12:30Z",
 #'   "2024-001T12:30+01"))
 #' x
 #' attr(x, "timezone")
@@ -27,7 +27,7 @@
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @export
-parsedatetime <- function(x) {
+iso8601todatetime <- function(x) {
   res <- rcpp_parse_datetime(x)
   fail <- is.na(res$year) & !is.na(x)
   if (any(fail)) {

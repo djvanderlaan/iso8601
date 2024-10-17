@@ -1,6 +1,6 @@
 #' Standardise ISO8601 date-time strings
 #'
-#' @param x a character vector with valid ISO8601 date-time strins. 
+#' @param x a character vector with valid ISO8601 date-time strings. 
 #' 
 #' @param fillmissing set missing minutes and seconds of the time part of the
 #' string to 0.

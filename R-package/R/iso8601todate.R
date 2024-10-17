@@ -10,15 +10,15 @@
 #' Returns a \code{\link{Date}} object with the same length as \code{x}. 
 #'
 #' @examples
-#' parsedate(c("2024-01-01", "2024-W01-1", "2024001", 
+#' iso8601todate(c("2024-01-01", "2024-W01-1", "2024001", 
 #'   "2024-01-01T12:30"))
 #'
 #' @useDynLib iso8601
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @export
-parsedate <- function(x) {
-  res <- parsetodataframe(x, "toyearday")
+iso8601todate <- function(x) {
+  res <- iso8601todataframe(x, "toyearday")
   # Handle errors
   d  <- res$type == "Date" & !is.na(res$type)
   dt <- res$type == "Datetime" & !is.na(res$type)

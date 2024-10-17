@@ -21,6 +21,10 @@ rcpp_standardise_datetime <- function(in_str, fillmissing = TRUE, toymd = TRUE, 
     .Call('_iso8601_rcpp_standardise_datetime', PACKAGE = 'iso8601', in_str, fillmissing, toymd, to_zulu)
 }
 
+rcpp_standardise <- function(in_str, fillmissing = TRUE, toymd = TRUE, to_zulu = TRUE) {
+    .Call('_iso8601_rcpp_standardise', PACKAGE = 'iso8601', in_str, fillmissing, toymd, to_zulu)
+}
+
 rcpp_type <- function(in_str) {
     .Call('_iso8601_rcpp_type', PACKAGE = 'iso8601', in_str)
 }

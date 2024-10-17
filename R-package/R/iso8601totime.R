@@ -12,13 +12,13 @@
 #' formatting, which leaves out the date part.
 #'
 #' @examples
-#' parsetime(c("12:30:12", "T12", "T000910"))
+#' iso8601totime(c("12:30:12", "T12", "T000910"))
 #'
 #' @useDynLib iso8601
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @export
-parsetime <- function(x) {
+iso8601totime <- function(x) {
   res <- rcpp_parse_time(x)
   fail <- is.na(res) & !is.na(x)
   if (any(fail)) {
