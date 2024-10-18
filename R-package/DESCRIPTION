@@ -8,7 +8,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "r@eoos.dds.nl",
            comment = c(ORCID = "0000-0002-0693-1514"))
-Description: Functions to parse ISO8601 dates, times, and date-times.
+Description: Functions to parse strings with ISO8601 dates, times, and
+    date-times into R-objects.  Additionally, there are functions to determine
+    the type of ISO8601 string and to standardise ISO8601 strings. 
 BugReports: https://github.com/djvanderlaan/iso8601/issues
 URL: https://github.com/djvanderlaan/iso8601
 Depends:
