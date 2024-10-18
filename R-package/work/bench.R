@@ -4,7 +4,8 @@ x <- sample(x, 1E6, replace = TRUE)
 x[rbinom(length(x), 1, 0.02) == 1] <- NA
 x <- as.character(x)
 
-library(iso8601)
+#library(iso8601)
+pkgload::load_all()
 library(lubridate)
 library(anytime)
 
@@ -43,7 +44,6 @@ d0 <- as.POSIXct(x)
 })
 t0
 
-x <- "1999-10-25 03:14:06"
 
 t1 <- system.time({
 d1 <- iso8601todatetime(x)

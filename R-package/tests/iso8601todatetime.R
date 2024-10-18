@@ -38,3 +38,11 @@ expect_equal(x[4], as.POSIXct(NA_character_, tz = ""),
 expect_equal(attr(x, "tzone"), attr(as.POSIXct(0), "tzone"))
 expect_equal(attr(x, "timezone"), c(NA_character_))
 
+
+# Next date gave issues in earlier version has to do with summer-winter-time
+# crossing in CET/CEST
+x <- "1999-10-25 03:14:06"
+y <- iso8601todatetime(x)
+z <- as.POSIXct(x)
+expect_equal(y, z, attributes = FALSE)
+
