@@ -21,6 +21,7 @@ TEST_CASE("Detect ISO8601 type", "[determinetype]") {
   REQUIRE( determinetype("T12:00/PH1") == ISO8601Type::TimeInterval );
   REQUIRE( determinetype("P10/PH1") == ISO8601Type::TimeInterval );
   REQUIRE( determinetype("PH1") == ISO8601Type::Duration );
+  REQUIRE( determinetype("R5/1Y") == ISO8601Type::RepeatingInterval );
   REQUIRE( determinetype("") == ISO8601Type::Date );
 
 }
