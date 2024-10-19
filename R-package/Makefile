@@ -24,3 +24,7 @@ clean:
 
 getlib: clean
 	cp ../include/*.h ../src/*.cpp ./src
+
+readme:
+	R -e 'library(simplermarkdown);options(md_formatter=format_copypaste);mdweave("README_source.md", "README.md", cmd2 = "pandoc %1$$s -t gfm -o %2$$s %3$$.0s")'
+
