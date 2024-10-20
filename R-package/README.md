@@ -234,34 +234,109 @@ print(t)
 ## [1] "1970-01-01 16:15:14 GMT"
 ```
 
-```{.R}
+### Generic conversion
+
+The function `iso8601todataframe` will parse ISO8601 strings and split
+these into the separate parts. Only the parts present in any of the
+strings are returned.
+
+``` R
 iso8601todataframe(c(
-    "2019-08-17",
-    "2019-W33-6T1615,24",
-    "2019-08-17T16:15:14+01",
-    NA,
-    "T16:15:14Z"
+  "2019-08-17",
+  "2019-W33-6",
+  "2019-08-17T16:15:14+00",
+  "2019229T161514",
+  "T16:15"
 ))
+##       type year month day week weekday yearday hour minutes seconds
+## 1     Date 2019     8  17   NA      NA      NA   NA      NA      NA
+## 2     Date 2019    NA  NA   33       6      NA   NA      NA      NA
+## 3 Datetime 2019     8  17   NA      NA      NA   16      15      14
+## 4 Datetime 2019    NA  NA   NA      NA     229   16      15      14
+## 5     Time   NA    NA  NA   NA      NA      NA   16      15      NA
+##   tzoffsethours tzoffsetminutes
+## 1            NA              NA
+## 2            NA              NA
+## 3             0               0
+## 4            NA              NA
+## 5            NA              NA
 ```
 
-```{.R}
-iso8601todataframe(c(
-    "2019-08-17",
-    "2019-W33-6T1615,24",
-    "2019-08-17T16:15:14+01",
-    NA,
-    "T16:15:14Z"
-), transformdate = "toyearday")
-```
+The ‘type’ column contains the type of ISO8601 string. For parts not
+present in the string is returned.
 
-```{.R}
+It is also possible to transform the dates to one format: either
+year-month-day or year-day:
+
+``` R
 iso8601todataframe(c(
-    "2019-08-17",
-    "2019-W33-6T1615,24",
-    "2019-08-17T16:15:14+01",
-    NA,
-    "T16:15:14Z"
+  "2019-08-17",
+  "2019-W33-6",
+  "2019-08-17T16:15:14+01",
+  "2019229T161514",
+  "T16:15"
 ), transformdate = "toyearmonthday")
+##       type year month day hour minutes seconds tzoffsethours tzoffsetminutes
+## 1     Date 2019     8  17   NA      NA      NA            NA              NA
+## 2     Date 2019     8  17   NA      NA      NA            NA              NA
+## 3 Datetime 2019     8  17   16      15      14             1               0
+## 4 Datetime 2019     8  17   16      15      14            NA              NA
+## 5     Time   NA    NA  NA   16      15      NA            NA              NA
+iso8601todataframe(c(
+  "2019-08-17",
+  "2019-W33-6",
+  "2019-08-17T16:15:14+01",
+  "2019229T161514",
+  "T16:15"
+), transformdate = "toyearday")
+##       type year yearday hour minutes seconds tzoffsethours tzoffsetminutes
+## 1     Date 2019     229   NA      NA      NA            NA              NA
+## 2     Date 2019     229   NA      NA      NA            NA              NA
+## 3 Datetime 2019     229   16      15      14             1               0
+## 4 Datetime 2019     229   16      15      14            NA              NA
+## 5     Time   NA      NA   16      15      NA            NA              NA
 ```
 
+### Helper functions
 
+`iso8601type` returns a character vector whose elements indicate the
+type of ISO8601 string:
+
+``` R
+iso8601type(c(
+  "2019-08-17",
+  "2019-W33-6",
+  "2019-08-17T16:15:14+01",
+  "2019229T161514",
+  "T16:15"
+  ))
+## [1] "YMD"       "YWD"       "YMDTHMS±Z" "YDTHMS"    "THM"      
+```
+
+`iso8601standardise` transforms the dates into one standard extended
+format:
+
+``` R
+iso8601standardise(c(
+  "2019-08-17",
+  "2019-W33-6",
+  "2019-08-17 16:15:14+01",
+  "2019229T161514",
+  "T16:15"
+  ))
+## [1] "2019-08-17"           "2019-08-17"           "2019-08-17T15:15:14Z"
+## [4] "2019-08-17T16:15:14"  "T16:15:00"           
+```
+
+The `fillmissing` arguments fills in missing parts (1 for dates and 0
+for times), `toymd` transforms all dates to year-month-day and `tozulu`
+applies any time zone offsets and transforms the times to UTC (times
+local time zones are not affected):
+
+    iso8601standardise(c(
+      "2019-08-17",
+      "2019-W33-6",
+      "2019-08-17 16:15:14+01",
+      "2019229T161514",
+      "T16:15"
+      ), fillmissing = TRUE, toymd = TRUE, tozulu = TRUE)

@@ -160,35 +160,80 @@ class(t) <- class(t)[-1]
 print(t)
 ```
 
+### Generic conversion
 
-
-
-```
-
+The function `iso8601todataframe` will parse ISO8601 strings and split these
+into the separate parts. Only the parts present in any of the strings are
+returned.
+```{.R}
 iso8601todataframe(c(
   "2019-08-17",
   "2019-W33-6",
   "2019-08-17T16:15:14+00",
   "2019229T161514",
-  "T16:15:14"
+  "T16:15"
 ))
+```
+The ‘type’ column contains the type of ISO8601 string. For parts not present in
+the string \code{NA} is returned.
 
+It is also possible to transform the dates to one format: either year-month-day
+or year-day:
+
+```{.R}
 iso8601todataframe(c(
   "2019-08-17",
   "2019-W33-6",
-  "2019-08-17T16:15:14+00",
+  "2019-08-17T16:15:14+01",
   "2019229T161514",
-  "T16:15:14"
+  "T16:15"
 ), transformdate = "toyearmonthday")
 
 iso8601todataframe(c(
   "2019-08-17",
   "2019-W33-6",
-  "2019-08-17T16:15:14+00",
+  "2019-08-17T16:15:14+01",
   "2019229T161514",
-  "T16:15:14"
+  "T16:15"
 ), transformdate = "toyearday")
-
-
 ```
+
+### Helper functions
+
+`iso8601type` returns a character vector whose elements indicate the type of ISO8601 string:
+```{.R}
+iso8601type(c(
+  "2019-08-17",
+  "2019-W33-6",
+  "2019-08-17T16:15:14+01",
+  "2019229T161514",
+  "T16:15"
+  ))
+```
+
+`iso8601standardise` transforms the dates into one standard extended format:
+```{.R}
+iso8601standardise(c(
+  "2019-08-17",
+  "2019-W33-6",
+  "2019-08-17 16:15:14+01",
+  "2019229T161514",
+  "T16:15"
+  ))
+```
+
+The `fillmissing` arguments fills in missing parts (1 for dates and 0 for
+times), `toymd` transforms all dates to year-month-day and `tozulu` applies any
+time zone offsets and transforms the times to UTC (times local time zones are
+not affected):
+```
+iso8601standardise(c(
+  "2019-08-17",
+  "2019-W33-6",
+  "2019-08-17 16:15:14+01",
+  "2019229T161514",
+  "T16:15"
+  ), fillmissing = TRUE, toymd = TRUE, tozulu = TRUE)
+```
+
 

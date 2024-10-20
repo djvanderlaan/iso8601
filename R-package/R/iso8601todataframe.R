@@ -32,7 +32,7 @@
 #' iso8601todataframe(c("2014-W01-1", "2041-02-12T12+00", NA, "T22"))
 #'
 #' iso8601todataframe(c("2014-W01-1", "2041-02-12T12+00", NA, "T22"),
-#'   transformdate = "tomonthyearday")
+#'   transformdate = "toyearmonthday")
 #'
 #' @useDynLib iso8601
 #' @import Rcpp
