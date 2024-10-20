@@ -12,7 +12,7 @@ Description: Functions to parse strings with ISO8601 dates, times, and
     date-times into R-objects.  Additionally, there are functions to determine
     the type of ISO8601 string and to standardise ISO8601 strings. 
 BugReports: https://github.com/djvanderlaan/iso8601/issues
-URL: https://github.com/djvanderlaan/iso8601
+URL: https://github.com/djvanderlaan/iso8601/R-package
 Depends:
     R (>= 3.6.0)
 Imports:
