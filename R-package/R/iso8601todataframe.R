@@ -39,10 +39,10 @@
 #' @importFrom Rcpp evalCpp
 #' @export
 iso8601todataframe <- function(x, 
-    transformdate = c("no", "tomonthyearday", "toyearday")) {
+    transformdate = c("no", "toyearmonthday", "toyearday")) {
   transformdate <- match.arg(transformdate)
   transformdate <- match(transformdate, 
-    c("no", "tomonthyearday", "toyearday")) - 1L
+    c("no", "toyearmonthday", "toyearday")) - 1L
   res <- rcpp_parse_iso_dateframe(x, transformdate)
   res$type <- factor(res$type, levels = 1:6, labels = c("Date", "Time", 
       "Datetime", "Duration", "Interval", "RepeatingInterval"))

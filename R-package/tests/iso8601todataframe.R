@@ -31,7 +31,7 @@ expect_equal(nrow(x), 0)
 
 
 # Transformdate
-x <- iso8601todataframe("2024-001", "tomonthyearday")
+x <- iso8601todataframe("2024-001", "toyearmonthday")
 expect_equal(names(x), c("type", "year", "month", "day"))
 expect_equal(x$year, 2024L)
 expect_equal(x$month, 1)
