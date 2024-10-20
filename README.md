@@ -3,6 +3,10 @@
 Parser for ISO8601 dates, times, and date-times. The parse will detect the type
 and generate appropiate objects containing the date and time information.
 
+The c++ code is also used in the `iso8601` R-package. The source and
+documentation of this package can be found in the (R-package
+subdirectory)[R-package].
+
 Some example code:
 
 ```cpp
