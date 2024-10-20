@@ -50,3 +50,30 @@ expect_equal(x$yearday, 1)
 x <- iso8601todataframe(NA_character_, "toyearday")
 expect_equal(names(x), c("type"))
 
+
+# Failed in earlier version
+# tranformdate did not work for datetime
+x <- iso8601todataframe("2019-08-17T16:15:14+00", "toyearday")
+expect_equal(x$year, 2019L)
+expect_equal(x$month, NULL)
+expect_equal(x$day, NULL)
+expect_equal(x$yearday, 229L)
+expect_equal(x$hour, 16)
+expect_equal(x$minutes, 15)
+expect_equal(x$seconds, 14)
+expect_equal(x$tzoffsethours, 0)
+expect_equal(x$tzoffsetminutes, 0)
+
+# Failed in earlier version
+# tranformdate did not work for datetime
+x <- iso8601todataframe("2019229T161514", "toyearmonthday")
+expect_equal(x$year, 2019L)
+expect_equal(x$month, 8L)
+expect_equal(x$day, 17L)
+expect_equal(x$yearday, NULL)
+expect_equal(x$hour, 16)
+expect_equal(x$minutes, 15)
+expect_equal(x$seconds, 14)
+expect_equal(x$tzoffsethours, NULL)
+expect_equal(x$tzoffsetminutes, NULL)
+

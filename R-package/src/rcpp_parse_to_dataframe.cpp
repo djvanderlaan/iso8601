@@ -107,6 +107,17 @@ List rcpp_parse_iso_dateframe(CharacterVector in_str, int transformdate = 0) {
               isotype[i] = 3;
               ISO8601::Datetime dt = ISO8601::parsedatetime(str);
               ISO8601::Date d = dt.date();
+              if (transformdate != 0) {
+                if (transformdate == 1) {
+                  d = ISO8601::fillmissing(d);
+                  d = ISO8601::toyearmonthday(d);
+                } else if (transformdate == 2) {
+                  d = ISO8601::fillmissing(d);
+                  d = ISO8601::toyearday(d);
+                } else {
+                  throw std::runtime_error("Invalid value for transformdate.");
+                }
+              }
               year[i] = d.year();
               if (d.has_month()) month[i] = d.month();
               if (d.has_day()) day[i] = d.day();
