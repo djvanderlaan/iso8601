@@ -86,7 +86,8 @@ offsets indicate time zones west of the prime meridian.
 ```{.R}
 iso8601todatetime("2019-08-17T16:15:14Z")
 iso8601todatetime("2019-08-17T16:15:14+01:00")
-iso8601todatetime("2019-08-17T16:15:14+01")
+iso8601todatetime("2019-08-17T16:15:14±00:00")
+iso8601todatetime("2019-08-17T16:15:14-01")
 iso8601todatetime("2019-08-17T16:15:14")
 ```
 
