@@ -1,6 +1,8 @@
 #include "iso8601.h"
 #include "utils.h"
 
+#include <iostream>
+
 namespace ISO8601 {
 
 typedef std::pair<double, bool> Fractional;
@@ -29,19 +31,47 @@ typedef std::pair<double, bool> Fractional;
     return std::make_pair(val, isfraction);
   }
 
-  bool timezonestart(char c) {
-    return c == 'Z' || c == '+' || c == '-';
+  inline int starts_with_sign(const std::string_view str) {
+    int res = 0;
+    if ( (res = starts_with(str, '-')) ) return res;
+    if ( (res = starts_with(str, '+')) ) return res;
+    if ( (res = starts_with(str, "±")) ) return res;
+    return res;
   }
 
+  inline bool timezonestart(const std::string_view str) {
+    return starts_with(str, 'Z') || starts_with_sign(str);
+  }
+
+
   Timezone parse_timezone(const std::string_view& str, std::string_view::size_type& pos) {
-    //const auto end = str.size();
     pos = 0;
-    //const auto nchar_remain = end - pos;
-    const auto nchar_remain = str.size();
+    auto nchar_remain = str.size();
+    unsigned int ncharsign{};
+
     if (nchar_remain == 0) {
       return Timezone{};
     } else if (nchar_remain == 1 && str.at(pos) == 'Z') {
       return Timezone{false};
+    } else if ( (ncharsign = starts_with_sign(str)) ) {
+      if (nchar_remain < (2+ncharsign)) throw std::runtime_error("Invalid time zone");
+      int hour = strtoint(str.substr(pos, pos+ncharsign+2));
+      pos += ncharsign+2;
+      nchar_remain -= ncharsign+2;
+      int minutes = 0;
+      if (nchar_remain == 0) {
+        // do nothing; hours is already parsed
+      } else if (nchar_remain == 2) {
+        minutes = strtoint(str.substr(pos,pos+2));
+        pos += 2;
+      } else if (nchar_remain == 3) {
+        minutes = strtoint(str.substr(pos+1,pos+3));
+        pos += 3;
+      } else {
+        throw std::runtime_error("Invalid time zone");
+      }
+      return Timezone{false, hour, minutes};
+
     } else if (str.at(pos) == '-' || str.at(pos) == '+') {
       if (nchar_remain < 3) throw std::runtime_error("Invalid time zone");
       int hour = strtoint(str.substr(pos, pos+3));
@@ -76,7 +106,7 @@ typedef std::pair<double, bool> Fractional;
     str = str.substr(pos);
     // Minutes
     bool extended_format = false;
-    if (!result.hour_fractional() && str.size() > 0 && !timezonestart(str[0])) {
+    if (!result.hour_fractional() && str.size() > 0 && !timezonestart(str)) {
       // Check if we have HH:MM or HHMM
       if (str[0] == ':')  {
         extended_format = true;
@@ -91,7 +121,7 @@ typedef std::pair<double, bool> Fractional;
       throw std::runtime_error("Invalid ISO8601 time");
     // Seconds
     if (result.has_minutes() && !result.minutes_fractional() && str.size() > 0 && 
-        !timezonestart(str[0])) {
+        !timezonestart(str)) {
       // Check if we have HH:MM or HHMM
       const bool colon = str[0] == ':';
       if (colon != extended_format)

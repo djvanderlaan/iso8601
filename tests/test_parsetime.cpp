@@ -310,6 +310,23 @@ TEST_CASE("Time parsing THHMMSS+0100", "[parsetime]") {
   REQUIRE( tz.offset_minutes() == 0 );
 }
 
+TEST_CASE("Time parsing THHMMSS±00:00", "[parsetime]") {
+  Time time = parsetime("T122334±00:00");
+  REQUIRE( time.hour() == 12 );
+  REQUIRE_FALSE( time.hour_fractional()  );
+  REQUIRE( time.has_minutes() );
+  REQUIRE( time.minutes() == 23 );
+  REQUIRE_FALSE( time.minutes_fractional() );
+  REQUIRE( time.has_seconds() );
+  REQUIRE( time.seconds() == 34 );
+  REQUIRE_FALSE( time.seconds_fractional() );
+  Timezone tz = time.timezone();
+  REQUIRE_FALSE( tz.localtime() );
+  REQUIRE( tz.offset_hours() == 0 );
+  REQUIRE( tz.offset_minutes() == 0 );
+}
+
+
 TEST_CASE("Time parsing invalid time zones", "[parsetime]") {
   REQUIRE_THROWS( parsetime("T12:23:34X") );
   REQUIRE_THROWS( parsetime("T12:23:34+1") );
@@ -325,5 +342,6 @@ TEST_CASE("Time parsing invalid time zones", "[parsetime]") {
   REQUIRE_THROWS( parsetime("T12:23:34-03:-10") );
   REQUIRE_THROWS( parsetime("T12:23:34+12:01") );
   REQUIRE_THROWS( parsetime("T12:23:34-12:01") );
+  REQUIRE_THROWS( parsetime("T12:23:34±01:00") );
 }
 

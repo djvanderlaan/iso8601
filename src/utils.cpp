@@ -22,9 +22,15 @@ namespace ISO8601 {
     std::string_view::const_iterator p = str.begin();
     // check if we start with a sign
     int sign = 1L;
+    unsigned int ncharsign = 0;
     if (str.front() == '+' || str.front() == '-') {
       if (str.front() == '-') sign = -1;
       ++p;
+      if (str.size() == 1)
+        throw std::runtime_error("Convertion to int failed.");
+    } else if ( (ncharsign = starts_with(str, "±")) ) {
+      sign = 0;
+      p += ncharsign;
       if (str.size() == 1)
         throw std::runtime_error("Convertion to int failed.");
     }
@@ -67,6 +73,8 @@ namespace ISO8601 {
           throw std::runtime_error("Convertion to int failed.");
       }
     }
+    if (value != 0 && sign == 0) 
+      throw std::runtime_error("Convertion to int failed.");
     return sign * value;
   }
 
