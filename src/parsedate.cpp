@@ -4,7 +4,7 @@
 
 namespace ISO8601 {
 
-  int getint(const std::string_view& str, std::string_view::size_type nchar) {
+  int getint(const std::string_view str, std::string_view::size_type nchar) {
     return strtoint(str.substr(0, nchar));
   }
 

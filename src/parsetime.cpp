@@ -7,7 +7,7 @@ namespace ISO8601 {
 
 typedef std::pair<double, bool> Fractional;
 
-  Fractional readfractime(const std::string_view& str, std::string_view::size_type& pos) {
+  Fractional readfractime(const std::string_view str, std::string_view::size_type& pos) {
     pos = 0;
     // We expect two digits
     if (str.size() < 2 || !isnumchar(str[0]) || !isnumchar(str[1]))
@@ -44,7 +44,7 @@ typedef std::pair<double, bool> Fractional;
   }
 
 
-  Timezone parse_timezone(const std::string_view& str, std::string_view::size_type& pos) {
+  Timezone parse_timezone(const std::string_view str, std::string_view::size_type& pos) {
     pos = 0;
     auto nchar_remain = str.size();
     unsigned int ncharsign{};
