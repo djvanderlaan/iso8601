@@ -15,13 +15,13 @@ Some example code:
 
 int main() {
 
-  ISO8601::Date date = ISO8601::parsedate("2030-W01-3"):
+  ISO8601::Date date = ISO8601::parsedate("2030-W01-3");
   std::cout << date << '\n';
 
-  ISO8601::Time time = ISO8601::parsedate("14:45"):
+  ISO8601::Time time = ISO8601::parsetime("14:45");
   std::cout << time << '\n';
 
-  ISO8601::Datetime datetime = ISO8601::parsedate("20300405T1445+01"):
+  ISO8601::Datetime datetime = ISO8601::parsedatetime("20300405T1445+01");
   std::cout << datetime << '\n';
 
   const std::string str{"2030-123"};
@@ -49,6 +49,5 @@ int main() {
 
   return 0;
 }
-
 ```
 
