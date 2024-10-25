@@ -18,7 +18,6 @@ int main(int argc, char* argv[]) {
       line.remove_suffix(1);
     // Skip empty lines
     if (line.empty()) continue;
-    std::cout << "Parsing '" << line << "'\n";
     ISO8601::ISO8601Type type = ISO8601::determinetype(line);
     try {
       switch (type) {
