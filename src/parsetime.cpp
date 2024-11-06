@@ -96,7 +96,7 @@ namespace ISO8601 {
     }
   }
 
-  Time parsetime(std::string_view str) {
+  Time parsetime(std::string_view str, bool noTisok) {
     std::string_view::size_type pos = 0;
     if (str.size() < 1) throw std::runtime_error("Invalid ISO8601 time");
     const bool starts_with_T = str.front() == 'T';
@@ -119,7 +119,7 @@ namespace ISO8601 {
       result.set_minutes(r.first, r.second);
     }
     // A check; we don't accept compact format without T
-    if (!extended_format && !starts_with_T)
+    if (!noTisok && !extended_format && !starts_with_T)
       throw std::runtime_error("Invalid ISO8601 time");
     // Seconds
     if (result.has_minutes() && !result.minutes_fractional() && str.size() > 0 && 

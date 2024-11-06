@@ -12,7 +12,7 @@ namespace ISO8601 {
   ISO8601Type determinetype(std::string_view str);
 
   Date parsedate(std::string_view str);
-  Time parsetime(std::string_view str);
+  Time parsetime(std::string_view str, bool noTisok = false);
   Datetime parsedatetime(std::string_view str);
 
 }
