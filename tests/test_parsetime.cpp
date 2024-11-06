@@ -278,6 +278,24 @@ TEST_CASE("Time parsing THH:MM.mmm-03:30", "[parsetime]") {
   REQUIRE( tz.offset_minutes() == 30 );
 }
 
+TEST_CASE("Time parsing THH:MM.mmm−03:30", "[parsetime]") {
+  // this is unicode minus instead of hyphen-minus
+  Time time = parsetime("T12:23.123−03:30");
+  REQUIRE( time.hour() == 12 );
+  REQUIRE_FALSE( time.hour_fractional()  );
+  REQUIRE( time.has_minutes() );
+  REQUIRE( time.minutes() == 23.123 );
+  REQUIRE( time.minutes_fractional() );
+  REQUIRE_FALSE( time.has_seconds() );
+  REQUIRE_THROWS( time.seconds() == 34 );
+  REQUIRE_THROWS( time.seconds_fractional() );
+  Timezone tz = time.timezone();
+  REQUIRE_FALSE( tz.localtime() );
+  REQUIRE( tz.offset_hours() == -3 );
+  REQUIRE( tz.offset_minutes() == 30 );
+}
+
+
 TEST_CASE("Time parsing THH+01:00", "[parsetime]") {
   Time time = parsetime("T12+01:00");
   REQUIRE( time.hour() == 12 );

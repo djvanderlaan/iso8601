@@ -5,7 +5,7 @@
 
 namespace ISO8601 {
 
-typedef std::pair<double, bool> Fractional;
+  typedef std::pair<double, bool> Fractional;
 
   Fractional readfractime(const std::string_view str, std::string_view::size_type& pos) {
     pos = 0;
@@ -36,7 +36,9 @@ typedef std::pair<double, bool> Fractional;
     if ( (res = starts_with(str, '-')) ) return res;
     if ( (res = starts_with(str, '+')) ) return res;
     if ( (res = starts_with(str, "±")) ) return res;
+    if ( (res = starts_with(str, "−")) ) return res;
     return res;
+
   }
 
   inline bool timezonestart(const std::string_view str) {
