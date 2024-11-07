@@ -9,8 +9,8 @@ namespace ISO8601 {
   }
 
 
-  Date parsedate(std::string_view str) {
-    //std::string_view::size_type pos = 0;
+  Date parsedate(std::string_view str, unsigned int extrayearlen) {
+    const unsigned int yearlen = 4 + extrayearlen;
     if (str.size() < 1) throw std::runtime_error("Invalid ISO8601 date");
     int sign = 1;
     if (str.front() == '+') {
@@ -21,15 +21,17 @@ namespace ISO8601 {
     } else if (unsigned int nchar = starts_with(str, "−")) {
       sign = -1L;
       str.remove_prefix(nchar);
+    } else if (extrayearlen > 0) {
+      throw std::runtime_error("Invalid ISO8601 date");
     }
     // Year
     const auto nnum = count_numeric(str);
-    if (nnum < 4) {
+    if (nnum < yearlen) {
       // TODO:we have parial year; for now we don't accept this
       throw std::runtime_error("Invalid ISO8601 date");
     }
-    Date result{sign * getint(str, 4L)};
-    str.remove_prefix(4);
+    Date result{sign * getint(str, yearlen)};
+    str.remove_prefix(yearlen);
     // Determine if we have extended format e.g. YYYY-MM-DD or compact 
     // format e.g. YYYYMMDD; if we have extended format - needs to be used all
     // the time and vice versa

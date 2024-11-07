@@ -30,6 +30,7 @@ iso8601todate("2019-229")
 iso8601todate("2019229")
 iso8601todate("−0009-123")
 iso8601todate("-0009")
+iso8601todate("-20123-123", ndigitsyear = 5)
 ```
 As can be seen from the examples above, for incomplete dates, the missing parts
 are substituted by 1 as the ‘Date’ object cannot handle incomplete dates. It is
@@ -239,5 +240,4 @@ iso8601standardise(c(
   "T16:15"
   ), fillmissing = TRUE, toymd = TRUE, tozulu = TRUE)
 ```
-
 

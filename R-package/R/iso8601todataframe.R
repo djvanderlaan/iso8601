@@ -6,6 +6,11 @@
 #' @param transformdate Transform the date to the given format. This also
 #' immplies that missing parts of the date are replaces by values of 1.
 #'
+#' @param ndigitsyear Number of digits used to encode the year. This should be
+#' an integer with values >= 4 with the same length as \code{x} or length one.
+#' When it is a vector with length greater than one, a different value is used
+#' for each element of \code{x}.
+#'
 #' @return 
 #' Returns a \code{data.frame} with possibly the following columns:
 #'
@@ -39,11 +44,17 @@
 #' @importFrom Rcpp evalCpp
 #' @export
 iso8601todataframe <- function(x, 
-    transformdate = c("no", "toyearmonthday", "toyearday")) {
+    transformdate = c("no", "toyearmonthday", "toyearday"),
+    ndigitsyear = 4L) {
   transformdate <- match.arg(transformdate)
   transformdate <- match(transformdate, 
     c("no", "toyearmonthday", "toyearday")) - 1L
-  res <- rcpp_parse_iso_dateframe(x, transformdate)
+  ndigitsyear <- as.integer(ndigitsyear)
+  stopifnot(!anyNA(ndigitsyear))
+  stopifnot(length(ndigitsyear) == 1 || length(ndigitsyear) == length(x))
+  stopifnot(all(ndigitsyear >= 4))
+  extrayearlen <- rep(ndigitsyear - 4, length.out = length(x))
+  res <- rcpp_parse_iso_dateframe(x, transformdate, extrayearlen)
   res$type <- factor(res$type, levels = 1:6, labels = c("Date", "Time", 
       "Datetime", "Duration", "Interval", "RepeatingInterval"))
   sel <- sapply(res, \(x) length(x) != 0)

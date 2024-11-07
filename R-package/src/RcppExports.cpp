@@ -11,14 +11,15 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // rcpp_parse_iso_dateframe
-List rcpp_parse_iso_dateframe(CharacterVector in_str, int transformdate);
-RcppExport SEXP _iso8601_rcpp_parse_iso_dateframe(SEXP in_strSEXP, SEXP transformdateSEXP) {
+List rcpp_parse_iso_dateframe(CharacterVector in_str, int transformdate, IntegerVector extrayearlen);
+RcppExport SEXP _iso8601_rcpp_parse_iso_dateframe(SEXP in_strSEXP, SEXP transformdateSEXP, SEXP extrayearlenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type in_str(in_strSEXP);
     Rcpp::traits::input_parameter< int >::type transformdate(transformdateSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_parse_iso_dateframe(in_str, transformdate));
+    Rcpp::traits::input_parameter< IntegerVector >::type extrayearlen(extrayearlenSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_parse_iso_dateframe(in_str, transformdate, extrayearlen));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -72,7 +73,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_iso8601_rcpp_parse_iso_dateframe", (DL_FUNC) &_iso8601_rcpp_parse_iso_dateframe, 2},
+    {"_iso8601_rcpp_parse_iso_dateframe", (DL_FUNC) &_iso8601_rcpp_parse_iso_dateframe, 3},
     {"_iso8601_rcpp_parse_datetime", (DL_FUNC) &_iso8601_rcpp_parse_datetime, 2},
     {"_iso8601_rcpp_parse_time", (DL_FUNC) &_iso8601_rcpp_parse_time, 1},
     {"_iso8601_rcpp_standardise", (DL_FUNC) &_iso8601_rcpp_standardise, 4},

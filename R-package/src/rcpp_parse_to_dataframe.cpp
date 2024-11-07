@@ -43,7 +43,7 @@ class IntVec {
 };
 
 // [[Rcpp::export]]
-List rcpp_parse_iso_dateframe(CharacterVector in_str, int transformdate = 0) {
+List rcpp_parse_iso_dateframe(CharacterVector in_str, int transformdate, IntegerVector extrayearlen) {
   // We use IntVec and NumVec here. In that way we only create vectors that are
   // needed. For example, most times week and weekday will not be used and it
   // would be wastefull to create the full size vectors. In this case only
@@ -70,7 +70,7 @@ List rcpp_parse_iso_dateframe(CharacterVector in_str, int transformdate = 0) {
         switch (type) {
           case ISO8601::ISO8601Type::Date: {
               isotype[i] = 1;
-              ISO8601::Date d = ISO8601::parsedate(str);
+              ISO8601::Date d = ISO8601::parsedate(str, extrayearlen[i]);
               if (transformdate != 0) {
                 if (transformdate == 1) {
                   d = ISO8601::fillmissing(d);
@@ -105,7 +105,7 @@ List rcpp_parse_iso_dateframe(CharacterVector in_str, int transformdate = 0) {
             break;
           case ISO8601::ISO8601Type::Datetime: {
               isotype[i] = 3;
-              ISO8601::Datetime dt = ISO8601::parsedatetime(str);
+              ISO8601::Datetime dt = ISO8601::parsedatetime(str, extrayearlen[i]);
               ISO8601::Date d = dt.date();
               if (transformdate != 0) {
                 if (transformdate == 1) {

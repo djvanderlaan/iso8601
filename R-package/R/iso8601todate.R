@@ -3,6 +3,11 @@
 #' @param x character vector of ISO8601 date string. When the string also
 #' contains a time part, this is ignored.
 #'
+#' @param ndigitsyear Number of digits used to encode the year. This should be
+#' an integer with values >= 4 with the same length as \code{x} or length one.
+#' When it is a vector with length greater than one, a different value is used
+#' for each element of \code{x}.
+#'
 #' @details
 #' Dates are accepted in any of the formats supported by ISO8601.
 #'
@@ -17,8 +22,8 @@
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @export
-iso8601todate <- function(x) {
-  res <- iso8601todataframe(x, "toyearday")
+iso8601todate <- function(x, ndigitsyear = 4L) {
+  res <- iso8601todataframe(x, "toyearday", ndigitsyear)
   # Handle errors
   d  <- res$type == "Date" & !is.na(res$type)
   dt <- res$type == "Datetime" & !is.na(res$type)

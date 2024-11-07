@@ -199,6 +199,39 @@ TEST_CASE("Date parsing YYYY-Www", "[parsedate]") {
   REQUIRE_THROWS( date.weekday()); 
 }
 
+TEST_CASE("Date parsing +YYYYYY-MM-DD", "[parsedate]") {
+  Date date = parsedate("+002022-12-22", 2U);
+  REQUIRE( date.type() == Date::YEARMONTHDAY );
+  REQUIRE( date.year() == 2022 );
+  REQUIRE( date.has_month()  );
+  REQUIRE( date.month() == 12 );
+  REQUIRE( date.has_day()  );
+  REQUIRE( date.day() == 22 );
+  REQUIRE_FALSE( date.has_week() );
+  REQUIRE_THROWS( date.week() ); 
+  REQUIRE_FALSE( date.has_weekday() );
+  REQUIRE_THROWS( date.weekday() ); 
+  REQUIRE_FALSE( date.has_yearday() );
+  REQUIRE_THROWS( date.yearday() ); 
+}
+
+TEST_CASE("Date parsing -YYYYYY-MM-DD", "[parsedate]") {
+  Date date = parsedate("-102022-12-22", 2U);
+  REQUIRE( date.type() == Date::YEARMONTHDAY );
+  REQUIRE( date.year() == -102022 );
+  REQUIRE( date.has_month()  );
+  REQUIRE( date.month() == 12 );
+  REQUIRE( date.has_day()  );
+  REQUIRE( date.day() == 22 );
+  REQUIRE_FALSE( date.has_week() );
+  REQUIRE_THROWS( date.week() ); 
+  REQUIRE_FALSE( date.has_weekday() );
+  REQUIRE_THROWS( date.weekday() ); 
+  REQUIRE_FALSE( date.has_yearday() );
+  REQUIRE_THROWS( date.yearday() ); 
+}
+
+
 TEST_CASE("Date parsing invalid dates", "[parsedate]") {
   REQUIRE_THROWS( parsedate("2022-W123") );
   REQUIRE_THROWS( parsedate("2022-W54-3") );
@@ -206,6 +239,8 @@ TEST_CASE("Date parsing invalid dates", "[parsedate]") {
   REQUIRE_THROWS( parsedate("2022-W12-0") );
   REQUIRE_THROWS( parsedate("2022-W12-8") );
   REQUIRE_THROWS( parsedate("2022-W12-") );
+  REQUIRE_THROWS( parsedate("002022-12-22", 2U) );
+  REQUIRE_THROWS( parsedate("-002022-12-22", 3U) );
 }
 
 
