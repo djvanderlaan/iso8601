@@ -41,6 +41,10 @@ iso8601todate("2019-229")
 ## [1] "2019-08-17"
 iso8601todate("2019229")
 ## [1] "2019-08-17"
+iso8601todate("−0009-123")
+## [1] NA
+iso8601todate("-0009")
+## [1] "-9-01-01"
 ```
 
 As can be seen from the examples above, for incomplete dates, the

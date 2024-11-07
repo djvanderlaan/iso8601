@@ -25,6 +25,14 @@ TEST_CASE("Date parsing -YYYY", "[parsedate]") {
   REQUIRE( date.type() == Date::YEAR );
   REQUIRE( date.year() == -2022 );
 }
+
+TEST_CASE("Date parsing −YYYY", "[parsedate]") {
+  // this is unicode minus not hyphen
+  Date date = parsedate("−2022");
+  REQUIRE( date.type() == Date::YEAR );
+  REQUIRE( date.year() == -2022 );
+}
+  
   
 TEST_CASE("Date parsing +YYYY", "[parsedate]") {
   Date date = parsedate("+2022");
@@ -109,6 +117,24 @@ TEST_CASE("Date parsing YYYY-DDD", "[parsedate]") {
   REQUIRE_FALSE( date.has_weekday() );
   REQUIRE_THROWS( date.weekday() ); 
 }
+
+TEST_CASE("Date parsing −YYYY-DDD", "[parsedate]") {
+  // this is unicode minus not hyphen
+  Date date = parsedate("−2022-123");
+  REQUIRE( date.type() == Date::YEARDAY );
+  REQUIRE( date.year() == -2022 );
+  REQUIRE( date.has_yearday() );
+  REQUIRE( date.yearday() == 123); 
+  REQUIRE_FALSE( date.has_month()  );
+  REQUIRE_THROWS( date.month() == 12 );
+  REQUIRE_FALSE( date.has_day()  );
+  REQUIRE_THROWS( date.day() == 22 );
+  REQUIRE_FALSE( date.has_week() );
+  REQUIRE_THROWS( date.week() ); 
+  REQUIRE_FALSE( date.has_weekday() );
+  REQUIRE_THROWS( date.weekday() ); 
+}
+  
   
 TEST_CASE("Date parsing YYYYDDD", "[parsedate]") {
   Date date = parsedate("2022123");

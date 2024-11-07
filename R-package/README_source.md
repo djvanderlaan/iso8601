@@ -28,6 +28,8 @@ iso8601todate("2019W336")
 iso8601todate("2019W33")
 iso8601todate("2019-229")
 iso8601todate("2019229")
+iso8601todate("−0009-123")
+iso8601todate("-0009")
 ```
 As can be seen from the examples above, for incomplete dates, the missing parts
 are substituted by 1 as the ‘Date’ object cannot handle incomplete dates. It is

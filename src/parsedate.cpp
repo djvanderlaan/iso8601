@@ -13,9 +13,14 @@ namespace ISO8601 {
     //std::string_view::size_type pos = 0;
     if (str.size() < 1) throw std::runtime_error("Invalid ISO8601 date");
     int sign = 1;
-    if (str.front() == '+' || str.front() == '-') {
-      if (str.front() == '-') sign = -1L;
+    if (str.front() == '+') {
       str.remove_prefix(1);
+    } else if (str.front() == '-') {
+      sign = -1L;
+      str.remove_prefix(1);
+    } else if (unsigned int nchar = starts_with(str, "−")) {
+      sign = -1L;
+      str.remove_prefix(nchar);
     }
     // Year
     const auto nnum = count_numeric(str);
