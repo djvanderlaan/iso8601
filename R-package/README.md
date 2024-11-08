@@ -208,7 +208,8 @@ iso8601totime("T16,2539")
 ## [1] "T16:15:14"
 ```
 
-When time is in extended format the ‘T’ can be omitted
+When calling `iso8601totime` we know that we are dealing with times,
+therefore, the ‘T’ can be omitted
 
 ``` R
 iso8601totime("16:15:14")
@@ -224,6 +225,20 @@ iso8601totime("16:15:14.00")
 iso8601totime("16:15.24")
 ## [1] "T16:15:14"
 iso8601totime("16:15,24")
+## [1] "T16:15:14"
+iso8601totime("161514")
+## [1] "T16:15:14"
+iso8601totime("161514,00")
+## [1] "T16:15:14"
+iso8601totime("161514.00")
+## [1] "T16:15:14"
+iso8601totime("1615")
+## [1] "T16:15:00"
+iso8601totime("1615")
+## [1] "T16:15:00"
+iso8601totime("1615.24")
+## [1] "T16:15:14"
+iso8601totime("1615,24")
 ## [1] "T16:15:14"
 ```
 

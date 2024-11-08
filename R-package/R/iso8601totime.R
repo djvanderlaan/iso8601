@@ -13,6 +13,39 @@
 #'
 #' @examples
 #' iso8601totime(c("12:30:12", "T12", "T000910"))
+#' 
+#' iso8601totime("T16:15:14")
+#' iso8601totime("T16:15:14,00")
+#' iso8601totime("T16:15:14.00")
+#' iso8601totime("T161514")
+#' iso8601totime("T161514.00")
+#' iso8601totime("T161514,00")
+#' iso8601totime("T16:15:14,00")
+#' iso8601totime("T16:15:14.00")
+#' iso8601totime("T161514.00")
+#' iso8601totime("T161514,00")
+#' iso8601totime("T16:15.24")
+#' iso8601totime("T16:15,24")
+#' iso8601totime("T1615.24")
+#' iso8601totime("T1615,24")
+#' iso8601totime("T16.2539")
+#' iso8601totime("T16,2539")
+#' 
+#' # T can be omitted
+#' iso8601totime("16:15:14")
+#' iso8601totime("16:15:14,00")
+#' iso8601totime("16:15:14.00")
+#' iso8601totime("16:15:14,00")
+#' iso8601totime("16:15:14.00")
+#' iso8601totime("16:15.24")
+#' iso8601totime("16:15,24")
+#' iso8601totime("161514")
+#' iso8601totime("161514,00")
+#' iso8601totime("161514.00")
+#' iso8601totime("1615")
+#' iso8601totime("1615")
+#' iso8601totime("1615.24")
+#' iso8601totime("1615,24")
 #'
 #' @useDynLib iso8601
 #' @import Rcpp
