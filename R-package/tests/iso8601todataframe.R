@@ -3,6 +3,11 @@ library(iso8601)
 
 source("helpers.R")
 
+# Note that testing of the parsing of all of the various date formats allowed in
+# ISO8601 is done in the c++ library. We will not test these here. Here we will
+# only test if the R-routines correctly call the c++ routines and that the
+# result of those calls is handles correctly in R.
+
 x <- iso8601todataframe(c("2024-W01-6", "2041-02-12T12+05:20", NA, "T22"))
 expect_equal(x$type, factor(c(1,3,NA,2), levels = 1:6, 
   labels = c("Date", "Time", "Datetime", "Duration", 

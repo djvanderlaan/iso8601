@@ -3,6 +3,11 @@
 #'
 #' @param x character vector of date-time objects
 #'
+#' @param ndigitsyear Number of digits used to encode the year. This should be
+#' an integer with values >= 4 with the same length as \code{x} or length one.
+#' When it is a vector with length greater than one, a different value is used
+#' for each element of \code{x}.
+#'
 #' @details
 #' Date-time strings with a time-zone are converted to UTC.  If all date-time
 #' strings have a time zone the returned object will have it's display time zone
@@ -27,8 +32,13 @@
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @export
-iso8601todatetime <- function(x) {
-  res <- rcpp_parse_datetime(x)
+iso8601todatetime <- function(x, ndigitsyear = 4L) {
+  ndigitsyear <- as.integer(ndigitsyear)
+  stopifnot(!anyNA(ndigitsyear))
+  stopifnot(length(ndigitsyear) == 1 || length(ndigitsyear) == length(x))
+  stopifnot(all(ndigitsyear >= 4))
+  extrayearlen <- rep(ndigitsyear - 4, length.out = length(x))
+  res <- rcpp_parse_datetime(x, TRUE, extrayearlen)
   fail <- is.na(res$year) & !is.na(x)
   if (any(fail)) {
     sel <- which(fail)

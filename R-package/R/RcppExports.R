@@ -5,8 +5,8 @@ rcpp_parse_iso_dateframe <- function(in_str, transformdate, extrayearlen) {
     .Call('_iso8601_rcpp_parse_iso_dateframe', PACKAGE = 'iso8601', in_str, transformdate, extrayearlen)
 }
 
-rcpp_parse_datetime <- function(in_str, fillmissing = TRUE) {
-    .Call('_iso8601_rcpp_parse_datetime', PACKAGE = 'iso8601', in_str, fillmissing)
+rcpp_parse_datetime <- function(in_str, fillmissing, extrayearlen) {
+    .Call('_iso8601_rcpp_parse_datetime', PACKAGE = 'iso8601', in_str, fillmissing, extrayearlen)
 }
 
 rcpp_parse_time <- function(in_str) {

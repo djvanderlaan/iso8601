@@ -45,8 +45,8 @@ iso8601todate("−0009-123")
 ## [1] "-9-05-03"
 iso8601todate("-0009")
 ## [1] "-9-01-01"
-iso8601todate("-20123-123", ndigitsyear = 5)
-## [1] "-20123-05-03"
+iso8601todate("+002019-229", ndigitsyear = 6)
+## [1] "2019-08-17"
 ```
 
 As can be seen from the examples above, for incomplete dates, the
@@ -73,6 +73,8 @@ iso8601todatetime("2019-08-17T1615")
 ## [1] "2019-08-17 16:15:00 CEST"
 iso8601todatetime("2019-08-17T16Z")
 ## [1] "2019-08-17 16:00:00 GMT"
+iso8601todatetime("+002019-08-17T16:15:14Z", ndigitsyear = 6)
+## [1] "2019-08-17 16:15:14 GMT"
 ```
 
 Fractional times are also allowed:

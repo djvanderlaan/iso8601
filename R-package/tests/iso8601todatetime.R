@@ -2,6 +2,12 @@ library(iso8601)
 
 source("helpers.R")
 
+# Note that testing of the parsing of all of the various date formats allowed in
+# ISO8601 is done in the c++ library. We will not test these here. Here we will
+# only test if the R-routines correctly call the c++ routines and that the
+# result of those calls is handles correctly in R.
+
+oldtz = Sys.getenv("TZ")
 Sys.setenv(TZ="Etc/GMT+1")
 
 x <- iso8601todatetime(c("2024-01-01T12:30", "2024-W01-1T12:30Z",
@@ -38,6 +44,21 @@ expect_equal(x[4], as.POSIXct(NA_character_, tz = ""),
 expect_equal(attr(x, "tzone"), attr(as.POSIXct(0), "tzone"))
 expect_equal(attr(x, "timezone"), c(NA_character_))
 
+# Different number of digits in year
+x <- iso8601todatetime(c("2024-01-01T12:30", "2024-W01-1T12:30Z",
+  "2024-001T12:30+01", NA))
+expect_equal(x[1], as.POSIXct("2024-01-01 12:30"))
+expect_warning(r <- iso8601todatetime("02024-01-01T12:30"))
+expect_equal(r, as.POSIXct(NA_character_), attributes = FALSE)
+r <- iso8601todatetime("+02024-01-01T12:30", ndigitsyear=5)
+expect_equal(r, as.POSIXct("2024-01-01 12:30"), attributes = FALSE)
+expect_warning(r <- iso8601todatetime("2024-01-01T12:30", ndigitsyear = 5))
+expect_equal(r, as.POSIXct(NA_character_), attributes = FALSE)
+expect_error(r <- iso8601todatetime("2024-01-01T12:30", ndigitsyear = 3))
+expect_error(r <- iso8601todatetime("2024-01-01T12:30", ndigitsyear = NA))
+r <- iso8601todatetime(c("+02024-01-01T12:30", "2024-01-01T12:30"), ndigitsyear = c(5,4))
+expect_equal(r, rep(as.POSIXct("2024-01-01 12:30"),2), attributes = FALSE)
+
 
 # Next date gave issues in earlier version has to do with summer-winter-time
 # crossing in CET/CEST
@@ -46,3 +67,4 @@ y <- iso8601todatetime(x)
 z <- as.POSIXct(x)
 expect_equal(y, z, attributes = FALSE)
 
+Sys.setenv(TZ = oldtz)

@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 List rcpp_parse_datetime(CharacterVector in_str, 
-    bool fillmissing = true) {
+    bool fillmissing, IntegerVector extrayearlen) {
 
   IntegerVector year(in_str.size());
   IntegerVector month(in_str.size());
@@ -24,7 +24,7 @@ List rcpp_parse_datetime(CharacterVector in_str,
     try {
       if (!CharacterVector::is_na(in_str[i])) {
         const std::string_view str{in_str[i]};
-        ISO8601::Datetime dt = ISO8601::parsedatetime(str);
+        ISO8601::Datetime dt = ISO8601::parsedatetime(str, extrayearlen[i]);
         if (dt.date().type() != ISO8601::Date::YEARMONTHDAY) 
           dt.date( toyearmonthday(dt.date()) );
         if (fillmissing) dt.time(ISO8601::fillmissing(dt.time())); else

@@ -1,7 +1,10 @@
 library(iso8601)
 source("helpers.R")
 
-
+# Note that testing of the parsing of all of the various date formats allowed in
+# ISO8601 is done in the c++ library. We will not test these here. Here we will
+# only test if the R-routines correctly call the c++ routines and that the
+# result of those calls is handles correctly in R.
 
 x <- c("12:40:50", "T12", "121340", "T231312.12", NA)
 t1 <- iso8601totime(x)
