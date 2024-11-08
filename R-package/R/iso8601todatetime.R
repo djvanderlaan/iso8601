@@ -28,6 +28,43 @@
 #' x
 #' attr(x, "timezone")
 #'
+#' # Examples of full date-times
+#' iso8601todatetime("2019-08-17T16:15:14Z")
+#' iso8601todatetime("2019-08-17T161514Z")
+#' iso8601todatetime("2019-08-17T16:15Z")
+#' iso8601todatetime("2019-08-17T1615")
+#' iso8601todatetime("2019-08-17T16Z")
+#' iso8601todatetime("+002019-08-17T16:15:14Z", ndigitsyear = 6)
+#' 
+#' # Fractional times
+#' iso8601todatetime("2019-08-17T16:15:14,00Z")
+#' iso8601todatetime("2019-08-17T16:15:14.00Z")
+#' iso8601todatetime("2019-08-17T161514.00Z")
+#' iso8601todatetime("2019-08-17T161514,00Z")
+#' iso8601todatetime("2019-08-17T16:15.24Z")
+#' iso8601todatetime("2019-08-17T16:15,24Z")
+#' iso8601todatetime("2019-08-17T1615.24Z")
+#' iso8601todatetime("2019-08-17T1615,24Z")
+#' iso8601todatetime("2019-08-17T16.2539Z")
+#' iso8601todatetime("2019-08-17T16,2539Z")
+#' 
+#' # When extended format T can be omitted
+#' iso8601todatetime("2019-08-17 16:15:14Z")
+#' iso8601todatetime("2019-08-17 16:15:14,00Z")
+#' iso8601todatetime("2019-08-17 16:15:14.00Z")
+#' iso8601todatetime("2019-08-17 16:15Z")
+#' iso8601todatetime("2019-08-17 16:15Z")
+#' iso8601todatetime("2019-08-17 16:15.24Z")
+#' iso8601todatetime("2019-08-17 16:15,24Z")
+#' 
+#' # Time zones
+#' iso8601todatetime("2019-08-17T16:15:14Z")
+#' iso8601todatetime("2019-08-17T16:15:14+01:00")
+#' iso8601todatetime("2019-08-17T16:15:14\u00b100:00")
+#' iso8601todatetime("2019-08-17T16:15:14-01")
+#' iso8601todatetime("2019-08-17T16:15:14\u221200:00")
+#' iso8601todatetime("2019-08-17T16:15:14")
+#'
 #' @useDynLib iso8601
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp

@@ -73,8 +73,8 @@ When the date and time are in extended format the ‘T’ can be omitted
 iso8601todatetime("2019-08-17 16:15:14Z")
 iso8601todatetime("2019-08-17 16:15:14,00Z")
 iso8601todatetime("2019-08-17 16:15:14.00Z")
-iso8601todatetime("2019-08-17 16:15:14,00Z")
-iso8601todatetime("2019-08-17 16:15:14.00Z")
+iso8601todatetime("2019-08-17 16:15Z")
+iso8601todatetime("2019-08-17 16:15Z")
 iso8601todatetime("2019-08-17 16:15.24Z")
 iso8601todatetime("2019-08-17 16:15,24Z")
 ```

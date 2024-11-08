@@ -17,6 +17,20 @@
 #' @examples
 #' iso8601todate(c("2024-01-01", "2024-W01-1", "2024001", 
 #'   "2024-01-01T12:30"))
+#' 
+#' iso8601todate("2019-08-17")
+#' iso8601todate("2019-08")
+#' iso8601todate("2019")
+#' iso8601todate("20190817")
+#' iso8601todate("2019-W33-6")
+#' iso8601todate("2019-W33")
+#' iso8601todate("2019W336")
+#' iso8601todate("2019W33")
+#' iso8601todate("2019-229")
+#' iso8601todate("2019229")
+#' iso8601todate("\u22120009-123")
+#' iso8601todate("-0009")
+#' iso8601todate("+002019-229", ndigitsyear = 6)
 #'
 #' @useDynLib iso8601
 #' @import Rcpp
