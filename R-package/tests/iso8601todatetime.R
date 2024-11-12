@@ -67,4 +67,32 @@ y <- iso8601todatetime(x)
 z <- as.POSIXct(x)
 expect_equal(y, z, attributes = FALSE)
 
+
+# =====================================================================
+# === DATE-TIME VARIANTS
+# =====================================================================
+
+check_datetime <- function(x, d, tz = "", ...) {
+  r <- iso8601todatetime(x, ...)
+  if (!methods::is(d, "POSIXct")) d <- as.POSIXct(d, tz = tz)
+  expect_equal(r, d, attributes = FALSE)
+}
+
+check_datetime("2022-12-22T12:23:34", "2022-12-22 12:23:34")
+check_datetime("2022-W12-3 12:23.5", "2022-03-23 12:23:30")
+check_datetime("2022-123T12Z", "2022-05-03 12:00:00", tz = "GMT")
+check_datetime("+002022-12-22T12:23:34Z", "2022-12-22 12:23:34", 
+  tz = "GMT", ndigitsyear = 6)
+
+expect_warning(iso8601todatetime("2021-12T14:23:23"))
+expect_warning(iso8601todatetime(" 2021-12-23T14:23:23"))
+expect_warning(iso8601todatetime("2021-12-23T14:23:23 "))
+expect_warning(iso8601todatetime("2021-12-23T14:23:23/2021-12-23T14:25:00"))
+expect_warning(iso8601todatetime("2021-12-23"))
+expect_warning(iso8601todatetime("2021-12-23/2021-12-25"))
+expect_warning(iso8601todatetime("2021-12-23/2021-12-25"))
+expect_warning(iso8601todatetime("002022-12-22T12:23:34", ndigitsyear=6))
+expect_warning(iso8601todatetime("+002022-12-22T12:23:34", ndigitsyear=5))
+
+
 Sys.setenv(TZ = oldtz)
