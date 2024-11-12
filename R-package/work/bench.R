@@ -8,6 +8,8 @@ x <- as.character(x)
 pkgload::load_all()
 library(lubridate)
 library(anytime)
+library(parsedate)
+
 
 t0 <- system.time({
 d0 <- as.Date(x)
@@ -32,6 +34,12 @@ d3 <- ymd(x)
 })
 t3
 all(is.na(d3) | d3 == d0)
+
+t4 <- system.time({
+  d4 <- parse_iso_8601(x)
+})
+t4
+all(is.na(d4) | d4 == d0)
 
 
 n <- 1E6
