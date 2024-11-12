@@ -23,3 +23,58 @@ expect_equal(class(x), c("Time", "POSIXct", "POSIXt"))
 expect_equal(attr(x, "tzone"), "GMT")
 
 
+# Time time = parsetime("T12:23:34");
+# Time time = parsetime("T122334");
+# Time time = parsetime("T12");
+# Time time = parsetime("T12.123");
+# Time time = parsetime("T12:23,123");
+# Time time = parsetime("T1223.123");
+# Time time = parsetime("T1223");
+# Time time = parsetime("T12:23:34.123");
+# Time time = parsetime("T122334,123");
+# REQUIRE_THROWS( parsetime("T") );
+# REQUIRE_THROWS( parsetime("T1") );
+# REQUIRE_THROWS( parsetime("T12:2334") );
+# REQUIRE_THROWS( parsetime("T1223:34") );
+# REQUIRE_THROWS( parsetime("T12:23.1:34") );
+# REQUIRE_THROWS( parsetime("T12:23:34.") );
+# REQUIRE_THROWS( parsetime("T12:23:34 ") );
+# REQUIRE_THROWS( parsetime(" T12:23:34 ") );
+# REQUIRE_THROWS( parsetime("T12:23:60") );
+# REQUIRE_THROWS( parsetime("T12:60:34") );
+# REQUIRE_THROWS( parsetime("T25:23:34") );
+# REQUIRE_THROWS( parsetime("T24:23:34") );
+# Time time = parsetime("T12:23:34Z");
+# Time time = parsetime("T12:23:34+01");
+# Time time = parsetime("T12:23:34+0100");
+# Time time = parsetime("T12:23:34-03:30");
+# Time time = parsetime("T12:23:34.123Z");
+# Time time = parsetime("T12:23.123-03:30");
+# // this is unicode minus instead of hyphen-minus
+# Time time = parsetime("T12:23.123−03:30");
+# Time time = parsetime("T12+01:00");
+# Time time = parsetime("T122334+0100");
+# Time time = parsetime("T122334±00:00");
+# REQUIRE_THROWS( parsetime("T12:23:34X") );
+# REQUIRE_THROWS( parsetime("T12:23:34+1") );
+# REQUIRE_THROWS( parsetime("T12:23:34+01.5") );
+# REQUIRE_THROWS( parsetime("T12:23:34+01:5") );
+# REQUIRE_THROWS( parsetime("T12:23:34+015") );
+# REQUIRE_THROWS( parsetime("T12:23:34-") );
+# REQUIRE_THROWS( parsetime("T12:23:34+13") );
+# REQUIRE_THROWS( parsetime("T12:23:34-13") );
+# REQUIRE_THROWS( parsetime("T12:23:34+03:63") );
+# REQUIRE_THROWS( parsetime("T12:23:34+03:60") );
+# REQUIRE_THROWS( parsetime("T12:23:34-03:-1") );
+# REQUIRE_THROWS( parsetime("T12:23:34-03:-10") );
+# REQUIRE_THROWS( parsetime("T12:23:34+12:01") );
+# REQUIRE_THROWS( parsetime("T12:23:34-12:01") );
+# REQUIRE_THROWS( parsetime("T12:23:34±01:00") );
+# Time time = parsetime("12:23:34");
+# Time time = parsetime("12:23");
+# Time time = parsetime("122334", true);
+# Time time = parsetime("12.123", true);
+# REQUIRE_THROWS( parsetime("122334") );
+# REQUIRE_THROWS( parsetime("1223") );
+# REQUIRE_THROWS( parsetime("12") );
+# REQUIRE_THROWS( parsetime("1") );
