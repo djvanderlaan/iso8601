@@ -2,11 +2,6 @@ library(iso8601)
 
 source("helpers.R")
 
-# Note that testing of the parsing of all of the various date formats allowed in
-# ISO8601 is done in the c++ library. We will not test these here. Here we will
-# only test if the R-routines correctly call the c++ routines and that the
-# result of those calls is handles correctly in R.
-
 oldtz = Sys.getenv("TZ")
 Sys.setenv(TZ="Etc/GMT+1")
 
@@ -93,6 +88,35 @@ expect_warning(iso8601todatetime("2021-12-23/2021-12-25"))
 expect_warning(iso8601todatetime("2021-12-23/2021-12-25"))
 expect_warning(iso8601todatetime("002022-12-22T12:23:34", ndigitsyear=6))
 expect_warning(iso8601todatetime("+002022-12-22T12:23:34", ndigitsyear=5))
+
+check_datetime("2021-12-23T12:23:34Z", "2021-12-23 12:23:34", tz = "GMT")
+check_datetime("2021-12-23T12:23:34+01", "2021-12-23 11:23:34", tz = "GMT")
+check_datetime("2021-12-23T12:23:34+0100", "2021-12-23 11:23:34", tz = "GMT")
+check_datetime("2021-12-23T12:23:34-03:30", "2021-12-23 15:53:34", tz = "GMT")
+check_datetime("2021-12-23T12:23:34.5Z", "2021-12-23 12:23:34.5", tz = "GMT")
+check_datetime("2021-12-23T12:23.5-03:30", "2021-12-23 15:53:30", tz = "GMT")
+# unicode minus
+check_datetime("2021-12-23T12:23.5\u221203:30", "2021-12-23 15:53:30", tz = "GMT")
+check_datetime("2021-12-23T12+01:00", "2021-12-23 11:00:00", tz = "GMT")
+check_datetime("2021-12-23T122334+0100", "2021-12-23 11:23:34", tz = "GMT")
+# plus minus
+check_datetime("2021-12-23T122334\u00b100:00", "2021-12-23 12:23:34", tz = "GMT")
+
+expect_warning(iso8601todatetime("2021-12-23T12:23:34X") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34+1") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34+01.5") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34+01:5") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34+015") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34-") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34+13") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34-13") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34+03:63") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34+03:60") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34-03:-1") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34-03:-10") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34+12:01") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34-12:01") )
+expect_warning(iso8601todatetime("2021-12-23T12:23:34±01:00") )
 
 
 Sys.setenv(TZ = oldtz)
