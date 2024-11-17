@@ -36,9 +36,11 @@ int main(int argc, char* argv[]) {
           std::cout << dt << "\n";
           break;
         }
-        case ISO8601::ISO8601Type::Duration:
-          std::cout << "<duration not supported>\n";
+        case ISO8601::ISO8601Type::Duration: {
+          const auto p = ISO8601::parseduration(line);
+          std::cout << p << "\n";
           break;
+        }
         case ISO8601::ISO8601Type::TimeInterval:
           std::cout << "<time interval not supported>\n";
           break;

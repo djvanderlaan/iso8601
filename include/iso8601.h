@@ -4,6 +4,7 @@
 #include "iso8601_date.h"
 #include "iso8601_time.h"
 #include "iso8601_datetime.h"
+#include "iso8601_duration.h"
 #include <string_view>
 
 namespace ISO8601 {
@@ -14,6 +15,7 @@ namespace ISO8601 {
   Date parsedate(std::string_view str, unsigned int extrayearlen = 0);
   Time parsetime(std::string_view str, bool noTisok = false);
   Datetime parsedatetime(std::string_view str, unsigned int extrayearlen = 0);
+  Duration parseduration(std::string_view str);
 
 }
 
