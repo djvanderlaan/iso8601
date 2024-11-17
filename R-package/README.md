@@ -1,9 +1,9 @@
 # `iso8601` R-package
 
-The package has special functions for transforming ISO8601 strings into
-dates, date-times and times. These functions transform the strings into
-the corresponding R objects: ‘Date’, ‘POSIXct’ and ‘Time’ (which is a
-subclass of ‘POSIXct’, see below):
+The package has special functions for transforming ISO8601 (ISO
+8601-1:2019) strings into dates, date-times and times. These functions
+transform the strings into the corresponding R objects: ‘Date’,
+‘POSIXct’ and ‘Time’ (which is a subclass of ‘POSIXct’, see below):
 
 ``` R
 library(iso8601)
@@ -60,7 +60,7 @@ Date-time strings consist of a date and a time separated by the
 character ‘T’. For the date part all complete date strings mentioned
 above are allowed. The time part can be specified both in expanded
 format (with colon) and compact format and as complete or incomplete
-times. In the latter case the missing parts are subsituted by 0:
+times. In the latter case the missing parts are substituted by 0:
 
 ``` R
 iso8601todatetime("2019-08-17T16:15:14Z")
@@ -367,3 +367,25 @@ local time zones are not affected):
       "2019229T161514",
       "T16:15"
       ), fillmissing = TRUE, toymd = TRUE, tozulu = TRUE)
+
+## Other R-packages
+
+Other options for parsing date, time (none of the packages support time
+strings) and date-times strings are:
+
+- [`parsedate`](https://cran.r-project.org/package=parsedate) has the
+  function `parse_iso_8601` that supports ISO8601 dates and date-times.
+  The performance of this function is significantly less than those from
+  `iso8601`.
+- [`anytime`](https://cran.r-project.org/package=anytime) has the
+  functions `anytime` and `anydate` to convert date-time and time
+  strings to time and date classes. It supports many of the
+  year-month-day formats but not year-weer-day or ordinal dates. Also
+  (this can be an advantage of disadvantage) it accepts many more
+  formats.
+- [`lubridate`](https://cran.r-project.org/package=lubridate) supports
+  many or most of the year-month-day formats.
+- `as.Date`, `as.POXIXct` and `strptime` from base R will also support
+  most of the ISO8601 formats by specifying a appropriate format string
+  except for time-zones. This, however, requires that all strings have
+  the same format.
