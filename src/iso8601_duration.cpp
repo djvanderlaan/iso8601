@@ -23,6 +23,7 @@ namespace ISO8601 {
     anythingprinted |= printelement(stream, duration.years(), 'Y');
     anythingprinted |= printelement(stream, duration.months(), 'M');
     anythingprinted |= printelement(stream, duration.days(), 'D');
+    anythingprinted |= printelement(stream, duration.weeks(), 'W');
     if (hastime) { 
       stream << 'T';
       anythingprinted |= printelement(stream, duration.hours(), 'H');
@@ -32,7 +33,7 @@ namespace ISO8601 {
     // We omit values of 0 and elements that aren't set. But that could mean we
     // haven't printed anything except the 'P' which is invalid. Print a
     // duration of 0 seconds in that case.
-    if (!anythingprinted) stream << "0S";
+    if (!anythingprinted) stream << "T0S";
     return stream;
   }
 

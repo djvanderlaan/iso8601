@@ -50,8 +50,9 @@ namespace ISO8601 {
       void years(double value, bool fractional = false) {
         if (value < 0) throw std::runtime_error("Invalid duration.");
         // check if lower parts are already set; if so error
-        if (years_.has_value() || months_.has_value() || days_.has_value() || 
-            hours_.has_value() || minutes_.has_value() || seconds_.has_value()) 
+        if (weeks_.has_value() || years_.has_value() || months_.has_value() || 
+            days_.has_value() || hours_.has_value() || minutes_.has_value() || 
+            seconds_.has_value()) 
           throw std::runtime_error("Invalid duration.");
         if (!fractional) value = std::round(value);
         years_ = DurationElement{value, fractional};
@@ -64,8 +65,8 @@ namespace ISO8601 {
       void months(double value, bool fractional = false) {
         if (value < 0) throw std::runtime_error("Invalid duration.");
         // check if lower parts are already set; if so error
-        if (months_.has_value() || days_.has_value() || hours_.has_value() || 
-            minutes_.has_value() || seconds_.has_value()) 
+        if (weeks_.has_value() || months_.has_value() || days_.has_value() || 
+            hours_.has_value() || minutes_.has_value() || seconds_.has_value()) 
           throw std::runtime_error("Invalid duration.");
         // check if higher parts are fractional
         if (years_.has_value() && years_.fractional()) 
@@ -81,7 +82,7 @@ namespace ISO8601 {
       void days(double value, bool fractional = false) {
         if (value < 0) throw std::runtime_error("Invalid duration.");
         // check if lower parts are already set; if so error
-        if (days_.has_value() || hours_.has_value() || 
+        if (weeks_.has_value() || days_.has_value() || hours_.has_value() || 
             minutes_.has_value() || seconds_.has_value()) 
           throw std::runtime_error("Invalid duration.");
         // check if higher parts are fractional
@@ -100,7 +101,8 @@ namespace ISO8601 {
       void hours(double value, bool fractional = false) {
         if (value < 0) throw std::runtime_error("Invalid duration.");
         // check if lower parts are already set; if so error
-        if (hours_.has_value() || minutes_.has_value() || seconds_.has_value()) 
+        if (weeks_.has_value() || hours_.has_value() || minutes_.has_value() || 
+            seconds_.has_value()) 
           throw std::runtime_error("Invalid duration.");
         // check if higher parts are fractional
         if (years_.has_value() && years_.fractional()) 
@@ -120,7 +122,7 @@ namespace ISO8601 {
       void minutes(double value, bool fractional = false) {
         if (value < 0) throw std::runtime_error("Invalid duration.");
         // check if lower parts are already set; if so error
-        if (minutes_.has_value() || seconds_.has_value()) 
+        if (weeks_.has_value() || minutes_.has_value() || seconds_.has_value()) 
           throw std::runtime_error("Invalid duration.");
         // check if higher parts are fractional
         if (years_.has_value() && years_.fractional()) 
@@ -142,7 +144,7 @@ namespace ISO8601 {
       void seconds(double value, bool fractional = false) {
         if (value < 0) throw std::runtime_error("Invalid duration.");
         // check if lower parts are already set; if so error
-        if (seconds_.has_value()) 
+        if (weeks_.has_value() || seconds_.has_value()) 
           throw std::runtime_error("Invalid duration.");
         // check if higher parts are fractional
         if (years_.has_value() && years_.fractional()) 
@@ -163,6 +165,19 @@ namespace ISO8601 {
         return seconds_;
       }
 
+      void weeks(double value, bool fractional = false) {
+        if (value < 0) throw std::runtime_error("Invalid duration.");
+        // week cannot be combined with other types such as years, days etc.
+        if (years_.has_value() || months_.has_value() || days_.has_value() || 
+            hours_.has_value() || minutes_.has_value() || seconds_.has_value()) 
+          throw std::runtime_error("Invalid duration.");
+        weeks_ = DurationElement{value, fractional};
+      }
+
+      const DurationElement& weeks() const {
+        return weeks_;
+      }
+
     private:
       DurationElement years_ = {};
       DurationElement months_ = {};
@@ -170,6 +185,7 @@ namespace ISO8601 {
       DurationElement hours_ = {};
       DurationElement minutes_ = {};
       DurationElement seconds_ = {};
+      DurationElement weeks_ = {};
   };
 
 

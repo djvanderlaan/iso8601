@@ -67,6 +67,10 @@ namespace ISO8601 {
           duration.days(r.first, r.second);
           str.remove_prefix(1);
           break;
+        case 'W':
+          duration.weeks(r.first, r.second);
+          str.remove_prefix(1);
+          break;
       }
     }
     // Read time part
