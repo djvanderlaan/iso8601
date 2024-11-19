@@ -56,19 +56,19 @@ namespace ISO8601 {
       const char element = str[0];
       switch(element) {
         case 'Y':
-          duration.years(r.first, r.second);
+          duration.set_years(r.first, r.second);
           str.remove_prefix(1);
           break;
         case 'M':
-          duration.months(r.first, r.second);
+          duration.set_months(r.first, r.second);
           str.remove_prefix(1);
           break;
         case 'D':
-          duration.days(r.first, r.second);
+          duration.set_days(r.first, r.second);
           str.remove_prefix(1);
           break;
         case 'W':
-          duration.weeks(r.first, r.second);
+          duration.set_weeks(r.first, r.second);
           str.remove_prefix(1);
           break;
       }
@@ -82,15 +82,15 @@ namespace ISO8601 {
       const char element = str[0];
       switch(element) {
         case 'H':
-          duration.hours(r.first, r.second);
+          duration.set_hours(r.first, r.second);
           str.remove_prefix(1);
           break;
         case 'M':
-          duration.minutes(r.first, r.second);
+          duration.set_minutes(r.first, r.second);
           str.remove_prefix(1);
           break;
         case 'S':
-          duration.seconds(r.first, r.second);
+          duration.set_seconds(r.first, r.second);
           str.remove_prefix(1);
           break;
       }

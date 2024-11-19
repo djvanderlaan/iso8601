@@ -8,7 +8,7 @@ namespace ISO8601 {
 
   Duration removefractions(const Duration& duration, bool round_seconds, double month_precision) {
     Duration d{};
-    // Round year and month
+/*    // Round year and month
     if (duration.years().has_value() && duration.years().fractional()) {
       const double f = duration.years().value();
       d.years(std::floor(f), false);
@@ -78,12 +78,12 @@ namespace ISO8601 {
       }
     }
     if (!d.seconds().has_value() && duration.seconds().has_value()) 
-      d.seconds(duration.seconds().value(), duration.seconds().fractional());
+      d.seconds(duration.seconds().value(), duration.seconds().fractional());*/
     return d;
   }
 
   Duration standardise(const Duration& duration) {
-    const Duration d0 = removefractions(duration);
+    /*const Duration d0 = removefractions(duration);
     DurationElement seconds = d0.seconds();
     DurationElement minutes = d0.minutes();
     DurationElement hours = d0.hours();
@@ -136,47 +136,38 @@ namespace ISO8601 {
         nd = days.has_value() ? days.value() + nd : nd;
         days.value(nd, false);
       }
-    }
+    }*/
     Duration d;
-    if (years.has_value()) d.years(years.value(), years.fractional());
+    /*if (years.has_value()) d.years(years.value(), years.fractional());
     if (months.has_value()) d.months(months.value(), months.fractional());
     if (days.has_value()) d.days(days.value(), days.fractional());
     if (hours.has_value()) d.hours(hours.value(), hours.fractional());
     if (minutes.has_value()) d.minutes(minutes.value(), minutes.fractional());
-    if (seconds.has_value()) d.seconds(seconds.value(), seconds.fractional());
+    if (seconds.has_value()) d.seconds(seconds.value(), seconds.fractional());*/
     return d;
   }
 
-  bool printelement(std::ostream& stream, const DurationElement& el, char post) {
-    if (el.has_value()) {// && el.value() > 0) {
-      if (el.fractional()) {
-        stream << el.value() << post;
-      } else {
-        stream << static_cast<int>(el.value()) << post;
-      }
-    } else return false;
-    return true;
-  }
 
   std::ostream& operator<<(std::ostream& stream, const Duration& duration) {
-    bool hastime = duration.hours().has_value() || 
-      duration.minutes().has_value() || duration.seconds().has_value();
-    bool anythingprinted = false;
+    bool hastime = duration.has_hours() || 
+      duration.has_minutes() || duration.has_seconds();
+    bool hasdate = duration.has_years() || duration.has_months() || 
+      duration.has_days() || duration.has_weeks();
     stream << 'P';
-    anythingprinted |= printelement(stream, duration.years(), 'Y');
-    anythingprinted |= printelement(stream, duration.months(), 'M');
-    anythingprinted |= printelement(stream, duration.days(), 'D');
-    anythingprinted |= printelement(stream, duration.weeks(), 'W');
-    if (hastime) { 
+    if (duration.has_years()) stream << duration.yearsv() << 'Y';
+    if (duration.has_months()) stream << duration.monthsv() << 'M';
+    if (duration.has_days()) stream << duration.daysv() << 'D';
+    if (duration.has_weeks()) stream << duration.weeksv() << 'W';
+    if (hastime) {
       stream << 'T';
-      anythingprinted |= printelement(stream, duration.hours(), 'H');
-      anythingprinted |= printelement(stream, duration.minutes(), 'M');
-      anythingprinted |= printelement(stream, duration.seconds(), 'S');
+      if (duration.has_hours()) stream << duration.hoursv() << 'H';
+      if (duration.has_minutes()) stream << duration.minutesv() << 'M';
+      if (duration.has_seconds()) stream << duration.secondsv() << 'S';
     }
     // We omit values of 0 and elements that aren't set. But that could mean we
     // haven't printed anything except the 'P' which is invalid. Print a
     // duration of 0 seconds in that case.
-    if (!anythingprinted) stream << "T0S";
+    if (!hasdate && !hastime) stream << "T0S";
     return stream;
   }
 

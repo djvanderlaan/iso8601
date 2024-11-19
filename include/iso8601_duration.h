@@ -47,6 +47,11 @@ namespace ISO8601 {
 
   class Duration {
     public:
+
+      void set_years(double value, bool fractional = false) {
+        years(value, fractional);
+      }
+
       void years(double value, bool fractional = false) {
         if (value < 0) throw std::runtime_error("Invalid duration.");
         // check if lower parts are already set; if so error
@@ -58,8 +63,20 @@ namespace ISO8601 {
         years_ = DurationElement{value, fractional};
       }
 
-      const DurationElement& years() const {
-        return years_;
+      bool has_years() const {
+        return years_.has_value();
+      }
+
+      bool years_fractional() const {
+        return years_.fractional();
+      }
+
+      double yearsv() const {
+        return years_.value();
+      }
+
+      void set_months(double value, bool fractional = false) {
+        months(value, fractional);
       }
 
       void months(double value, bool fractional = false) {
@@ -75,8 +92,20 @@ namespace ISO8601 {
         months_ = DurationElement{value, fractional};
       }
 
-      const DurationElement& months() const {
-        return months_;
+      bool has_months() const {
+        return months_.has_value();
+      }
+
+      bool months_fractional() const {
+        return months_.fractional();
+      }
+
+      double monthsv() const {
+        return months_.value();
+      }
+
+      void set_days(double value, bool fractional = false) {
+        days(value, fractional);
       }
 
       void days(double value, bool fractional = false) {
@@ -94,8 +123,20 @@ namespace ISO8601 {
         days_ = DurationElement{value, fractional};
       }
 
-      const DurationElement& days() const {
-        return days_;
+      bool has_days() const {
+        return days_.has_value();
+      }
+
+      bool days_fractional() const {
+        return days_.fractional();
+      }
+
+      double daysv() const {
+        return days_.value();
+      }
+
+      void set_hours(double value, bool fractional = false) {
+        hours(value, fractional);
       }
 
       void hours(double value, bool fractional = false) {
@@ -115,8 +156,20 @@ namespace ISO8601 {
         hours_ = DurationElement{value, fractional};
       }
 
-      const DurationElement& hours() const {
-        return hours_;
+      bool has_hours() const {
+        return hours_.has_value();
+      }
+
+      bool hours_fractional() const {
+        return hours_.fractional();
+      }
+
+      double hoursv() const {
+        return hours_.value();
+      }
+
+      void set_minutes(double value, bool fractional = false) {
+        minutes(value, fractional);
       }
 
       void minutes(double value, bool fractional = false) {
@@ -137,8 +190,20 @@ namespace ISO8601 {
         minutes_ = DurationElement{value, fractional};
       }
 
-      const DurationElement& minutes() const {
-        return minutes_;
+      bool has_minutes() const {
+        return minutes_.has_value();
+      }
+
+      bool minutes_fractional() const {
+        return minutes_.fractional();
+      }
+
+      double minutesv() const {
+        return minutes_.value();
+      }
+
+      void set_seconds(double value, bool fractional = false) {
+        seconds(value, fractional);
       }
 
       void seconds(double value, bool fractional = false) {
@@ -161,8 +226,24 @@ namespace ISO8601 {
         seconds_ = DurationElement{value, fractional};
       }
 
+      bool has_seconds() const {
+        return seconds_.has_value();
+      }
+
+      bool seconds_fractional() const {
+        return seconds_.fractional();
+      }
+
+      double secondsv() const {
+        return seconds_.value();
+      }
+
       const DurationElement& seconds() const {
         return seconds_;
+      }
+
+      void set_weeks(double value, bool fractional = false) {
+        weeks(value, fractional);
       }
 
       void weeks(double value, bool fractional = false) {
@@ -174,8 +255,16 @@ namespace ISO8601 {
         weeks_ = DurationElement{value, fractional};
       }
 
-      const DurationElement& weeks() const {
-        return weeks_;
+      bool has_weeks() const {
+        return weeks_.has_value();
+      }
+
+      bool weeks_fractional() const {
+        return weeks_.fractional();
+      }
+
+      double weeksv() const {
+        return weeks_.value();
       }
 
     private:
@@ -186,6 +275,7 @@ namespace ISO8601 {
       DurationElement minutes_ = {};
       DurationElement seconds_ = {};
       DurationElement weeks_ = {};
+
   };
 
 
