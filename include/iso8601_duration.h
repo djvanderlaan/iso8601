@@ -191,6 +191,10 @@ namespace ISO8601 {
 
   std::ostream& operator<<(std::ostream& stream, const Duration& duration);
 
+  Duration removefractions(const Duration& duration, bool round_seconds = false, 
+      double month_precision = 0.01);
+  Duration standardise(const Duration& duration);
+
 }
 
 #endif
