@@ -6,19 +6,19 @@ using namespace ISO8601;
 TEST_CASE("Duration parse P1Y2M3DT4H5M6,7S", "[parseduration]") {
   Duration d = parseduration("P1Y2M3DT4H5M6,7S");
   REQUIRE_FALSE(d.years_fractional());
-  REQUIRE(d.yearsv() == 1);
+  REQUIRE(d.years() == 1);
   REQUIRE_FALSE(d.months_fractional());
-  REQUIRE(d.monthsv() == 2);
+  REQUIRE(d.months() == 2);
   REQUIRE_FALSE(d.days_fractional());
-  REQUIRE(d.daysv() == 3);
+  REQUIRE(d.days() == 3);
   REQUIRE_FALSE(d.hours_fractional());
-  REQUIRE(d.hoursv() == 4);
+  REQUIRE(d.hours() == 4);
   REQUIRE_FALSE(d.minutes_fractional());
-  REQUIRE(d.minutesv() == 5);
+  REQUIRE(d.minutes() == 5);
   REQUIRE(d.seconds_fractional());
-  REQUIRE(d.secondsv() == 6.7);
+  REQUIRE(d.seconds() == 6.7);
   REQUIRE_FALSE(d.has_weeks());
-  REQUIRE_THROWS(d.weeksv());
+  REQUIRE_THROWS(d.weeks());
 }
 
 TEST_CASE("Duration parse PT4H5M6.7S", "[parseduration]") {
@@ -27,52 +27,52 @@ TEST_CASE("Duration parse PT4H5M6.7S", "[parseduration]") {
   REQUIRE_FALSE(d.has_months());
   REQUIRE_FALSE(d.has_days());
   REQUIRE_FALSE(d.hours_fractional());
-  REQUIRE(d.hoursv() == 4);
+  REQUIRE(d.hours() == 4);
   REQUIRE_FALSE(d.minutes_fractional());
-  REQUIRE(d.minutesv() == 5);
+  REQUIRE(d.minutes() == 5);
   REQUIRE(d.seconds_fractional());
-  REQUIRE(d.secondsv() == 6.7);
-  REQUIRE_THROWS(d.yearsv());
-  REQUIRE_THROWS(d.monthsv());
-  REQUIRE_THROWS(d.daysv());
+  REQUIRE(d.seconds() == 6.7);
+  REQUIRE_THROWS(d.years());
+  REQUIRE_THROWS(d.months());
+  REQUIRE_THROWS(d.days());
   REQUIRE_FALSE(d.has_weeks());
-  REQUIRE_THROWS(d.weeksv());
+  REQUIRE_THROWS(d.weeks());
 }
 
 TEST_CASE("Duration parse P01Y299M3,4D", "[parseduration]") {
   Duration d = parseduration("P01Y299M3.4D");
   REQUIRE_FALSE(d.years_fractional());
-  REQUIRE(d.yearsv() == 1);
+  REQUIRE(d.years() == 1);
   REQUIRE_FALSE(d.months_fractional());
-  REQUIRE(d.monthsv() == 299);
+  REQUIRE(d.months() == 299);
   REQUIRE(d.days_fractional());
-  REQUIRE(d.daysv() == 3.4);
+  REQUIRE(d.days() == 3.4);
   REQUIRE_FALSE(d.has_hours());
   REQUIRE_FALSE(d.has_minutes());
   REQUIRE_FALSE(d.has_seconds());
-  REQUIRE_THROWS(d.hoursv());
-  REQUIRE_THROWS(d.minutesv());
-  REQUIRE_THROWS(d.secondsv());
+  REQUIRE_THROWS(d.hours());
+  REQUIRE_THROWS(d.minutes());
+  REQUIRE_THROWS(d.seconds());
   REQUIRE_FALSE(d.has_weeks());
-  REQUIRE_THROWS(d.weeksv());
+  REQUIRE_THROWS(d.weeks());
 }
 
 TEST_CASE("Duration parse P99.5W", "[parseduration]") {
   Duration d = parseduration("P99.5W");
   REQUIRE(d.weeks_fractional());
-  REQUIRE(d.weeksv() == 99.5);
+  REQUIRE(d.weeks() == 99.5);
   REQUIRE_FALSE(d.has_years());
   REQUIRE_FALSE(d.has_months());
   REQUIRE_FALSE(d.has_days());
-  REQUIRE_THROWS(d.yearsv());
-  REQUIRE_THROWS(d.monthsv());
-  REQUIRE_THROWS(d.daysv());
+  REQUIRE_THROWS(d.years());
+  REQUIRE_THROWS(d.months());
+  REQUIRE_THROWS(d.days());
   REQUIRE_FALSE(d.has_hours());
   REQUIRE_FALSE(d.has_minutes());
   REQUIRE_FALSE(d.has_seconds());
-  REQUIRE_THROWS(d.hoursv());
-  REQUIRE_THROWS(d.minutesv());
-  REQUIRE_THROWS(d.secondsv());
+  REQUIRE_THROWS(d.hours());
+  REQUIRE_THROWS(d.minutes());
+  REQUIRE_THROWS(d.seconds());
 }
 
 

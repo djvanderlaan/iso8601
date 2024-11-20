@@ -154,15 +154,15 @@ namespace ISO8601 {
     bool hasdate = duration.has_years() || duration.has_months() || 
       duration.has_days() || duration.has_weeks();
     stream << 'P';
-    if (duration.has_years()) stream << duration.yearsv() << 'Y';
-    if (duration.has_months()) stream << duration.monthsv() << 'M';
-    if (duration.has_days()) stream << duration.daysv() << 'D';
-    if (duration.has_weeks()) stream << duration.weeksv() << 'W';
+    if (duration.has_years()) stream << duration.years() << 'Y';
+    if (duration.has_months()) stream << duration.months() << 'M';
+    if (duration.has_days()) stream << duration.days() << 'D';
+    if (duration.has_weeks()) stream << duration.weeks() << 'W';
     if (hastime) {
       stream << 'T';
-      if (duration.has_hours()) stream << duration.hoursv() << 'H';
-      if (duration.has_minutes()) stream << duration.minutesv() << 'M';
-      if (duration.has_seconds()) stream << duration.secondsv() << 'S';
+      if (duration.has_hours()) stream << duration.hours() << 'H';
+      if (duration.has_minutes()) stream << duration.minutes() << 'M';
+      if (duration.has_seconds()) stream << duration.seconds() << 'S';
     }
     // We omit values of 0 and elements that aren't set. But that could mean we
     // haven't printed anything except the 'P' which is invalid. Print a
