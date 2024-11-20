@@ -40,7 +40,9 @@ int main(int argc, char* argv[]) {
           std::cout << "foo\n";
           auto p = ISO8601::parseduration(line);
           std::cout << "foo\n";
-          p = standardise(p);
+          //p = standardise(p);
+          p = removefractions(p);
+          std::cout << "bar\n";
           std::cout << p << "\n";
           break;
         }

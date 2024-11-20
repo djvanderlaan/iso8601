@@ -6,79 +6,48 @@
 
 namespace ISO8601 {
 
+  inline bool nonset(const Duration& duration) {
+    return !(duration.has_years() || duration.has_months() || 
+        duration.has_days() || duration.has_hours() || duration.has_minutes() || 
+        duration.has_seconds() || duration.has_weeks());
+  }
+
   Duration removefractions(const Duration& duration, bool round_seconds, double month_precision) {
     Duration d{};
-/*    // Round year and month
-    if (duration.years().has_value() && duration.years().fractional()) {
-      const double f = duration.years().value();
-      d.years(std::floor(f), false);
-      const double m = (f - d.years().value())*12;
-      if (std::abs(m - std::round(m)) < month_precision) {
-        if (std::round(m) > 0) d.months(std::round(m), false);
-      } else {
-        d.months(m, true);
-      }
-    } 
-    if (!d.years().has_value() && duration.years().has_value()) 
-      d.years(duration.years().value(), duration.years().fractional());
-    if (!d.months().has_value() && duration.months().has_value()) 
-      d.months(duration.months().value(), duration.months().fractional());
-    // Round days
-    if (duration.days().has_value() && duration.days().fractional()) {
-      double remain = duration.days().value();
-      if (std::floor(remain) > 0) d.days(std::floor(remain), false);
-      remain = (remain - std::floor(remain)) * 24.0;
-      if (std::floor(remain) > 0) d.hours(std::floor(remain), false);
-      remain = (remain - std::floor(remain)) * 60.0;
-      if (std::floor(remain) > 0) d.minutes(std::floor(remain), false);
-      remain = (remain - std::floor(remain)) * 60.0;
-      if (round_seconds) {
-        if (std::round(remain) > 0) d.seconds(std::round(remain), false);
-      } else {
-        if (std::floor(remain) > 0) d.seconds(remain, true);
-      }
+    // Round year and month
+    double years = duration.has_years() ? duration.years() : 0.0;
+    double months = duration.has_months() ? duration.months() : 0.0;
+    bool months_fractional = duration.has_months() ? 
+      duration.months_fractional() : true;
+    if (duration.has_years() && duration.years_fractional()) {
+      months = (years - std::floor(years))*12;
+      years  = std::floor(years);
     }
-    if (!d.days().has_value() && duration.days().has_value()) 
-      d.days(duration.days().value(), duration.days().fractional());
-    // Round hours
-    if (duration.hours().has_value() && duration.hours().fractional()) {
-      double remain = duration.hours().value();
-      if (std::floor(remain) > 0) d.hours(std::floor(remain), false);
-      remain = (remain - std::floor(remain)) * 60.0;
-      if (std::floor(remain) > 0) d.minutes(std::floor(remain), false);
-      remain = (remain - std::floor(remain)) * 60.0;
-      if (round_seconds) {
-        if (std::round(remain) > 0) d.seconds(std::round(remain), false);
-      } else {
-        if (std::floor(remain) > 0) d.seconds(remain, true);
-      }
+    if (std::abs(months - std::round(months)) < month_precision) {
+      months = std::round(months);
+      months_fractional = false;
     }
-    if (!d.hours().has_value() && duration.hours().has_value()) 
-      d.hours(duration.hours().value(), duration.hours().fractional());
-    // Round minutes
-    if (duration.minutes().has_value() && duration.minutes().fractional()) {
-      double remain = duration.minutes().value();
-      if (std::floor(remain) > 0) d.minutes(std::floor(remain), false);
-      remain = (remain - std::floor(remain)) * 60.0;
-      if (round_seconds) {
-        if (std::round(remain) > 0) d.seconds(std::round(remain), false);
-      } else {
-        if (std::floor(remain) > 0) d.seconds(remain, true);
-      }
-    }
-    if (!d.minutes().has_value() && duration.minutes().has_value()) 
-      d.minutes(duration.minutes().value(), duration.minutes().fractional());
-    // Round seconds
-    if (duration.seconds().has_value()&& duration.seconds().fractional()) {
-      double remain = duration.seconds().value();
-      if (round_seconds) {
-        if (std::round(remain) > 0) d.seconds(std::round(remain), false);
-      } else {
-        if (std::floor(remain) > 0) d.seconds(remain, true);
-      }
-    }
-    if (!d.seconds().has_value() && duration.seconds().has_value()) 
-      d.seconds(duration.seconds().value(), duration.seconds().fractional());*/
+    if (years > 0) d.set_years(years, false);
+    if (months > 0) d.set_months(months, months_fractional);
+    // Round days, hours, ...
+    double days = duration.has_days() ? duration.days() : 0.0;
+    double hours = duration.has_hours() ? duration.hours() : 0.0;
+    double minutes = duration.has_minutes() ? duration.minutes() : 0.0;
+    double seconds = duration.has_seconds() ? duration.seconds() : 0.0;
+    bool seconds_fractional = duration.has_seconds() ? 
+      duration.seconds_fractional() : !round_seconds;
+    hours   += (days - std::floor(days))*24.0;
+    days     = std::floor(days);
+    minutes += (hours - std::floor(hours))*60.0;
+    hours    = std::floor(hours);
+    seconds += (minutes - std::floor(minutes))*60.0;
+    minutes  = std::floor(minutes);
+    if (round_seconds) seconds = round(seconds);
+    if (days > 0) d.set_days(days, false);
+    if (hours > 0) d.set_hours(hours, false);
+    if (minutes > 0) d.set_minutes(minutes, false);
+    if (seconds > 0) d.set_seconds(seconds, seconds_fractional);
+    if (nonset(d)) d.set_seconds(0, false);
     return d;
   }
 
