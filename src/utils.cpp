@@ -1,6 +1,7 @@
 #include "utils.h"
 
-#include<stdexcept>
+#include <stdexcept>
+#include <iomanip>
 
 namespace ISO8601 {
 
@@ -80,5 +81,21 @@ namespace ISO8601 {
       throw std::runtime_error("Convertion to int failed.");
     return sign * value;
   }
+
+  std::ostream& numprinter::operator()(std::ostream& stream, double val) {
+    ostr_.str("");
+    ostr_.setf(std::ios_base::fixed);
+    ostr_ << std::left << std::setw(10) << val;
+    std::string_view str{ostr_.str()};
+    while (str.back() == '0' || str.back() == ' ') 
+      str.remove_suffix(1);
+    if (str.back() == '.')
+      str.remove_suffix(1);
+    for (auto c: str) {
+      if (c == '.') stream << dec_; else stream << c;
+    }
+    return stream;
+  }
+
 
 }

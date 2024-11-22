@@ -1,4 +1,5 @@
 #include "iso8601_duration.h"
+#include "utils.h"
 #include <iomanip>
 #include <cmath>
 
@@ -125,16 +126,18 @@ namespace ISO8601 {
       duration.has_minutes() || duration.has_seconds();
     bool hasdate = duration.has_years() || duration.has_months() || 
       duration.has_days() || duration.has_weeks();
+    stream.setf(std::ios_base::fixed);
+    numprinter printnum;
     stream << 'P';
-    if (duration.has_years()) stream << duration.years() << 'Y';
-    if (duration.has_months()) stream << duration.months() << 'M';
-    if (duration.has_days()) stream << duration.days() << 'D';
-    if (duration.has_weeks()) stream << duration.weeks() << 'W';
+    if (duration.has_years()) printnum(stream, duration.years()) << 'Y';
+    if (duration.has_months()) printnum(stream, duration.months()) << 'M';
+    if (duration.has_days()) printnum(stream, duration.days()) << 'D';
+    if (duration.has_weeks()) printnum(stream, duration.weeks()) << 'W';
     if (hastime) {
       stream << 'T';
-      if (duration.has_hours()) stream << duration.hours() << 'H';
-      if (duration.has_minutes()) stream << duration.minutes() << 'M';
-      if (duration.has_seconds()) stream << duration.seconds() << 'S';
+      if (duration.has_hours()) printnum(stream, duration.hours()) << 'H';
+      if (duration.has_minutes()) printnum(stream, duration.minutes()) << 'M';
+      if (duration.has_seconds()) printnum(stream, duration.seconds()) << 'S';
     }
     // We omit values of 0 and elements that aren't set. But that could mean we
     // haven't printed anything except the 'P' which is invalid. Print a

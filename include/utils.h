@@ -1,7 +1,8 @@
 #ifndef utils_h
 #define utils_h
 
-#include<string_view>
+#include <string_view>
+#include <sstream>
 
 namespace ISO8601 {
 
@@ -56,6 +57,15 @@ namespace ISO8601 {
   inline bool contains(const std::string_view str, char c) {
     return str.find(c) != std::string_view::npos;
   }
+
+  class numprinter {
+    public:
+      numprinter(const std::string& dec = ",") : dec_{dec} {}
+      std::ostream& operator()(std::ostream& stream, double val);
+    private:
+      std::ostringstream ostr_{};
+      std::string dec_;
+  };
 
 
 }
