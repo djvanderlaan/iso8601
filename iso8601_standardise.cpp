@@ -39,9 +39,11 @@ int main(int argc, char* argv[]) {
         case ISO8601::ISO8601Type::Duration: {
           std::cout << "foo\n";
           auto p = ISO8601::parseduration(line);
+          std::cout << p << "\n";
           std::cout << "foo\n";
           //p = standardise(p);
-          p = removefractions(p);
+          //p = removefractions(p);
+          p = simplify(p);
           std::cout << "bar\n";
           std::cout << p << "\n";
           break;

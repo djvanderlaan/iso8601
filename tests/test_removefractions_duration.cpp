@@ -104,11 +104,41 @@ TEST_CASE("Remove fractions from duration zero", "[removefractions]") {
   REQUIRE_FALSE( d2.has_years() );
   REQUIRE_FALSE( d2.has_months() );
   REQUIRE_FALSE( d2.has_days() );
-  REQUIRE_FALSE( d2.has_days() );
   REQUIRE_FALSE( d2.has_hours() );
   REQUIRE_FALSE( d2.has_minutes() );
   REQUIRE( d2.has_seconds() );
   REQUIRE( d2.seconds() == 0 );
   REQUIRE_FALSE( d2.seconds_fractional() );
+}
+
+TEST_CASE("Remove fractions from weeks no fraction", "[removefractions]") {
+  Duration d = parseduration("P5W");
+  Duration d2 = removefractions(d, true);
+
+  REQUIRE_FALSE( d2.has_years() );
+  REQUIRE_FALSE( d2.has_months() );
+  REQUIRE_FALSE( d2.has_days() );
+  REQUIRE_FALSE( d2.has_hours() );
+  REQUIRE_FALSE( d2.has_minutes() );
+  REQUIRE_FALSE( d2.has_seconds() );
+  REQUIRE_FALSE( d2.weeks_fractional() );
+  REQUIRE( d2.weeks() == 5 );
+}
+
+TEST_CASE("Remove fractions from weeks", "[removefractions]") {
+  Duration d = parseduration("P5,5W");
+  Duration d2 = removefractions(d, true);
+
+  REQUIRE_FALSE( d2.has_years() );
+  REQUIRE_FALSE( d2.has_months() );
+  REQUIRE( d2.has_days() );
+  REQUIRE_FALSE( d2.days_fractional() );
+  REQUIRE( d2.days() == 38 );
+  REQUIRE( d2.has_hours() );
+  REQUIRE_FALSE( d2.hours_fractional() );
+  REQUIRE( d2.hours() == 12 );
+  REQUIRE_FALSE( d2.has_minutes() );
+  REQUIRE_FALSE( d2.has_seconds() );
+  REQUIRE_FALSE( d2.has_weeks() );
 }
 

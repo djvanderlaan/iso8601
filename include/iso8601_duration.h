@@ -266,6 +266,7 @@ namespace ISO8601 {
   Duration removefractions(const Duration& duration, bool round_seconds = false, 
       double month_precision = 0.01);
   Duration standardise(const Duration& duration);
+  Duration simplify(const Duration& duration);
 
 }
 

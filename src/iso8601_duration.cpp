@@ -29,8 +29,14 @@ namespace ISO8601 {
     }
     if (years > 0) d.set_years(years, false);
     if (months > 0) d.set_months(months, months_fractional);
+    // Weeks
+    if (duration.has_weeks() && !duration.weeks_fractional()) 
+      d.set_weeks(duration.weeks(), false);
+    // else we convert weeks to days; cannot have week and days
     // Round days, hours, ...
     double days = duration.has_days() ? duration.days() : 0.0;
+    if (duration.has_weeks() && duration.weeks_fractional()) 
+      days += duration.weeks()*7.0;
     double hours = duration.has_hours() ? duration.hours() : 0.0;
     double minutes = duration.has_minutes() ? duration.minutes() : 0.0;
     double seconds = duration.has_seconds() ? duration.seconds() : 0.0;
@@ -52,67 +58,64 @@ namespace ISO8601 {
   }
 
   Duration standardise(const Duration& duration) {
-    /*const Duration d0 = removefractions(duration);
-    DurationElement seconds = d0.seconds();
-    DurationElement minutes = d0.minutes();
-    DurationElement hours = d0.hours();
-    DurationElement days = d0.days();
-    DurationElement months = d0.months();
-    DurationElement years = d0.years();
-    if (months.has_value()) {
-      double m = months.value();
-      double ny = static_cast<int>(std::floor(m)) / 12;
-      if (ny > 0) {
-        m = m - ny*12;
-        if (m > 0) months.value(m, months.fractional());
-        ny = years.has_value() ? years.value() + ny : ny;
-        years.value(ny, false);
-      }
-    }
-    if (seconds.has_value()) {
-      double sec = seconds.value();
-      double nmin = static_cast<int>(std::floor(sec)) / 60;
-      if (nmin > 0) {
-        sec = sec - nmin*60;
-        if (sec > 0) seconds.value(sec, seconds.fractional());
-        nmin = minutes.has_value() ? minutes.value() + nmin : nmin;
-        minutes.value(nmin, false);
-      }
-    }
-    if (minutes.has_value()) {
-      double min = minutes.value();
-      double nh = static_cast<int>(std::floor(min)) / 60;
-      std::cout << nh << "\n";
-      if (nh > 0) {
-        std::cout << "foo" << "\n";
-        min = min - nh*60;
-        std::cout << "min = " << min << "\n";
-        minutes.value(min, minutes.fractional());
-        //if (min > 0) minutes.value(min, minutes.fractional()); else minutes.unset();
-        std::cout << "m.v = " << minutes.value() << "\n";
-        nh = hours.has_value() ? hours.value() + nh : nh;
-        std::cout << "hh=" << nh << "\n";
-        hours.value(nh, false);
-        std::cout << "h.v = " << hours.value() << "\n";
-      }
-    }
-    if (hours.has_value()) {
-      double h = hours.value();
-      double nd = static_cast<int>(std::floor(h)) / 24;
-      if (nd > 0) {
-        h = h - nd*24;
-        if (h > 0) hours.value(h, hours.fractional());
-        nd = days.has_value() ? days.value() + nd : nd;
-        days.value(nd, false);
-      }
-    }*/
-    Duration d;
-    /*if (years.has_value()) d.years(years.value(), years.fractional());
-    if (months.has_value()) d.months(months.value(), months.fractional());
-    if (days.has_value()) d.days(days.value(), days.fractional());
-    if (hours.has_value()) d.hours(hours.value(), hours.fractional());
-    if (minutes.has_value()) d.minutes(minutes.value(), minutes.fractional());
-    if (seconds.has_value()) d.seconds(seconds.value(), seconds.fractional());*/
+    const Duration d0 = removefractions(duration);
+    Duration d{};
+    // Handle months and years
+    double years = d0.has_years() ? d0.years() : 0.0;
+    double months = d0.has_months() ? d0.months() : 0.0;
+    const int nyears = static_cast<int>(std::floor(months))/12;
+    years += nyears;
+    months -= nyears * 12;
+    if (years > 0) 
+      d.set_years(years, d0.has_years() && d0.years_fractional());
+    if (months > 0) 
+      d.set_months(months, d0.has_months() && d0.months_fractional());
+    // Handle days, hours, minutes, seconds
+    double days = d0.has_days() ? d0.days() : 0.0;
+    double hours = d0.has_hours() ? d0.hours() : 0.0;
+    double minutes = d0.has_minutes() ? d0.minutes() : 0.0;
+    double seconds = d0.has_seconds() ? d0.seconds() : 0.0;
+    const int nminutes = static_cast<int>(std::floor(seconds))/60;
+    minutes += nminutes;
+    seconds -= nminutes * 60;
+    const int nhours = static_cast<int>(std::floor(minutes))/60;
+    hours += nhours;
+    minutes -= nhours * 60;
+    const int ndays = static_cast<int>(std::floor(hours))/24;
+    days += ndays;
+    hours -= ndays * 24;
+    if (days > 0) 
+      d.set_days(days, d0.has_days() && d0.days_fractional());
+    if (hours > 0) 
+      d.set_hours(hours, d0.has_hours() && d0.hours_fractional());
+    if (minutes > 0) 
+      d.set_minutes(minutes, d0.has_minutes() && d0.minutes_fractional());
+    if (seconds > 0) 
+      d.set_seconds(seconds, d0.has_seconds() && d0.seconds_fractional());
+    return d;
+  }
+
+  Duration simplify(const Duration& duration) {
+    const Duration d0 = removefractions(duration);
+    Duration d{};
+    // Handle months and years
+    const double years = d0.has_years() ? d0.years() : 0.0;
+    double months = d0.has_months() ? d0.months() : 0.0;
+    months += years*12.0;
+    if (months > 0) 
+      d.set_months(months, d0.has_months() && d0.months_fractional());
+    // Handle days, hours, minutes, seconds
+    const double weeks = d0.has_weeks() ? d0.weeks() : 0.0;
+    double days = d0.has_days() ? d0.days() : 0.0;
+    days += weeks*7.0;
+    double hours = d0.has_hours() ? d0.hours() : 0.0;
+    hours += days*24.0;
+    double minutes = d0.has_minutes() ? d0.minutes() : 0.0;
+    minutes += hours*60.0;
+    double seconds = d0.has_seconds() ? d0.seconds() : 0.0;
+    seconds += minutes*60.0;
+    if (!d.has_months() || seconds > 0) 
+      d.set_seconds(seconds, d0.has_seconds() && d0.seconds_fractional());
     return d;
   }
 
