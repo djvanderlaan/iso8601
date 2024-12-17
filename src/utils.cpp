@@ -6,13 +6,13 @@
 namespace ISO8601 {
 
   std::string_view::size_type find_from_table(const std::string_view str, const std::string_view table) {
-    for (std::string_view::size_type i = 0; str.size(); ++i) 
+    for (std::string_view::size_type i = 0; i < str.size(); ++i) 
       for (const char& c: table) if (str[i] == c) return i;
     return std::string_view::npos;
   }
 
   std::string_view::size_type count_numeric(const std::string_view str) {
-    for (std::string_view::size_type i = 0; str.size(); ++i) 
+    for (std::string_view::size_type i = 0; i < str.size(); ++i) 
       if (!isnumchar(str[i])) return i;
     return str.size();
   }
