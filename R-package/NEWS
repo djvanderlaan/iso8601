@@ -1,0 +1,9 @@
+
+
+CHANGES IN VERSION 0.1.1
+
+BUG FIXES
+
+  - Bug fixed in internal C++ routine where bytes could be read outside of
+    array. 
+
