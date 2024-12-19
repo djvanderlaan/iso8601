@@ -1,7 +1,7 @@
 
 .PHONY: build check document install vignettes clean getlib
 
-build: document
+build: getlib document
 	cd work && R CMD build ../
 
 check: build

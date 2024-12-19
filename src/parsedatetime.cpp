@@ -4,7 +4,8 @@
 namespace ISO8601 {
 
   Datetime parsedatetime(std::string_view str, unsigned int extrayearlen) {
-    const auto date_end_pos = find_from_table(str, "T ");
+    auto date_end_pos = find_from_table(str, "T ");
+    if (date_end_pos == std::string_view::npos) date_end_pos = str.length();
     Date date = parsedate(str.substr(0, date_end_pos), extrayearlen);
     str.remove_prefix(date_end_pos);
     if (str.size() < 1 || str.front() == '/') 

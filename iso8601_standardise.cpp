@@ -24,12 +24,12 @@ int main(int argc, char* argv[]) {
         case ISO8601::ISO8601Type::Date: {
           const auto d = ISO8601::parsedate(line);
           std::cout << d << "\n";
-          break;
+          //break;
         }
         case ISO8601::ISO8601Type::Time: {
           const auto t = ISO8601::parsetime(line);
           std::cout << t << "\n";
-          break;
+          //break;
         }
         case ISO8601::ISO8601Type::Datetime: {
           const auto dt = ISO8601::parsedatetime(line);

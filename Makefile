@@ -4,11 +4,13 @@ INCLUDEDIR = include
 TMPDIR     = tmp
 TESTSDIR   = tests
 
-CXX        = g++
+#CXX        = g++
+CXX = g++ -fsanitize=address -fno-omit-frame-pointer
 CXXFLAGS   = -I$(INCLUDEDIR) -I$(TESTSDIR) -Wall 
 #CXXFLAGS   = -O3 -std=c++20 -I$(INCLUDEDIR) -Wall
 #CXXFLAGS  = -pg -std=c++11 -I$(INCLUDEDIR) -Wall
 #LIBS       = -pthread
+
 
 VPATH      = $(INCLUDEDIR):$(SOURCEDIR):$(TMPDIR):$(TESTSDIR)
 

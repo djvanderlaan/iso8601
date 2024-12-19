@@ -1,4 +1,11 @@
 
+CHANGES IN VERSION 0.1.2
+
+BUG FIXES
+
+  - Bug fixed in parsedatetime C++ routine. Dates without time parsed by this
+    routine triggered undefined behaviour. 
+
 
 CHANGES IN VERSION 0.1.1
 
